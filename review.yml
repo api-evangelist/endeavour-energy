@@ -1,0 +1,264 @@
+aid: endeavour-energy
+name: Endeavour Energy
+review:
+  question: Does Endeavour Energy publish a real, documented public API — and does the
+    Australian Consumer Data Right, extended from banking into energy, actually reach
+    a distribution network business?
+  answer: true
+  date: '2026-07-27'
+  reviewer: API Evangelist
+  summary: |
+    Yes on the market/network side, no on the consumer side — and the Consumer Data
+    Right does not reach this organization at all. Endeavour Energy runs a genuine,
+    anonymous, key-free open data API over its distribution network (Opendatasoft
+    Explore API v2.1, downloadable OpenAPI 3.0.3, eight datasets, live outage feeds).
+    It is not a designated CDR data holder, has no CDR base URI, and makes no
+    reference to the Consumer Data Right anywhere on its corporate site. The energy
+    designation put the obligation on retailers and AEMO, not on the poles and wires.
+
+mandate:
+  regime: none
+  regime_considered: cdr-energy
+  status: not-applicable
+  home_market: Australia
+  tier: network-distributor
+  verbatim: |
+    The Consumer Data Right (Energy Sector) Designation 2020 extended the same
+    statutory machinery that produced Australia's byte-for-byte identical banking
+    APIs — the CDR, the ACCC, and the Data Standards Body — into energy. That
+    transplant did NOT land on distribution network service providers. The
+    designation places the data-holder obligation on electricity RETAILERS as
+    primary data holders and on AEMO as the secondary data holder and gateway,
+    with retailers obtaining consumer data from AEMO and serving it to accredited
+    data recipients. Endeavour Energy is a DNSP. It sells no energy, holds no
+    retail billing relationship, and carries no CDR data-holder obligation.
+    Therefore the honest mandate regime for THIS organization is `none` and the
+    honest status is `not-applicable` — not `designated-not-live`, because it was
+    never designated in the first place.
+  how_verified: |
+    Machine-verified against the authoritative CDR Register, not against a press
+    release or a compliance page.
+      GET https://api.cdr.gov.au/cdr-register/v1/energy/data-holders/brands/summary
+          (header x-v: 1) -> HTTP 200, 84 energy data holder brands returned
+          on 2026-07-27.
+      Searched the full JSON payload for "endeavour" -> 0 matches.
+      Searched for every Australian distribution network business by name —
+      ausgrid, essential energy, endeavour, powercor, citipower, united energy,
+      jemena, sa power, energex, ergon energy distribution, evoenergy,
+      tasnetworks — and for aemo -> 0 matches for all of them.
+      All 84 registered brands are retailers (AGL, Origin, EnergyAustralia,
+      Alinta, Red, Momentum, Amber, Shell Energy, and so on). "Ergon Energy
+      Retail" appears; the Ergon DISTRIBUTION business does not.
+    Corroborated by the designation's own structure: retailers are primary data
+    holders, AEMO is the secondary data holder/gateway.
+    Corporate-site check: fetched the sitemap (539 URLs) and grepped a 30-page
+    sample plus the homepage, retailer page, meter page, network capacity map,
+    planning page and demand/forecast page for "consumer data right", "CDR",
+    "green button" and "open data" -> zero occurrences of any of them.
+  what_this_proves: |
+    This is the control case for whether a data mandate is replicable. The answer
+    found here is narrower than the framing suggests: the CDR was successfully
+    transplanted from banking into energy as a legal instrument, but it was
+    transplanted onto a DIFFERENT layer of the stack. In banking the obligation
+    landed on the institution that holds both the customer relationship and the
+    data. In energy those are separated — the retailer holds the customer, the
+    distributor holds the wires and the meter, AEMO holds the market records —
+    and the mandate followed the customer relationship, not the data. The result
+    is that the organization that physically owns the meters on 2.8 million
+    people's homes has no consumer data obligation whatsoever. A mandate is not
+    an implementation, and a sector mandate is not a sector-wide mandate.
+
+data_standard:
+  consumer_data_standard: not applicable — no CDR obligation, no Green Button, no ESPI
+  open_data_standard: |
+    Opendatasoft Explore API v2.1 (vendor platform standard, not an energy-domain
+    standard), with a DCAT catalogue export available at
+    /api/explore/v2.1/catalog/exports/dcat (HTTP 200). Query language is ODSQL.
+    No IEC CIM 61968/61970, no ESPI/Green Button, no OpenADR reference found in
+    the published surface.
+  der_standard: |
+    CSIP-AUS (Common Smart Inverter Profile - Australia), the Australian
+    derivative of IEEE 2030.5 / SEP2. Named explicitly on the NSW emergency
+    backstop page: installers must "Install equipment that is compliant with the
+    Australian Standard 'Common Smart Inverter Profile - Australia' (CSIP-AUS)",
+    and the page references "Endeavour Energy's utility server". This is a REAL
+    standards-based machine interface operated by Endeavour Energy — but no
+    endpoint, no base URI, no specification and no developer onboarding is
+    published for it. It is not listed as an API in apis.yml because nothing about
+    its contract is documented. Recorded here so the mandate and the
+    implementation are never conflated.
+  summary_phrase: Opendatasoft Explore API v2.1 (open data) + CSIP-AUS/IEEE 2030.5 (DER, undocumented)
+
+consumer_vs_market_split:
+  consumer_data_api: false
+  consumer_data_detail: |
+    No API of any kind returns an individual customer's usage or billing data.
+    Endeavour Energy does not bill consumers — it is the network business, and the
+    retailer holds the account. Under the CDR the consumer's interval metering
+    data and NMI standing data reach accredited recipients through the RETAILER,
+    sourced from AEMO as gateway. Endeavour Energy is not in that chain as a
+    data holder. Its consumer-facing pages (meter, understanding your bill) are
+    informational only; no account API, no login-scoped data export, no Green
+    Button download.
+  market_data_open: true
+  market_data_detail: |
+    Genuinely open, anonymous, and machine-readable. Verified 2026-07-27 with no
+    credential and no account:
+      GET /api/explore/v2.1/catalog/datasets            -> HTTP 200, total_count 8
+      GET /api/explore/v2.1/catalog/datasets/outagecustomerlive/records?limit=1
+                                                       -> HTTP 200, live records
+    Datasets and record counts as observed:
+      - networkassets_otherassets ................. 316,997  Open Database License
+      - endeavourenergy_poles ..................... 440,728  Open Database License
+      - conductors_hv_lv_sl_ug .................... 808,500  no licence declared
+      - distribution-substation-available-capacity . 30,500  no licence declared
+      - distribution-district ......................      1  no licence declared
+      - plannedoutagecustomer ......................  8,857  Open Database License
+      - single_premise_outage_customer_live ........    798  Open Database License
+      - outagecustomerlive .........................     66  Open Database License
+    The live outage datasets carry geospatial coordinates, incident IDs, estimated
+    restore times and customers-affected counts, and the dataset description states
+    the layer "refreshes every 10 minutes"; observed `modified` timestamp was
+    minutes old at fetch time. Licence where declared is the Open Database Licence
+    (https://www.opendatacommons.org/licenses/odbl/1.0/), publisher "Endeavour
+    Energy".
+  the_finding: |
+    The split is total and it runs the opposite way to the banking sector. The
+    mandated consumer surface is absent because the mandate never applied; the
+    unmandated market surface is wide open, voluntary, standards-light and needs
+    no permission at all. Endeavour Energy publishes more machine-readable data
+    about its physical grid — every pole, every conductor, every substation's
+    spare capacity — than it does about any customer, and it does so with no
+    obligation compelling it.
+
+access_gate:
+  gate: self-serve
+  gated: false
+  what_a_developer_must_do: |
+    Nothing. No signup, no application, no licence acceptance, no accreditation.
+    Issue an unauthenticated HTTPS GET against
+    https://data.endeavourenergy.com.au/api/explore/v2.1/catalog/datasets and you
+    get JSON. An optional `apikey` query parameter exists for authenticated quota,
+    but it is not required for any endpoint tested. Anonymous quota observed in
+    response headers: x-ratelimit-limit 5000, x-ratelimit-remaining 4990,
+    x-ratelimit-reset 2026-07-28T00:00:00Z — i.e. 5,000 calls per day per client
+    with no relationship of any kind. Reuse of most datasets is governed by the
+    Open Database Licence rather than by an access gate.
+    The one caveat is DISCOVERY, not access: the portal is effectively unlinked
+    from the corporate website. A 30-page sample of the 539-URL sitemap plus the
+    homepage produced zero links to data.endeavourenergy.com.au. A developer has
+    to already know the host exists.
+    The separate CSIP-AUS utility server is NOT self-serve — reaching it requires
+    CEC-approved inverter equipment and a connectivity capability test run through
+    the NSW CER Installer Portal at installation time. No public developer path.
+
+auth_model:
+  open_data_api: |
+    Optional API key only. From the harvested OpenAPI 3.0.3 document,
+    components.securitySchemes:
+      apikey: {type: apiKey, name: apikey, in: query,
+               description: "API key to make authenticated requests."}
+    All endpoints tested returned HTTP 200 anonymously. No OAuth2, no OIDC, no mTLS
+    on this surface.
+  openid_configuration: |
+    GET https://data.endeavourenergy.com.au/.well-known/openid-configuration -> 404
+    GET https://www.endeavourenergy.com.au/.well-known/openid-configuration -> 404
+    No anonymous OIDC discovery document is served on either host.
+  cdr_auth: not applicable — no CDR surface exists for this organization
+  der_auth: |
+    CSIP-AUS/IEEE 2030.5 conventionally uses mutual TLS with device certificates.
+    Endeavour Energy publishes no security scheme, endpoint or onboarding for its
+    utility server, so no auth model is asserted here beyond the standard it names.
+
+probes:
+  fetched: '2026-07-27'
+  subdomains:
+    - {url: 'https://www.endeavourenergy.com.au/', status: 200, note: corporate site}
+    - {url: 'https://data.endeavourenergy.com.au/', status: 200, note: 302 -> /pages/home/ 200; Opendatasoft open data portal}
+    - {url: 'https://developer.endeavourenergy.com.au/', status: 000, note: does not resolve}
+    - {url: 'https://developers.endeavourenergy.com.au/', status: 000, note: does not resolve}
+    - {url: 'https://api.endeavourenergy.com.au/', status: 000, note: does not resolve}
+    - {url: 'https://docs.endeavourenergy.com.au/', status: 000, note: does not resolve}
+    - {url: 'https://opendata.endeavourenergy.com.au/', status: 000, note: does not resolve}
+    - {url: 'https://portal.endeavourenergy.com.au/', status: 000, note: does not resolve}
+    - {url: 'https://gis.endeavourenergy.com.au/', status: 000, note: does not resolve}
+    - {url: 'https://connections.endeavourenergy.com.au/', status: 000, note: does not resolve}
+  paths:
+    - {url: 'https://data.endeavourenergy.com.au/api/explore/v2.1/swagger.json', status: 200, note: OpenAPI 3.0.3, 16 paths, harvested}
+    - {url: 'https://data.endeavourenergy.com.au/api/explore/v2.0/swagger.json', status: 200, note: OpenAPI 3.0.3, 16 paths, harvested; server sends ods-explore-api-deprecation header}
+    - {url: 'https://data.endeavourenergy.com.au/api/explore/v2.1/openapi.json', status: 404}
+    - {url: 'https://data.endeavourenergy.com.au/api/explore/v2.1/catalog/datasets', status: 200, note: anonymous, 8 datasets}
+    - {url: 'https://data.endeavourenergy.com.au/api/explore/v2.1/catalog/exports/dcat', status: 200, note: DCAT catalogue export}
+    - {url: 'https://data.endeavourenergy.com.au/api/datasets/1.0/search/', status: 200, note: legacy Opendatasoft v1 search; no spec served}
+    - {url: 'https://data.endeavourenergy.com.au/api/v1/swagger.json', status: 404}
+    - {url: 'https://data.endeavourenergy.com.au/api/datasets/1.0/swagger.json', status: 404}
+    - {url: 'https://data.endeavourenergy.com.au/api/explore/v2.1/console', status: 301, note: redirects to /api-console/explore/v2.1/ (200)}
+    - {url: 'https://data.endeavourenergy.com.au/.well-known/openid-configuration', status: 404}
+    - {url: 'https://www.endeavourenergy.com.au/openapi.json', status: 404}
+    - {url: 'https://www.endeavourenergy.com.au/swagger.json', status: 404}
+    - {url: 'https://www.endeavourenergy.com.au/api-docs', status: 404}
+    - {url: 'https://www.endeavourenergy.com.au/api', status: 404}
+    - {url: 'https://www.endeavourenergy.com.au/.well-known/openid-configuration', status: 404}
+    - {url: 'https://www.endeavourenergy.com.au/.well-known/security.txt', status: 200, note: 'Contact: cybersecurity@endeavourenergy.com.au, Expires 2027-07-01'}
+    - {url: 'https://www.endeavourenergy.com.au/robots.txt', status: 200}
+    - {url: 'https://www.endeavourenergy.com.au/sitemap.xml', status: 200, note: 539 URLs}
+  external:
+    - {url: 'https://api.cdr.gov.au/cdr-register/v1/energy/data-holders/brands/summary', status: 200, note: 84 brands, zero distributors, zero Endeavour matches}
+
+artifacts:
+  - path: openapi/endeavour-energy-open-data-explore-api-v2-1-openapi.json
+    type: OpenAPI
+    version: 3.0.3
+    source: https://data.endeavourenergy.com.au/api/explore/v2.1/swagger.json
+    http_status: 200
+    fetched: '2026-07-27'
+    bytes: 45937
+    paths: 16
+    server: https://data.endeavourenergy.com.au/api/explore/v2.1
+    parses: true
+    note: Current version. Verbatim, unmodified. Server URL is Endeavour Energy's own host.
+  - path: openapi/endeavour-energy-open-data-explore-api-v2-0-openapi.json
+    type: OpenAPI
+    version: 3.0.3
+    source: https://data.endeavourenergy.com.au/api/explore/v2.0/swagger.json
+    http_status: 200
+    fetched: '2026-07-27'
+    bytes: 45821
+    paths: 16
+    server: https://data.endeavourenergy.com.au/api/explore/v2.0
+    parses: true
+    note: |
+      Deprecated but still served. Response header on v2.0 endpoints reads
+      "ods-explore-api-deprecation: deprecated API version (v2.0), please use the
+      current v2.1 version". Retained as a real harvested artifact; v2.1 is the
+      one to build against.
+
+sources:
+  - url: https://www.endeavourenergy.com.au/
+    type: Website
+    note: Corporate site. States service to "2.8 million people in homes and businesses across Central West NSW, the Blue Mountains, Greater Western Sydney, the Southern Highlands, the Illawarra and the South Coast of NSW". No developer, API, open data or CDR section.
+  - url: https://data.endeavourenergy.com.au/pages/home/
+    type: Portal
+    note: Opendatasoft open data portal. Confirmed live 200. Not linked from the corporate site.
+  - url: https://data.endeavourenergy.com.au/api-console/explore/v2.1/
+    type: APIReference
+    note: Interactive API console served by the portal.
+  - url: https://www.endeavourenergy.com.au/our-network/resilience-and-emergency-planning/nsw-emergency-backstop-mechanism
+    type: Documentation
+    note: Names CSIP-AUS and "Endeavour Energy's utility server"; onboarding via the NSW CER Installer Portal capability test. No endpoint published.
+  - url: https://www.endeavourenergy.com.au/for-your-home/solar-and-battery-options/flexible-exports
+    type: Documentation
+    note: Dynamic export limits, inverter "connects to Endeavour Energy over the internet". No standard named on this page, no endpoint.
+  - url: https://api.cdr.gov.au/cdr-register/v1/energy/data-holders/brands/summary
+    type: Register
+    note: Authoritative CDR energy data holder register. 84 brands, all retailers. Endeavour Energy absent.
+
+conclusion: |
+  Built, not a stub. One real documented API captured with two harvested OpenAPI
+  3.0.3 contracts. Status recorded honestly on every axis: mandate regime none
+  (CDR energy considered and ruled out on register evidence), consumer data API
+  false, market data open true, access gate self-serve and ungated, data standard
+  a vendor open-data platform plus an undocumented CSIP-AUS DER interface. The
+  headline for the sector study is that Australia's replicated mandate skipped the
+  distribution layer entirely, and the distributor opened its grid data anyway
+  without being told to.

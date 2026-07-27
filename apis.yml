@@ -1,0 +1,97 @@
+aid: endeavour-energy
+url: https://raw.githubusercontent.com/api-evangelist/endeavour-energy/refs/heads/main/apis.yml
+name: Endeavour Energy
+kind: company
+description: 'Endeavour Energy is the regulated electricity distribution network service provider
+  (DNSP) for Greater Western Sydney, the Blue Mountains, the Illawarra, the Southern Highlands,
+  the South Coast and Central West of New South Wales, Australia, delivering power to around
+  2.8 million people over the poles-and-wires network it owns and operates. It sits between
+  transmission and retail in the value chain - it moves electricity and hosts the meters,
+  but it does not sell energy to consumers, so it holds no retail billing relationship. Its
+  API posture is a sharp split. On the market and network side it is genuinely open: a live
+  Opendatasoft portal at data.endeavourenergy.com.au serves eight network datasets (poles,
+  conductors, distribution districts, other network assets, distribution substation available
+  capacity, and live planned/unplanned/single-premise outages) through a documented, anonymous,
+  no-key REST Explore API with a downloadable OpenAPI 3.0.3 contract, most of it under the
+  Open Database Licence. On the consumer side it is closed and, more importantly, unobligated:
+  Australia''s Consumer Data Right was extended to energy, but the designation put the data-holder
+  obligation on electricity retailers as primary holders and AEMO as the secondary holder
+  and gateway, not on distributors. Endeavour Energy appears nowhere in the 84 brands of the
+  CDR energy data holder register, publishes no CDR base URI, and makes no reference to the
+  Consumer Data Right anywhere on its corporate site. It does operate a CSIP-AUS (Common Smart
+  Inverter Profile - Australia) utility server for NSW flexible exports and the emergency
+  backstop mechanism, but that machine interface is device-facing and entirely undocumented
+  publicly. The open data portal itself is not linked from the corporate website.'
+image: https://kinlane-images.s3.amazonaws.com/shared/apis-json/icons/groq.png
+tags:
+- Energy
+- Australia
+- Utilities
+- Electricity
+- Grid
+- Open Data
+- Energy Networks
+- Distribution
+- Outages
+- Consumer Data Right
+- Smart Metering
+- DER
+- Solar
+- Renewables
+created: '2026-07-27'
+modified: '2026-07-27'
+specificationVersion: '0.19'
+apis:
+- aid: endeavour-energy:endeavour-energy-open-data-explore-api
+  name: Endeavour Energy Open Data Explore API
+  description: Anonymous, key-free REST API over Endeavour Energy's public network open data
+    catalogue, served on the Opendatasoft Explore API v2.1. Exposes eight datasets covering
+    distribution network assets (440,728 poles, 808,500 conductor segments, 316,997 other
+    network assets, distribution districts), 30,500 records of distribution substation available
+    capacity, and live outage feeds (unplanned, planned and single-premise) that refresh roughly
+    every ten minutes. Supports dataset search, record query via the Opendatasoft Query Language
+    (ODSQL), faceting, per-record lookup, attachments, and bulk export to CSV, Parquet, GPX
+    and DCAT. Verified anonymously on 2026-07-27 with HTTP 200 on the catalogue and on records
+    with no credential; an optional apikey query parameter exists for authenticated quota.
+    Anonymous quota observed at 5,000 calls per day via the x-ratelimit-limit response header.
+    Most datasets are published under the Open Database Licence; three carry no declared licence.
+  humanURL: https://data.endeavourenergy.com.au/pages/home/
+  baseURL: https://data.endeavourenergy.com.au/api/explore/v2.1
+  tags:
+  - Open Data
+  - Energy
+  - Electricity
+  - Grid
+  - Outages
+  - Network Assets
+  - Australia
+  - Geospatial
+  properties:
+  - type: OpenAPI
+    url: openapi/endeavour-energy-open-data-explore-api-v2-1-openapi.json
+  - type: OpenAPI
+    url: openapi/endeavour-energy-open-data-explore-api-v2-0-openapi.json
+  - type: Documentation
+    url: https://data.endeavourenergy.com.au/pages/home/
+  - type: APIReference
+    url: https://data.endeavourenergy.com.au/api-console/explore/v2.1/
+  - type: Portal
+    url: https://data.endeavourenergy.com.au/explore/
+common:
+- type: Website
+  url: https://www.endeavourenergy.com.au/
+- type: Portal
+  url: https://data.endeavourenergy.com.au/pages/home/
+- type: Documentation
+  url: https://www.endeavourenergy.com.au/our-network/resilience-and-emergency-planning/nsw-emergency-backstop-mechanism
+- type: Documentation
+  url: https://www.endeavourenergy.com.au/for-your-home/solar-and-battery-options/flexible-exports
+- type: Documentation
+  url: https://www.endeavourenergy.com.au/our-network/network-demand-and-capacity/network-capacity-map
+- type: SecurityTxt
+  url: https://www.endeavourenergy.com.au/.well-known/security.txt
+- type: LinkedIn
+  url: https://www.linkedin.com/company/endeavour-energy
+maintainers:
+- FN: Kin Lane
+  email: kin@apievangelist.com
