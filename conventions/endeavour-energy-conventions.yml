@@ -1,0 +1,194 @@
+generated: '2026-07-27'
+method: searched
+source: >-
+  https://help.opendatasoft.com/apis/ods-explore-v2/explore_v2.1.html (the
+  Explore API v2.1 reference that governs this surface — Authentication,
+  Versioning, Deprecation warnings, ODSQL sections), plus the harvested
+  contracts openapi/endeavour-energy-open-data-explore-api-v2-1-openapi.json
+  and -v2-0-openapi.json, plus live anonymous probes of
+  https://data.endeavourenergy.com.au on 2026-07-27.
+description: >-
+  Cross-cutting request/response semantics for the Endeavour Energy Open Data
+  Explore API: how you authenticate (or do not), how the query language works,
+  how pagination is bounded, what the error envelope looks like, how rate
+  limits are signalled, and how versions are deprecated. These are the runtime
+  rules OpenAPI does not fully express. The API is served by the Opendatasoft
+  platform, so the conventions are the platform's — but every value below was
+  verified against Endeavour Energy's own host.
+
+base_url: https://data.endeavourenergy.com.au/api/explore/v2.1
+api_style: >-
+  Read-only REST over HTTPS. JSON responses (content-type
+  `application/json; charset=utf-8`). Only the HTTP GET method is supported —
+  all 16 operations in the contract are GET. Endpoints are hierarchical
+  (catalog -> dataset -> records/exports/facets/attachments) and most responses
+  carry a `links` array for navigation.
+
+authentication:
+  scheme: >-
+    Optional API key. Anonymous access is the default and is sufficient for
+    every published dataset.
+  mechanisms:
+    - {kind: none, detail: 'Anonymous GET. Verified HTTP 200 on /catalog/datasets and on records with no credential.'}
+    - {kind: apiKey, in: header, format: 'Authorization: Apikey <API_KEY>', recommended: true}
+    - {kind: apiKey, in: query, parameter: apikey, recommended: false, note: 'Declared in the OpenAPI securityScheme; docs recommend the header instead because query strings land in logs and browser history.'}
+    - {kind: session, detail: 'Portal session cookie, when logged into https://data.endeavourenergy.com.au/login/.'}
+    - {kind: oauth2, detail: 'Authorization-code flow at /oauth2/authorize/ and /oauth2/token/. See scopes/endeavour-energy-scopes.yml.'}
+  key_provisioning: >-
+    https://data.endeavourenergy.com.au/account/ -> "My API keys" tab. Requires
+    a portal account; /signup/ currently 302-redirects to the portal home, so
+    self-serve registration is not open on this domain.
+  what_a_key_buys: >-
+    Access to restricted datasets (there are none published here) and extended
+    call quotas. It is not required for any public dataset.
+  detail: authentication/endeavour-energy-authentication.yml
+
+idempotency:
+  supported: true
+  mechanism: http-method-semantics
+  idempotency_key_header: false
+  applies_to: >-
+    All 16 operations. The contract declares GET as the only method, and GET is
+    safe and idempotent by definition under RFC 9110 section 9.2.
+  detail: >-
+    There is no Idempotency-Key header, and none is needed: this API mutates
+    nothing. Any request can be retried, replayed or run concurrently without
+    side effects. The only retry consideration is the daily quota (see
+    rate_limits) — a retry storm burns quota, it does not corrupt state. Agents
+    can treat every operation here as freely retryable.
+  reference: https://www.rfc-editor.org/rfc/rfc9110#section-9.2.1
+
+query_language:
+  name: Opendatasoft Query Language (ODSQL)
+  docs: 'https://help.opendatasoft.com/apis/ods-explore-v2/explore_v2.1.html#section/Opendatasoft-Query-Language-(ODSQL)'
+  clauses: [select, where, group_by, order_by, refine, exclude]
+  note: >-
+    ODSQL clauses work the same way across catalog and dataset endpoints. The
+    docs guarantee ODSQL is backward compatible within a version — new syntax
+    never replaces existing syntax.
+
+pagination:
+  style: offset
+  request_params:
+    limit:
+      default: 10
+      max_without_group_by: 100
+      max_with_group_by: 20000
+    offset:
+      default: 0
+      min: 0
+  bounds:
+    without_group_by: 'offset + limit must be less than 10000'
+    with_group_by: 'offset + limit must be less than 20000'
+  response_fields:
+    total_count: total number of matching items
+    results: array of results
+    links: navigation links (self, first, next, last) where applicable
+  overflow_guidance: >-
+    The documented escape hatch for anything larger than the window is the
+    export endpoints (exportRecords / exportRecordsCSV / exportRecordsParquet /
+    exportRecordsGPX), which have no record limit. For Endeavour Energy this
+    matters: conductors_hv_lv_sl_ug alone holds 808,500 records and
+    endeavourenergy_poles 440,725 — neither is reachable through paginated
+    /records at all.
+
+field_selection:
+  supported: true
+  mechanism: >-
+    `select` clause (field names, aggregations, ODSQL functions) and the
+    `exclude` clause. Also `include_links` and `include_app_metas` booleans on
+    catalog endpoints to trim response envelopes.
+
+faceting:
+  supported: true
+  endpoints: [getDatasetsFacets, getRecordsFacets]
+  mechanism: '`facet` and `refine` parameters; facet values returned with counts.'
+
+error_envelope:
+  format: custom-json
+  rfc9457: false
+  shape:
+    error_code: 'string — machine-readable error identifier, e.g. ODSQLSyntaxError, NotFoundResource'
+    message: 'string — human-readable explanation, often naming the offending clause and position'
+  quota_shape:
+    errorcode: 'number — e.g. 10002'
+    error: string
+    call_limit: number
+    limit_time_unit: string
+    reset_time: 'string — ISO 8601'
+  note: >-
+    Two different envelopes are in play: 4xx/5xx application errors use
+    {error_code, message}; the 429 quota response uses a distinct
+    {errorcode, error, call_limit, limit_time_unit, reset_time} shape with a
+    NUMERIC errorcode. An agent parsing errors must handle both. No
+    application/problem+json anywhere.
+  detail: errors/endeavour-energy-problem-types.yml
+
+rate_limit_signaling:
+  headers:
+    - {name: X-RateLimit-Limit, meaning: 'calls allowed in the window', observed: 5000}
+    - {name: X-RateLimit-Remaining, meaning: 'calls left in the window', observed: 4988}
+    - {name: X-RateLimit-Reset, meaning: 'window reset timestamp', observed: '2026-07-28 00:00:00+00:00'}
+    - {name: X-RateLimit-dataset-Limit, meaning: 'per-dataset variant, exposed via CORS'}
+    - {name: X-RateLimit-dataset-Remaining}
+    - {name: X-RateLimit-dataset-Reset}
+  throttled_status: 429
+  cors_exposed: true
+  detail: rate-limits/endeavour-energy-rate-limits.yml
+
+versioning:
+  scheme: uri-path
+  current: v2.1
+  also_served: v2.0 (deprecated)
+  deprecation_headers:
+    - {name: ODS-Explore-API-Deprecation, note: 'Free-text deprecation messages, semicolon-separated, formatted <FEATURE_ID>: message.'}
+    - {name: Link, rel: deprecation, note: 'RFC 8288 link to the version changelog.'}
+  rfc8594_sunset_header: false
+  detail: lifecycle/endeavour-energy-lifecycle.yml
+
+caching:
+  cache_control: 'no-cache, no-store, max-age=0, must-revalidate'
+  vary: 'Accept-Language, Cookie, Host'
+  note: >-
+    The platform instructs clients not to cache. Live outage datasets are
+    described as refreshing every 10 minutes, so polling — not caching — is the
+    freshness model. There is no ETag or Last-Modified on the API responses;
+    dataset-level freshness is exposed as the `modified` meta on
+    /catalog/datasets.
+
+cors:
+  allow_origin: '*'
+  allow_methods: [POST, GET, OPTIONS]
+  expose_headers: [ODS-Explore-API-Deprecation, Link, X-RateLimit-Remaining, X-RateLimit-Limit, X-RateLimit-Reset, X-RateLimit-dataset-Remaining, X-RateLimit-dataset-Limit, X-RateLimit-dataset-Reset]
+  note: Fully open CORS — browser clients can call this API directly.
+
+request_tracing:
+  request_id_header: false
+  note: >-
+    No Request-Id / X-Request-Id / traceparent is returned. There is no
+    correlation identifier to quote in a support ticket, and no support channel
+    for the API itself (the portal's contact links are the utility's phone
+    numbers).
+
+security_response_headers:
+  strict_transport_security: 'max-age=31536000;includeSubdomains'
+  x_content_type_options: nosniff
+  referrer_policy: strict-origin-when-cross-origin
+  content_security_policy: upgrade-insecure-requests
+  permissions_policy: 'midi=(),microphone=(),camera=(),magnetometer=(),gyroscope=(),fullscreen=(self),payment=()'
+
+licensing:
+  note: >-
+    Reuse is governed per dataset, not per API. Five of eight datasets declare
+    the Open Database Licence; three declare no licence at all
+    (conductors_hv_lv_sl_ug, distribution-substation-available-capacity,
+    distribution-district). Read `metas.default.license` on
+    /catalog/datasets before redistributing anything.
+
+related:
+  - authentication/endeavour-energy-authentication.yml
+  - scopes/endeavour-energy-scopes.yml
+  - errors/endeavour-energy-problem-types.yml
+  - lifecycle/endeavour-energy-lifecycle.yml
+  - rate-limits/endeavour-energy-rate-limits.yml
+  - changelog/endeavour-energy-changelog.yml

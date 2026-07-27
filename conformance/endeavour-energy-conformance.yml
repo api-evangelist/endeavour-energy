@@ -1,0 +1,211 @@
+generated: '2026-07-27'
+method: derived
+source: >-
+  Derived from openapi/endeavour-energy-open-data-explore-api-v2-1-openapi.json
+  and -v2-0-openapi.json, the live response headers and error bodies captured
+  from https://data.endeavourenergy.com.au on 2026-07-27, the harvested
+  well-known/ documents, and the Explore API v2.1 reference at
+  help.opendatasoft.com. Searched the corporate site and the data portal for
+  compliance claims — none found.
+description: >-
+  Which cross-cutting standards this API actually conforms to, asserted only
+  where there is evidence. The pattern is consistent: the platform-level web
+  standards are in good shape (OpenAPI, OAuth2, DCAT, security.txt, RFC 8288
+  deprecation links, CORS), and the ENERGY-domain standards are entirely
+  absent. There is no CIM, no ESPI/Green Button, no OpenADR, and no Consumer
+  Data Right surface. The one energy standard Endeavour Energy genuinely
+  implements — CSIP-AUS — has no published contract at all.
+
+standards:
+  - id: openapi-3.0
+    conforms: true
+    evidence: >-
+      Two harvested contracts, both `openapi: 3.0.3`, 16 paths each, servers[]
+      pointing at Endeavour Energy's own host. Fetched from
+      /api/explore/v2.1/swagger.json and /api/explore/v2.0/swagger.json (both
+      HTTP 200) and parse cleanly.
+
+  - id: rest
+    conforms: true
+    evidence: >-
+      Resource-oriented, hierarchical URLs (catalog -> datasets -> records),
+      JSON responses, HTTP status semantics. GET-only; the platform documents
+      "Only the HTTP GET method is supported."
+
+  - id: hateoas
+    conforms: partial
+    evidence: >-
+      "All responses contain a list of links allowing easy and relevant
+      navigation through the API endpoints" — a `links` array with rel-typed
+      hrefs, and `include_links` to control it. Navigation links, not a full
+      hypermedia control set.
+
+  - id: oauth2
+    conforms: true
+    evidence: >-
+      Authorization-code flow live on Endeavour Energy's host:
+      /oauth2/authorize/ -> 302, /oauth2/token/ -> 405 (POST-only), documented
+      as RFC 6749 compliant. NOT declared in the OpenAPI contract.
+    detail: scopes/endeavour-energy-scopes.yml
+
+  - id: rfc6750-bearer-token
+    conforms: true
+    evidence: 'Documented: OAuth2 flow issues Bearer tokens "in compliance with RFC 6750".'
+
+  - id: rfc8414-oauth-authorization-server-metadata
+    conforms: false
+    evidence: '/.well-known/oauth-authorization-server -> 404 on both hosts, despite a working OAuth2 surface.'
+
+  - id: oidc
+    conforms: false
+    evidence: '/.well-known/openid-configuration -> 404 on both hosts.'
+
+  - id: rfc9457-problem-details
+    conforms: false
+    evidence: >-
+      Errors return a flat {error_code, message} object as
+      application/json; charset=utf-8. No application/problem+json anywhere in
+      either contract or in live responses.
+    detail: errors/endeavour-energy-problem-types.yml
+
+  - id: rfc9116-security-txt
+    conforms: true
+    evidence: >-
+      https://www.endeavourenergy.com.au/.well-known/security.txt -> 200, with
+      Contact, Expires (2027-07-01), Preferred-Languages and Hiring. A second,
+      platform-level file is served on the data host.
+    gap: 'No Policy, Encryption, Acknowledgments or Canonical field.'
+    detail: well-known/endeavour-energy-well-known.yml
+
+  - id: rfc9727-api-catalog
+    conforms: false
+    evidence: '/.well-known/api-catalog -> 404 on both hosts.'
+
+  - id: rfc8288-web-linking
+    conforms: true
+    evidence: >-
+      The deprecated v2.0 endpoints return
+      `Link: <...v2.1 changelog...>;rel="deprecation"; type="text/html"`,
+      observed live 2026-07-27.
+
+  - id: rfc8594-sunset-header
+    conforms: false
+    evidence: >-
+      Deprecation is signalled with a vendor header
+      (ODS-Explore-API-Deprecation) plus an RFC 8288 Link, not with the
+      standard Sunset/Deprecation headers, and no sunset date is published.
+    detail: lifecycle/endeavour-energy-lifecycle.yml
+
+  - id: rfc9110-safe-idempotent-methods
+    conforms: true
+    evidence: 'All 16 declared operations are GET — safe and idempotent by definition. No state-changing method exists on this API.'
+
+  - id: rate-limit-headers
+    conforms: partial
+    evidence: >-
+      X-RateLimit-Limit / -Remaining / -Reset are returned and CORS-exposed
+      (observed 5000 / 4988 / 2026-07-28T00:00:00Z). These are the de-facto
+      convention, not the IETF draft RateLimit header fields.
+    detail: rate-limits/endeavour-energy-rate-limits.yml
+
+  - id: cors
+    conforms: true
+    evidence: 'Access-Control-Allow-Origin: *, Allow-Methods POST/GET/OPTIONS, and eight response headers explicitly exposed.'
+
+  - id: dcat
+    conforms: true
+    evidence: >-
+      GET /api/explore/v2.1/catalog/exports/dcat -> 200, RDF/XML catalogue
+      export. The contract also declares exportCatalogDCAT with a
+      dcat_ap_format path parameter (DCAT-AP profiles).
+
+  - id: json-schema
+    conforms: partial
+    evidence: 'components.schemas defines 9 reusable schemas in v2.1 (links, dataset, datasets, record, records, attachment, facet enumerations) via OpenAPI 3.0 Schema Objects.'
+
+  - id: geojson
+    conforms: true
+    evidence: >-
+      GeoJSON is a supported export format and six of the eight datasets carry
+      geo_point_2d / geo_shape fields. The v2.1 changelog documents a GeoJSON
+      datetime formatting change.
+
+  - id: gpx
+    conforms: true
+    evidence: 'exportRecordsGPX operation — GET /catalog/datasets/{dataset_id}/exports/gpx.'
+
+  - id: parquet
+    conforms: true
+    evidence: 'exportRecordsParquet operation — GET /catalog/datasets/{dataset_id}/exports/parquet.'
+
+  - id: odbl-open-database-licence
+    conforms: partial
+    evidence: >-
+      Five of eight datasets declare the Open Database Licence in
+      metas.default.license (networkassets_otherassets, endeavourenergy_poles,
+      outagecustomerlive, single_premise_outage_customer_live,
+      plannedoutagecustomer). Three declare no licence at all
+      (conductors_hv_lv_sl_ug, distribution-substation-available-capacity,
+      distribution-district) — a real reuse risk on 839,001 records.
+
+  - id: cdr-consumer-data-right
+    conforms: false
+    evidence: >-
+      Not applicable, verified against the authoritative register. GET
+      https://api.cdr.gov.au/cdr-register/v1/energy/data-holders/brands/summary
+      (x-v: 1) -> 200, 84 energy brands, zero matches for "endeavour" and zero
+      for any Australian distribution network business. The CDR energy
+      designation placed the data-holder obligation on retailers (primary) and
+      AEMO (secondary/gateway), not on DNSPs.
+    detail: review.yml
+
+  - id: csip-aus
+    conforms: unknown
+    evidence: >-
+      Endeavour Energy names CSIP-AUS (Common Smart Inverter Profile -
+      Australia, the AU derivative of IEEE 2030.5 / SEP2) on its NSW emergency
+      backstop page and references "Endeavour Energy's utility server".
+      Conformance cannot be asserted or denied: no endpoint, no base URI, no
+      specification and no developer onboarding is published for that
+      interface. Recorded so the standard and its implementation are never
+      conflated.
+
+  - id: iec-cim-61968-61970
+    conforms: false
+    evidence: 'No CIM vocabulary, payload or reference anywhere in the published surface. Network asset datasets use flat vendor field names (g3e_fid, asset_num, feature_type).'
+
+  - id: espi-green-button
+    conforms: false
+    evidence: 'No consumer usage/interval data API of any kind. Endeavour Energy holds no retail billing relationship.'
+
+  - id: openadr
+    conforms: false
+    evidence: 'Not referenced anywhere in the published surface.'
+
+  - id: asyncapi
+    conforms: false
+    evidence: 'No event, streaming or webhook surface exists. /asyncapi.yaml -> 404. Live data is polled, not pushed.'
+
+  - id: graphql
+    conforms: false
+    evidence: '/graphql -> 404 on the portal host.'
+
+  - id: mcp
+    conforms: false
+    evidence: 'No official MCP server published. See mcp/endeavour-energy-mcp.yml (derived candidate only).'
+
+compliance_program:
+  published: false
+  certifications: []
+  trust_center: null
+  evidence: >-
+    probe-security-programs.py returned trust=none. No SOC 2, ISO 27001, PCI
+    DSS, HIPAA, FedRAMP, CSA STAR or equivalent is published on either host,
+    and there is no trust.endeavourenergy.com.au. No `Compliance` pointer is
+    wired in apis.yml as a result.
+
+related:
+  - security/endeavour-energy-vulnerability-disclosure.yml
+  - security/endeavour-energy-domain-security.yml
+  - well-known/endeavour-energy-well-known.yml
+  - review.yml

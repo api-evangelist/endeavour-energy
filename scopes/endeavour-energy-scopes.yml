@@ -1,0 +1,92 @@
+generated: '2026-07-27'
+method: searched
+source: >-
+  https://help.opendatasoft.com/apis/ods-explore-v2/explore_v2.1.html#section/Authentication/Using-OAuth2-authorization
+  plus live probes of the OAuth2 endpoints on Endeavour Energy's own portal host
+  on 2026-07-27. The mechanical derive pass
+  (0-working/derive-oauth-scopes.py) found ZERO oauth2 schemes because the
+  harvested OpenAPI declares only an apiKey — this file exists because the
+  OAuth2 surface is real but undeclared.
+docs: 'https://help.opendatasoft.com/apis/ods-explore-v2/explore_v2.1.html#section/Authentication/Using-OAuth2-authorization'
+description: >-
+  Endeavour Energy's open data portal runs the Opendatasoft OAuth2
+  authorization-code flow, RFC 6749 compliant with RFC 6750 bearer tokens. The
+  scope model is deliberately trivial: there is exactly ONE scope, `all`, and
+  it is the only value the platform accepts. There is no read/write split, no
+  per-dataset scope, and no least-privilege story — an authorized application
+  gets whatever its authorizing user has. This is worth recording precisely
+  because it is the opposite of a granular scope catalogue, and an agent
+  planning consent needs to know that "all" is the only option.
+
+declared_in_openapi: false
+derive_pass_result: 'no oauth2 securityScheme in any harvested spec'
+
+schemes:
+  - name: oauth2
+    source: 'docs + live probe (not in openapi/)'
+    rfc: [RFC 6749, RFC 6750]
+    token_type: Bearer
+    client_types:
+      - {type: confidential, note: 'client secret kept server-side'}
+      - {type: public, note: 'client secret embedded in a client-side app'}
+    registration:
+      url: 'https://data.endeavourenergy.com.au/account/ -> "My applications" tab'
+      fields: [application name, type, redirection URL]
+      returns: [client_id, client_secret]
+      domain_bound: >-
+        "Currently, applications are registered on a specific domain and can
+        only access data on this domain." An application registered here works
+        only against data.endeavourenergy.com.au.
+    flows:
+      - flow: authorizationCode
+        authorizationUrl: https://data.endeavourenergy.com.au/oauth2/authorize/
+        tokenUrl: https://data.endeavourenergy.com.au/oauth2/token/
+        refresh_supported: true
+        authorize_params: [client_id, redirect_uri, 'response_type=code', scopes, state]
+        token_params: [client_id, client_secret, redirect_uri, 'grant_type=authorization_code', code, scopes, state]
+        client_auth_at_token_endpoint: 'form parameters or HTTP Basic (Authorization: Basic base64(client_id:client_secret))'
+        authorization_code_ttl: '1 hour — the 30-character code must be exchanged before it expires'
+        state_recommended: true
+    verified_live:
+      - {url: 'https://data.endeavourenergy.com.au/oauth2/authorize/', status: 302, note: 'exists; redirects to the portal login'}
+      - {url: 'https://data.endeavourenergy.com.au/oauth2/token/', status: 405, note: 'exists; Method Not Allowed on GET, POST-only as documented'}
+    discovery:
+      well_known_oauth_authorization_server: 404
+      well_known_openid_configuration: 404
+      note: >-
+        No RFC 8414 metadata document. A client cannot discover these endpoints
+        programmatically; they are only in the vendor documentation.
+
+scopes:
+  - scope: all
+    description: >-
+      Full access to the data the authorizing user can see on this domain.
+      The published wording is unambiguous: "a list of space-separated
+      requested scopes. Currently, only `all` is supported."
+    flows: [authorizationCode]
+    optional: true
+    sources: ['https://help.opendatasoft.com/apis/ods-explore-v2/explore_v2.1.html#section/Authentication/Using-OAuth2-authorization']
+
+granularity:
+  scope_count: 1
+  read_write_split: false
+  per_dataset_scopes: false
+  least_privilege_possible: false
+  assessment: >-
+    On this domain the practical consequence is small — all eight datasets are
+    public and readable anonymously, and the API is GET-only, so an `all` token
+    grants nothing an unauthenticated caller does not already have. The scope
+    model would matter on a portal with restricted datasets; here it is
+    effectively decorative.
+
+alternative_credentials:
+  note: >-
+    API keys carry the same problem in a sharper form: "every API key
+    authenticates requests as coming from your user, which means they grant the
+    same rights (yours) to any person using them." Key permissions can only be
+    narrowed through the separate Automation API, whose surface on this host
+    (/api/management/v2/swagger.json) returns 401.
+
+related:
+  - authentication/endeavour-energy-authentication.yml
+  - well-known/endeavour-energy-well-known.yml

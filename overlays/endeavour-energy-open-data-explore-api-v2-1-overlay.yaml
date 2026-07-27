@@ -1,0 +1,139 @@
+overlay: 1.0.0
+info:
+  title: API Evangelist enhancements for Endeavour Energy Open Data Explore API v2.1
+  version: 1.0.0
+extends: openapi/endeavour-energy-open-data-explore-api-v2-1-openapi.json
+x-apievangelist:
+  generated: '2026-07-27'
+  method: generated
+  source: >-
+    Generated from the harvested contract plus live anonymous verification of
+    https://data.endeavourenergy.com.au/api/explore/v2.1 on 2026-07-27. The
+    harvested spec is stock Opendatasoft — it describes the platform, not
+    Endeavour Energy. This overlay adds what is true of THIS deployment:
+    provider identity, the anonymous access model, the undeclared auth
+    mechanisms, the observed quota, and the 404 the spec omits. The original
+    JSON is never mutated.
+actions:
+  - target: $.info
+    update:
+      x-provider: Endeavour Energy
+      x-provider-aid: endeavour-energy
+      x-provider-role: >-
+        Regulated electricity distribution network service provider (DNSP) for
+        Greater Western Sydney, the Blue Mountains, the Illawarra, the Southern
+        Highlands, the South Coast and Central West NSW, Australia.
+      x-deployment-of: Opendatasoft Explore API v2.1
+      x-spec-source: https://data.endeavourenergy.com.au/api/explore/v2.1/swagger.json
+      x-spec-fetched: '2026-07-27'
+      x-apievangelist-note: >-
+        The title, contact (support@opendatasoft.com) and licence (Copyright
+        Opendatasoft) in this document belong to the platform vendor, not to
+        Endeavour Energy. Endeavour Energy publishes no developer support
+        channel for this API.
+
+  - target: $.info
+    update:
+      x-access-model:
+        anonymous: true
+        credential_required: false
+        signup_required: false
+        verified: '2026-07-27'
+        note: >-
+          Every operation returns 200 with no credential. The declared apikey
+          security scheme is optional and buys only extended quota.
+      x-data-licence:
+        model: per-dataset, not per-api
+        open_database_licence:
+          - networkassets_otherassets
+          - endeavourenergy_poles
+          - outagecustomerlive
+          - single_premise_outage_customer_live
+          - plannedoutagecustomer
+        undeclared:
+          - conductors_hv_lv_sl_ug
+          - distribution-substation-available-capacity
+          - distribution-district
+        note: 'Read metas.default.license on /catalog/datasets before redistributing.'
+      x-rate-limit:
+        scope: domain
+        limit: 5000
+        window: day
+        reset: '00:00 UTC'
+        headers: [X-RateLimit-Limit, X-RateLimit-Remaining, X-RateLimit-Reset]
+        observed: '2026-07-27'
+        note: 'Shared across all anonymous consumers of this domain, not per client.'
+      x-datasets:
+        count: 8
+        ids:
+          - networkassets_otherassets
+          - endeavourenergy_poles
+          - conductors_hv_lv_sl_ug
+          - distribution-substation-available-capacity
+          - distribution-district
+          - outagecustomerlive
+          - single_premise_outage_customer_live
+          - plannedoutagecustomer
+        live_feeds:
+          - outagecustomerlive
+          - single_premise_outage_customer_live
+          - plannedoutagecustomer
+        refresh: 'live outage layers refresh approximately every 10 minutes'
+
+  - target: $.components.securitySchemes
+    update:
+      x-apikey-header:
+        type: apiKey
+        in: header
+        name: Authorization
+        description: >-
+          UNDECLARED IN THE ORIGINAL SPEC. The documented and RECOMMENDED way
+          to pass a key is the header form `Authorization: Apikey <API_KEY>`;
+          the query-parameter scheme this document declares is explicitly
+          discouraged because query strings persist in logs and browser
+          history.
+      x-oauth2:
+        type: oauth2
+        description: >-
+          UNDECLARED IN THE ORIGINAL SPEC, but live on this host and verified
+          2026-07-27 (/oauth2/authorize/ -> 302, /oauth2/token/ -> 405
+          POST-only). RFC 6749 authorization-code flow with RFC 6750 bearer
+          tokens. Exactly one scope exists: `all`.
+        flows:
+          authorizationCode:
+            authorizationUrl: https://data.endeavourenergy.com.au/oauth2/authorize/
+            tokenUrl: https://data.endeavourenergy.com.au/oauth2/token/
+            scopes:
+              all: Full access to the data the authorizing user can see on this domain.
+
+  - target: $.paths..get
+    update:
+      x-idempotent: true
+      x-safe: true
+      x-apievangelist-note: >-
+        GET only — safe and idempotent under RFC 9110. Freely retryable; the
+        only cost of a retry is quota.
+      responses:
+        '404':
+          description: >-
+            Not found. UNDECLARED IN THE ORIGINAL SPEC but returned live:
+            {"error_code":"NotFoundResource","message":"The requested dataset
+            <id> does not exist."} Verified 2026-07-27.
+          content:
+            application/json; charset=utf-8:
+              schema:
+                type: object
+                properties:
+                  error_code: {type: string}
+                  message: {type: string}
+                required: [error_code, message]
+
+  - target: $.tags
+    update:
+      x-apievangelist-domain-tags:
+        - Electricity Distribution
+        - Network Assets
+        - Outages
+        - Geospatial
+        - Open Data
+        - Australia

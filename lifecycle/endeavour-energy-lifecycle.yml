@@ -1,0 +1,126 @@
+generated: '2026-07-27'
+method: searched
+source: >-
+  https://help.opendatasoft.com/apis/ods-explore-v2/explore_v2.1.html
+  (#section/Versioning and #section/Versioning/Deprecation-warnings), plus live
+  response headers captured from
+  https://data.endeavourenergy.com.au/api/explore/v2.0 and /v2.1 on 2026-07-27.
+description: >-
+  Version and deprecation posture for the Endeavour Energy Open Data Explore
+  API. The policy is the Opendatasoft platform's, but it is enforced on
+  Endeavour Energy's own host and was verified there: the deprecated v2.0
+  surface really does emit a deprecation header and an RFC 8288 Link to the
+  changelog. There is no status page, no SLA and no published support channel
+  for this API.
+
+versioning:
+  scheme: uri-path
+  current: v2.1
+  current_base_url: https://data.endeavourenergy.com.au/api/explore/v2.1
+  status: >-
+    "The v2.1 version is stable and production ready: no breaking change will be
+    introduced in the future, following our versioning policy."
+  docs: 'https://help.opendatasoft.com/apis/ods-explore-v2/explore_v2.1.html#section/Versioning'
+  guarantees:
+    - ODSQL is backward compatible — new syntax cannot replace existing syntax.
+    - Response bodies are stable — new keys can be added, but keys cannot be renamed or deleted.
+    - URLs and endpoints are stable.
+  breaking_change_policy: >-
+    A breaking change is defined as a violation of any of the three guarantees
+    above, and must ship as a NEW API version rather than as a change to an
+    existing one.
+
+deprecation:
+  policy_url: 'https://help.opendatasoft.com/apis/ods-explore-v2/explore_v2.1.html#section/Versioning/Deprecation-warnings'
+  changelog_url: 'https://help.opendatasoft.com/apis/ods-explore-v2/explore_v2.1.html#section/Introduction/v2.1-Changelog'
+  rfc8594_sunset_header: false
+  rfc8594_deprecation_header: false
+  custom_deprecation_header: ODS-Explore-API-Deprecation
+  rfc8288_link_relation: deprecation
+  sunset_date_published: false
+  mechanism: >-
+    Deprecated versions and deprecated FEATURES are both signalled in response
+    headers. ODS-Explore-API-Deprecation carries one or more messages separated
+    by `;`, each formatted `<FEATURE_ID>: message`. A `Link` header with
+    rel="deprecation" points at the version changelog. Both headers are exposed
+    to browsers via Access-Control-Expose-Headers.
+  verified_live:
+    - request: 'GET https://data.endeavourenergy.com.au/api/explore/v2.0/catalog/datasets?limit=1'
+      status: 200
+      headers:
+        ods-explore-api-deprecation: 'deprecated API version (v2.0), please use the current v2.1 version'
+        link: '<https://help.huwise.com/apis/ods-explore-v2/explore_v2.1.html#section/Introduction/v2.1-Changelog>;rel="deprecation"; type="text/html"'
+    - request: 'GET https://data.endeavourenergy.com.au/api/explore/v2.1/catalog/datasets?limit=1'
+      status: 200
+      headers:
+        ods-explore-api-deprecation: null
+  gap: >-
+    There is a deprecation SIGNAL but no deprecation SCHEDULE. No Sunset date,
+    no removal timeline, and no commitment about how long v2.0 keeps answering.
+    A consumer on v2.0 is told to move but not told by when.
+
+deprecated_versions:
+  - version: v2.0
+    base_url: https://data.endeavourenergy.com.au/api/explore/v2.0
+    still_served: true
+    superseded_by: v2.1
+    artifact: openapi/endeavour-energy-open-data-explore-api-v2-0-openapi.json
+    evidence: ods-explore-api-deprecation response header, observed 2026-07-27
+
+deprecated_operations: []
+deprecated_features:
+  - feature: grouping by geo fields
+    replacement: geo_cluster() grouping function
+    since: v2.1
+    source: v2.1 changelog
+  - feature: XLS export format
+    replacement: XLSX
+    since: v2.1
+    source: v2.1 changelog
+  - feature: 'distance(), geometry(...) geometry functions'
+    replacement: 'within_distance(), intersects(), disjoint(), within() — old names still available'
+    since: v2.1
+    source: v2.1 changelog
+
+removed_endpoints:
+  - path: /api/explore/v2.0/<source>/datasets/<dataset_id>/aggregates
+    removed_in: v2.1
+  - path: /api/explore/v2.0/<source>/datasets/<dataset_id>/query
+    removed_in: v2.1
+
+sla:
+  url: null
+  uptime_target: null
+  notes: >-
+    None published. Endeavour Energy makes no availability commitment for the
+    open data portal, and the portal's own Terms and Conditions page states
+    "The Terms and Conditions of this domain have not been defined yet."
+
+status_page: null
+status_page_notes: >-
+  No API status page exists. Probed https://status.opendatasoft.com/ -> 404.
+  Endeavour Energy publishes a network OUTAGE map at
+  https://www.endeavourenergy.com.au/power-outages/outage-map, but that reports
+  electricity supply interruptions to customers, not availability of the API —
+  it is the subject of the data, not the health of the service. No StatusPage
+  pointer is wired in apis.yml because none genuinely exists.
+
+support:
+  api_support_channel: null
+  notes: >-
+    The Explore API contract lists contact email support@opendatasoft.com (the
+    platform vendor, inherited verbatim from the stock spec). Endeavour Energy
+    publishes no developer support channel; the portal footer links only the
+    utility's general/emergency phone numbers and a complaints form. Corporate
+    contact page: https://www.endeavourenergy.com.au/about-us/contact-us
+
+data_freshness:
+  note: >-
+    Dataset-level, not API-level. `metas.default.modified` on /catalog/datasets
+    is the freshness signal. Observed 2026-07-27: the three live outage
+    datasets had modified timestamps minutes old; endeavourenergy_poles was last
+    modified 2026-03-17 and distribution-district 2025-07-23.
+
+related:
+  - changelog/endeavour-energy-changelog.yml
+  - conventions/endeavour-energy-conventions.yml

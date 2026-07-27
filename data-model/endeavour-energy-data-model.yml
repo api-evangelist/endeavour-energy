@@ -1,0 +1,154 @@
+generated: '2026-07-27'
+method: derived
+source: >-
+  Derived from the component schemas and $ref graph in
+  openapi/endeavour-energy-open-data-explore-api-v2-1-openapi.json, plus the
+  live dataset catalogue and per-dataset field definitions read anonymously
+  from https://data.endeavourenergy.com.au/api/explore/v2.1 on 2026-07-27.
+description: >-
+  This API has two layers of model and they must not be confused. The PLATFORM
+  model (catalog -> dataset -> record) is fixed by Opendatasoft and is what the
+  OpenAPI describes. The DOMAIN model — poles, conductors, substations,
+  outages — lives inside the `record.fields` payload, which the contract types
+  only as a generic object. Everything below the platform layer was recovered
+  by reading each dataset's field definitions from the live API, because the
+  spec does not describe it.
+docs: https://data.endeavourenergy.com.au/explore/
+notation: >-
+  relationships use has_one / has_many / belongs_to with the linking field
+  name; direction is from the entity that owns the reference.
+
+platform_entities:
+  - {name: Catalog, key: null, description: 'The domain-wide collection of published datasets. Not addressable itself; enumerated by getDatasets.'}
+  - {name: Dataset, key: dataset_id, description: 'A published dataset with metadata, a field schema, records and attachments.'}
+  - {name: DatasetMeta, key: null, description: 'metas.default — title, description, license, modified, records_count, theme, publisher, keyword.'}
+  - {name: Field, key: name, description: 'One column definition on a dataset: name, label, type (text/int/double/date/geo_point_2d/geo_shape), description.'}
+  - {name: Record, key: record_id, description: 'One row. Carries an id, a links array, and a `fields` object whose shape is dataset-specific.'}
+  - {name: Facet, key: name, description: 'A facetable field with enumerated values and counts.'}
+  - {name: FacetValue, key: value, description: 'One facet value with its record count.'}
+  - {name: Attachment, key: id, description: 'A file attached to a dataset (getDatasetAttachments).'}
+  - {name: Link, key: rel, description: 'Navigation link returned in responses; the hypermedia affordance.'}
+  - {name: Export, key: format, description: 'A materialized dataset or catalogue in csv / parquet / gpx / geojson / xlsx / json / dcat.'}
+
+platform_relationships:
+  - {from: Catalog, to: Dataset, kind: has_many, via: dataset_id}
+  - {from: Dataset, to: DatasetMeta, kind: has_one, via: metas.default}
+  - {from: Dataset, to: Field, kind: has_many, via: fields}
+  - {from: Dataset, to: Record, kind: has_many, via: dataset_id}
+  - {from: Dataset, to: Facet, kind: has_many, via: facets}
+  - {from: Dataset, to: Attachment, kind: has_many, via: attachments}
+  - {from: Dataset, to: Export, kind: has_many, via: format}
+  - {from: Facet, to: FacetValue, kind: has_many, via: value}
+  - {from: Record, to: Dataset, kind: belongs_to, via: dataset_id}
+  - {from: Record, to: Link, kind: has_many, via: links}
+  - {from: Catalog, to: Export, kind: has_many, via: format}
+
+schema_refs_observed:
+  - 'datasets -> $ref dataset (results[])'
+  - 'records -> $ref record (results[])'
+  - 'dataset -> $ref links'
+  - 'record -> $ref links'
+  - 'facet_enumeration -> $ref facet_value_enumeration'
+  - 'datasets/records/dataset/record -> $ref links'
+note_on_generic_payload: >-
+  `record.fields` is typed as a free-form object in the contract. No JSON
+  Schema is published for any dataset's row shape, so a generated client gets
+  an untyped map. The domain entities below close that gap for the eight
+  datasets that exist today; they are read from the live field definitions and
+  will drift if Endeavour Energy changes a dataset.
+
+domain_entities:
+  - name: Pole
+    dataset_id: endeavourenergy_poles
+    records: 440725
+    licence: Open Database License
+    modified: '2026-03-17T03:12:22+00:00'
+    key: g3e_fid
+    geometry: geo_point_2d (geom)
+    fields: [g3e_fid, feature_type, ug, cm, lv, sl, tr, hv, usage, asset_num, state, geom]
+    description: A distribution pole, with the classes of plant it carries (hv, lv, sl, tr, ug, cm) and its asset number.
+
+  - name: Conductor
+    dataset_id: conductors_hv_lv_sl_ug
+    records: 808500
+    licence: null
+    modified: '2026-07-25T19:01:43+00:00'
+    description: >-
+      High-voltage, low-voltage, streetlight and underground conductor
+      segments — the wires between the poles. The single largest dataset and
+      one of the three with no declared licence.
+
+  - name: NetworkAsset
+    dataset_id: networkassets_otherassets
+    records: 317031
+    licence: Open Database License
+    modified: '2026-07-27T16:54:22+00:00'
+    themes: [Infrastructure, Usage, Energy Transition]
+    description: Other network assets not covered by the poles or conductors layers.
+
+  - name: DistributionSubstationCapacity
+    dataset_id: distribution-substation-available-capacity
+    records: 30500
+    licence: null
+    modified: '2026-02-04T00:32:54+00:00'
+    key: objectid
+    geometry: 'geo_shape + geo_point_2d'
+    fields: [objectid, dsub, avlbl_k, geo_shape, geo_point_2d, skip_records]
+    description: >-
+      Spare capacity at each distribution substation (`avlbl_k`, kVA) — the
+      dataset that tells a solar/EV/battery installer whether the local network
+      can take more load or export.
+
+  - name: DistributionDistrict
+    dataset_id: distribution-district
+    records: 1
+    licence: null
+    modified: '2025-07-23T01:11:49+00:00'
+    description: Distribution district boundary. A single record; the coarsest geography published.
+
+  - name: UnplannedOutage
+    dataset_id: outagecustomerlive
+    licence: Open Database License
+    refresh: every 10 minutes
+    key: incident_id
+    geometry: 'geo_point_2d (geom) + latitude/longitude'
+    fields: [incident_id, incident_status, outage_type, outage_cause_main, outage_cause_sub, cause, start_date_time, end_date_time, est_restore_time, customers_affected, street_name, cityname, postcode, latitude, longitude, geom, uid, updated_at]
+    description: >-
+      Live unplanned supply interruptions, with cause, status, estimated
+      restore time and customers affected. Note that every date field is typed
+      `text`, not `date` — clients must parse them.
+
+  - name: PlannedOutage
+    dataset_id: plannedoutagecustomer
+    records: 9645
+    licence: Open Database License
+    refresh: every 10 minutes
+    description: Scheduled/planned supply interruptions.
+
+  - name: SinglePremiseOutage
+    dataset_id: single_premise_outage_customer_live
+    records: 796
+    licence: Open Database License
+    refresh: every 10 minutes
+    description: Live outages affecting a single premise rather than a feeder or area.
+
+domain_relationships:
+  - {from: Pole, to: Conductor, kind: has_many, via: 'spatial — conductors terminate at poles; no shared key is published'}
+  - {from: DistributionSubstationCapacity, to: DistributionDistrict, kind: belongs_to, via: 'spatial only'}
+  - {from: UnplannedOutage, to: DistributionDistrict, kind: belongs_to, via: 'spatial only'}
+  - {from: PlannedOutage, to: DistributionDistrict, kind: belongs_to, via: 'spatial only'}
+  - {from: SinglePremiseOutage, to: UnplannedOutage, kind: has_one, via: 'incident_id where the same incident spans both feeds (not guaranteed)'}
+
+joinability:
+  assessment: >-
+    Weak. There are no foreign keys ACROSS datasets — no asset id links a
+    conductor to a pole, no substation id links a capacity record to an outage,
+    and no NMI or feeder id appears anywhere. The only practical join is
+    geospatial: every meaningful dataset carries geo_point_2d or geo_shape, and
+    the Explore API's ODSQL geo predicates (within_distance(), in_bbox(),
+    intersects(), within(), geo_cluster()) are how you relate them. Treat this
+    as a set of overlapping map layers, not a relational model.
+
+related:
+  - conventions/endeavour-energy-conventions.yml
+  - skills/_index.yml

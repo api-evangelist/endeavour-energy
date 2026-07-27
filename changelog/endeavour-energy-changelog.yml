@@ -1,0 +1,78 @@
+generated: '2026-07-27'
+method: searched
+source: >-
+  https://help.opendatasoft.com/apis/ods-explore-v2/explore_v2.1.html#section/Introduction/v2.1-Changelog
+  — reached from the RFC 8288 `Link: <...>;rel="deprecation"` header that
+  Endeavour Energy's own v2.0 endpoint returns.
+description: >-
+  Endeavour Energy publishes no changelog of its own — not for the API, not for
+  the data. The only versioned change record that governs this surface is the
+  Opendatasoft Explore API changelog, and the only reason it is discoverable
+  from Endeavour Energy's host at all is that the deprecated v2.0 endpoint
+  emits a Link header pointing to it. That is a genuinely good machine-readable
+  behaviour, and it is worth noting that a consumer never has to leave the HTTP
+  response to find out what changed.
+
+scheme: major-minor version, one changelog per API version
+current_version: v2.1
+current_version_status: >-
+  Stable and production ready; the platform states no breaking change will be
+  introduced in v2.1.
+discovery:
+  from_header: 'Link: <https://help.huwise.com/apis/ods-explore-v2/explore_v2.1.html#section/Introduction/v2.1-Changelog>;rel="deprecation"; type="text/html"'
+  emitted_by: 'https://data.endeavourenergy.com.au/api/explore/v2.0/* (any operation)'
+  verified: '2026-07-27'
+  note: help.huwise.com 301-redirects to help.opendatasoft.com.
+
+entries:
+  - version: v2.1
+    date: null
+    breaking: true
+    summary: >-
+      Current version. Introduced changes that are not all backward compatible
+      with v2.0; recorded verbatim from the published changelog.
+    additions:
+      - The `group_by` clause is now available on export endpoints.
+      - 'Two new full-text ODSQL predicates: suggest() and startswith().'
+    changes:
+      - The XLSX export format replaces the old XLS format.
+      - The search() function has been changed.
+      - 'Date functions (year(), month(), day(), hour(), minute(), second()) now return integers instead of strings.'
+      - In a group_by, null values are now grouped.
+      - Date aggregation keys are formatted as isoformat dates, previously as timestamps.
+      - CSV exports output a Byte Order Mark (BOM) character by default.
+      - 'GPX exports use <extension> instead of <desc> by default to export attributes.'
+      - Datetimes in GeoJSON exports are now output as isoformat strings, previously as integer timestamps.
+      - 'Geometry functions renamed (old names still available): distance() -> within_distance(); geometry(a,b,INTERSECTS) -> intersects(); geometry(a,b,DISJOINT) -> disjoint(); geometry(a,b,WITHIN) -> within().'
+      - 'Output schemas changed for: getDatasets, getDataset, getRecords, getRecord.'
+    deprecations:
+      - Grouping by geo fields is deprecated; use the geo_cluster() grouping function instead.
+    removals:
+      - '/api/explore/v2.0/<source>/datasets/<dataset_id>/aggregates — merged into the records endpoint.'
+      - '/api/explore/v2.0/<source>/datasets/<dataset_id>/query — merged into the records endpoint.'
+
+  - version: v2.0
+    date: null
+    breaking: false
+    status: deprecated
+    summary: >-
+      Still served on this domain and still answering 200, but every response
+      carries `ods-explore-api-deprecation: deprecated API version (v2.0),
+      please use the current v2.1 version`. No sunset date has been published.
+    artifact: openapi/endeavour-energy-open-data-explore-api-v2-0-openapi.json
+
+provider_changelog:
+  exists: false
+  notes: >-
+    Searched the corporate site and the data portal. There is no API release
+    notes page, no dataset-change feed, and no notification mechanism for
+    consumers when a dataset schema changes or a dataset is withdrawn. The
+    nearest thing to a data changelog is the per-dataset
+    `metas.default.modified` timestamp on GET /catalog/datasets — a timestamp,
+    not a description of what changed. The corporate newsroom
+    (https://www.endeavourenergy.com.au/about-us/newsroom) is corporate PR and
+    has never mentioned the open data portal.
+
+related:
+  - lifecycle/endeavour-energy-lifecycle.yml
+  - conventions/endeavour-energy-conventions.yml

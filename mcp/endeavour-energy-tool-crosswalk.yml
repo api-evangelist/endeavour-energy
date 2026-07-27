@@ -1,0 +1,76 @@
+generated: '2026-07-27'
+method: derived
+source: >-
+  Binds every tool in mcp/endeavour-energy-mcp.yml to its backing operationId
+  in openapi/endeavour-energy-open-data-explore-api-v2-1-openapi.json. Every
+  operationId below was verified verbatim in that contract.
+description: >-
+  A one-to-one crosswalk, which is itself the finding. Because the candidate
+  MCP surface was derived FROM the OpenAPI rather than published independently,
+  there is no divergence to record: no MCP-only tool, no GraphQL surface, and
+  no REST operation left without a tool. This file exists so that if Endeavour
+  Energy (or a third party) ever ships a real server, the drift against the
+  contract is measurable from day one.
+
+surfaces:
+  openapi:
+    file: openapi/endeavour-energy-open-data-explore-api-v2-1-openapi.json
+    version: 3.0.3
+    server: https://data.endeavourenergy.com.au/api/explore/v2.1
+    operations: 16
+    gated: false
+    note: 'Also harvested: the deprecated v2.0 contract, same 16 operationIds.'
+  graphql:
+    endpoint: null
+    gated: null
+    note: '/graphql -> 404 on the portal host. No GraphQL surface exists.'
+  mcp:
+    url: null
+    published: false
+    gated: null
+    note: 'No hosted server. tools/list could not be called; the tool set is derived, status candidate.'
+
+crosswalk:
+  - {tool: list_datasets, category: catalog, rest: [getDatasets], binding: rest, confidence: high}
+  - {tool: get_dataset, category: catalog, rest: [getDataset], binding: rest, confidence: high}
+  - {tool: list_catalog_facets, category: catalog, rest: [getDatasetsFacets], binding: rest, confidence: high}
+  - {tool: list_catalog_export_formats, category: catalog-export, rest: [listExportFormats], binding: rest, confidence: high}
+  - {tool: export_catalog, category: catalog-export, rest: [exportDatasets], binding: rest, confidence: high}
+  - {tool: export_catalog_csv, category: catalog-export, rest: [exportCatalogCSV], binding: rest, confidence: high, note: 'A fixed-format sibling of exportDatasets; kept separate because the contract declares it separately.'}
+  - {tool: export_catalog_dcat, category: catalog-export, rest: [exportCatalogDCAT], binding: rest, confidence: high, note: 'Takes a dcat_ap_format path parameter for DCAT-AP profiles.'}
+  - {tool: query_records, category: records, rest: [getRecords], binding: rest, confidence: high, note: 'The primary tool. Inherits the full ODSQL parameter set — select, where, group_by, order_by, refine, exclude, limit, offset, lang, timezone.'}
+  - {tool: get_record, category: records, rest: [getRecord], binding: rest, confidence: high}
+  - {tool: list_dataset_facets, category: records, rest: [getRecordsFacets], binding: rest, confidence: high}
+  - {tool: list_dataset_attachments, category: dataset, rest: [getDatasetAttachments], binding: rest, confidence: high}
+  - {tool: list_dataset_export_formats, category: dataset-export, rest: [listDatasetExportFormats], binding: rest, confidence: high}
+  - {tool: export_records, category: dataset-export, rest: [exportRecords], binding: rest, confidence: high}
+  - {tool: export_records_csv, category: dataset-export, rest: [exportRecordsCSV], binding: rest, confidence: high}
+  - {tool: export_records_parquet, category: dataset-export, rest: [exportRecordsParquet], binding: rest, confidence: high}
+  - {tool: export_records_gpx, category: dataset-export, rest: [exportRecordsGPX], binding: rest, confidence: high}
+
+mcp_only: []
+rest_only: []
+graphql_only: []
+
+coverage:
+  tools_named: 16
+  tools_bound: 16
+  mcp_only: 0
+  rest_operations_total: 16
+  rest_operations_with_a_tool: 16
+  binding_confidence: 'high on all 16 — each tool was derived directly from the operation it binds to.'
+
+input_schemas:
+  note: >-
+    Every tool's real input contract is the `parameters` block of its backing
+    operation in the OpenAPI. No requestBody exists anywhere — the API is
+    GET-only. The reusable parameter components shared across operations are:
+    select, where, order_by, limit, offset, refine, exclude, lang, timezone,
+    group_by, include_links, include_app_metas.
+  bounds:
+    limit: 'default 10, max 100 without group_by, max 20000 with group_by'
+    offset: 'default 0; offset+limit < 10000 without group_by, < 20000 with group_by'
+
+related:
+  - mcp/endeavour-energy-mcp.yml
+  - data-model/endeavour-energy-data-model.yml

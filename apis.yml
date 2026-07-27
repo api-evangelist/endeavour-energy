@@ -22,7 +22,7 @@ description: 'Endeavour Energy is the regulated electricity distribution network
   Inverter Profile - Australia) utility server for NSW flexible exports and the emergency
   backstop mechanism, but that machine interface is device-facing and entirely undocumented
   publicly. The open data portal itself is not linked from the corporate website.'
-image: https://kinlane-images.s3.amazonaws.com/shared/apis-json/icons/groq.png
+image: https://www.endeavourenergy.com.au/images/ee-logo.svg
 tags:
 - Energy
 - Australia
@@ -77,7 +77,21 @@ apis:
     url: https://data.endeavourenergy.com.au/api-console/explore/v2.1/
   - type: Portal
     url: https://data.endeavourenergy.com.au/explore/
+  - type: GettingStarted
+    url: https://help.opendatasoft.com/apis/ods-explore-v2/explore_v2.1.html#section/Getting-Started
+  - type: Overlay
+    url: overlays/endeavour-energy-open-data-explore-api-v2-1-overlay.yaml
+  - type: Overlay
+    url: overlays/endeavour-energy-open-data-explore-api-v2-0-overlay.yaml
 common:
+- type: AgenticAccess
+  url: agentic-access/endeavour-energy-agentic-access.yml
+- type: VulnerabilityDisclosure
+  url: security/endeavour-energy-vulnerability-disclosure.yml
+- type: DomainSecurity
+  url: security/endeavour-energy-domain-security.yml
+- type: Authentication
+  url: authentication/endeavour-energy-authentication.yml
 - type: Website
   url: https://www.endeavourenergy.com.au/
 - type: Portal
@@ -90,8 +104,64 @@ common:
   url: https://www.endeavourenergy.com.au/our-network/network-demand-and-capacity/network-capacity-map
 - type: SecurityTxt
   url: https://www.endeavourenergy.com.au/.well-known/security.txt
+- type: SecurityTxt
+  url: well-known/endeavour-energy-security.txt
+- type: Security
+  url: https://www.endeavourenergy.com.au/.well-known/security.txt
+- type: WellKnown
+  url: well-known/endeavour-energy-well-known.yml
 - type: LinkedIn
   url: https://www.linkedin.com/company/endeavour-energy
+- type: DeveloperPortal
+  url: https://data.endeavourenergy.com.au/pages/home/
+- type: Documentation
+  url: https://help.opendatasoft.com/apis/ods-explore-v2/explore_v2.1.html
+- type: APIReference
+  url: https://data.endeavourenergy.com.au/api-console/explore/v2.1/
+- type: GettingStarted
+  url: https://help.opendatasoft.com/apis/ods-explore-v2/explore_v2.1.html#section/Getting-Started
+- type: Support
+  url: https://www.endeavourenergy.com.au/about-us/contact-us
+- type: Blog
+  url: https://www.endeavourenergy.com.au/about-us/newsroom
+- type: PrivacyPolicy
+  url: https://www.endeavourenergy.com.au/privacy-policy
+- type: Login
+  url: https://data.endeavourenergy.com.au/login/
+- type: Packages
+  url: packages/endeavour-energy-packages.yml
+- type: Components
+  url: components/endeavour-energy-components.yml
+- type: MCPServer
+  url: mcp/endeavour-energy-mcp.yml
+- type: ToolCrosswalk
+  url: mcp/endeavour-energy-tool-crosswalk.yml
+- type: LLMsTxt
+  url: llms/endeavour-energy-llms.txt
+- type: Conformance
+  url: conformance/endeavour-energy-conformance.yml
+- type: ErrorCatalog
+  url: errors/endeavour-energy-problem-types.yml
+- type: Lifecycle
+  url: lifecycle/endeavour-energy-lifecycle.yml
+- type: Deprecation
+  url: https://help.opendatasoft.com/apis/ods-explore-v2/explore_v2.1.html#section/Versioning/Deprecation-warnings
+- type: ChangeLog
+  url: changelog/endeavour-energy-changelog.yml
+- type: OAuthScopes
+  url: scopes/endeavour-energy-scopes.yml
+- type: Conventions
+  url: conventions/endeavour-energy-conventions.yml
+- type: Idempotency
+  url: conventions/endeavour-energy-conventions.yml
+- type: RateLimits
+  url: rate-limits/endeavour-energy-rate-limits.yml
+- type: DataModel
+  url: data-model/endeavour-energy-data-model.yml
+- type: Sandbox
+  url: sandbox/endeavour-energy-sandbox.yml
+- type: AgentSkill
+  url: skills/_index.yml
 maintainers:
 - FN: Kin Lane
   email: kin@apievangelist.com

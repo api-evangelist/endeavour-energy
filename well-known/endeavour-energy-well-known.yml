@@ -1,0 +1,56 @@
+generated: '2026-07-27'
+method: searched
+source: >-
+  Live anonymous probes of the /.well-known/ discovery surface on both hosts in
+  apis.yml — the corporate site (www.endeavourenergy.com.au) and the
+  Opendatasoft open data portal that serves the Explore API
+  (data.endeavourenergy.com.au, the only host in OpenAPI servers[]).
+description: >-
+  Two RFC 9116 security.txt documents were found and are saved verbatim. Every
+  other well-known document probed returns 404 on both hosts: there is no OIDC
+  discovery, no RFC 8414 OAuth authorization-server metadata, no RFC 9727
+  api-catalog, and no ai-plugin manifest. The absence of the OAuth metadata
+  document is notable because the Opendatasoft platform DOES expose a working
+  OAuth2 authorization-code surface on this host (see scopes/) — it simply is
+  not advertised through discovery.
+
+hosts:
+  - host: https://www.endeavourenergy.com.au
+    role: corporate website
+    documents:
+      - path: /.well-known/security.txt
+        status: 200
+        file: endeavour-energy-security.txt
+        note: >-
+          Endeavour Energy's own RFC 9116 file. Contact
+          cybersecurity@endeavourenergy.com.au, Expires 2027-07-01. No Policy,
+          Encryption, Acknowledgments or Canonical field.
+      - {path: /.well-known/openid-configuration, status: 404}
+      - {path: /.well-known/oauth-authorization-server, status: 404}
+      - {path: /.well-known/oauth-protected-resource, status: 404}
+      - {path: /.well-known/api-catalog, status: 404}
+      - {path: /.well-known/ai-plugin.json, status: 404}
+      - {path: /llms.txt, status: 404}
+
+  - host: https://data.endeavourenergy.com.au
+    role: Opendatasoft open data portal + Explore API host
+    documents:
+      - path: /.well-known/security.txt
+        status: 200
+        file: endeavour-energy-data-portal-security.txt
+        note: >-
+          Platform-level file served by Opendatasoft, not by Endeavour Energy.
+          Contact security@opendatasoft.com, Expires 2050-01-01. A researcher
+          reporting a flaw in the DATA served here has no Endeavour Energy
+          contact on this host.
+      - {path: /.well-known/openid-configuration, status: 404}
+      - {path: /.well-known/oauth-authorization-server, status: 404}
+      - {path: /.well-known/oauth-protected-resource, status: 404}
+      - {path: /.well-known/api-catalog, status: 404}
+      - {path: /.well-known/ai-plugin.json, status: 404}
+      - {path: /llms.txt, status: 404}
+
+related:
+  - security/endeavour-energy-vulnerability-disclosure.yml
+  - security/endeavour-energy-domain-security.yml
+  - scopes/endeavour-energy-scopes.yml

@@ -1,0 +1,100 @@
+specification: API Commons Rate Limits
+specificationVersion: '0.1'
+provider: Endeavour Energy
+providerId: endeavour-energy
+generated: '2026-07-27'
+created: '2026-07-27'
+modified: '2026-07-27'
+method: probed
+tags:
+  - Rate Limiting
+  - Open Data
+  - Energy
+description: >-
+  Anonymous, domain-wide daily call quota on the Endeavour Energy Open Data
+  Explore API. Nothing is published in prose — these values were read directly
+  off the response headers of live anonymous requests on 2026-07-27. The quota
+  is enforced per DOMAIN, not per client: the ceiling is shared by every
+  anonymous consumer of data.endeavourenergy.com.au, and the 429 body's own
+  wording ("Too many requests on the domain. Please contact the domain
+  administrator.") confirms it. That makes the API cheap to start with and
+  fragile to depend on.
+sources:
+  - 'https://data.endeavourenergy.com.au/api/explore/v2.1/catalog/datasets (live response headers)'
+  - 'openapi/endeavour-energy-open-data-explore-api-v2-1-openapi.json#components/responses/quota'
+  - 'https://help.opendatasoft.com/apis/ods-explore-v2/explore_v2.1.html#section/Authentication'
+
+headers:
+  limit: X-RateLimit-Limit
+  remaining: X-RateLimit-Remaining
+  reset: X-RateLimit-Reset
+  datasetLimit: X-RateLimit-dataset-Limit
+  datasetRemaining: X-RateLimit-dataset-Remaining
+  datasetReset: X-RateLimit-dataset-Reset
+  requestId: null
+  corsExposed: true
+
+responseCodes:
+  throttled: 429
+
+limits:
+  - name: Anonymous domain quota
+    scope: domain
+    metric: requests_per_day
+    limit: 5000
+    timeFrame: day
+    resetsAt: '00:00 UTC'
+    observed: '2026-07-27 — X-RateLimit-Limit: 5000, X-RateLimit-Remaining: 4988, X-RateLimit-Reset: 2026-07-28 00:00:00+00:00'
+    authenticated: false
+  - name: Per-dataset quota
+    scope: dataset
+    metric: requests_per_day
+    limit: null
+    timeFrame: day
+    observed: >-
+      Not returned on the responses sampled, but the platform exposes
+      X-RateLimit-dataset-Limit / -Remaining / -Reset through
+      Access-Control-Expose-Headers, so a per-dataset ceiling exists in the
+      platform model. No value published for this domain.
+    authenticated: false
+
+authenticated_uplift:
+  documented: true
+  value: null
+  note: >-
+    "An authenticated user can be granted access to restricted datasets and
+    benefit from extended quotas for API calls." No number is published, and
+    self-serve signup is closed on this domain
+    (https://data.endeavourenergy.com.au/signup/ 302-redirects to the portal
+    home), so the uplift is not obtainable without contacting Endeavour Energy.
+
+throttled_response:
+  status: 429
+  body_shape: {errorcode: number, error: string, call_limit: number, limit_time_unit: string, reset_time: 'ISO 8601 string'}
+  published_example: {errorcode: 10002, reset_time: '2021-01-26T00:00:00Z', limit_time_unit: day, call_limit: 10000, error: 'Too many requests on the domain. Please contact the domain administrator.'}
+  note: >-
+    The example in the contract shows call_limit 10000; the live ceiling on
+    this domain is 5000. Trust the header, not the example.
+
+consumer_guidance:
+  - >-
+    5,000 calls/day is roughly 3.5 per minute sustained, shared across every
+    anonymous consumer of the portal. Treat it as a discovery budget, not an
+    integration budget.
+  - >-
+    Do not paginate bulk datasets. The /records window is capped at
+    offset+limit < 10000 anyway, and conductors_hv_lv_sl_ug (808,500 records)
+    and endeavourenergy_poles (440,725) are unreachable that way. Use the
+    export endpoints (exportRecords / exportRecordsCSV / exportRecordsParquet)
+    — one call instead of thousands.
+  - >-
+    The three live outage datasets are described as refreshing every 10
+    minutes. Polling at that cadence costs 144 calls/day per dataset, which is
+    well inside the quota; polling faster buys nothing.
+  - >-
+    Read X-RateLimit-Remaining on every response and back off before it reaches
+    zero — you are sharing the counter with strangers.
+
+related:
+  - conventions/endeavour-energy-conventions.yml
+  - errors/endeavour-energy-problem-types.yml

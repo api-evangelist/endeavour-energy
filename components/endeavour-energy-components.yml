@@ -1,0 +1,83 @@
+generated: '2026-07-27'
+method: searched
+source: >-
+  npm registry metadata for @opendatasoft/visualizations,
+  @opendatasoft/visualizations-react and ods-widgets;
+  github.com/opendatasoft/ods-dataviz-sdk and github.com/opendatasoft/ods-widgets;
+  the live portal at https://data.endeavourenergy.com.au (/explore/, /map/,
+  /chart/, /api-console/).
+description: >-
+  Endeavour Energy authors no client-side component library. Its embeddable
+  surface is entirely inherited from the Opendatasoft platform that hosts the
+  open data portal: a set of hosted, no-code pages (explore, map, chart, API
+  console) that can be linked or iframed, plus Opendatasoft's published
+  visualization component libraries which bind to the same Explore API.
+  Recorded as `first_party_to: opendatasoft` throughout — real, usable, and not
+  Endeavour Energy's work.
+
+families:
+  - family: hosted-portal-surfaces
+    description: >-
+      Prebuilt pages served by the portal itself. No build step, no key; each
+      is a URL that can be linked or embedded.
+    first_party_to: opendatasoft
+    deployed_by: endeavour-energy
+    components:
+      - name: Dataset explorer
+        url: https://data.endeavourenergy.com.au/explore/
+        status: 200
+        note: Browse and filter the eight published datasets.
+      - name: Map view
+        url: https://data.endeavourenergy.com.au/map/
+        status: 200
+        note: >-
+          Geospatial render. Six of eight datasets carry geo_point_2d or
+          geo_shape fields (poles, conductors, other network assets,
+          distribution districts, substation capacity, live outages).
+      - name: Chart view
+        url: https://data.endeavourenergy.com.au/chart/
+        status: 200
+      - name: API console
+        url: https://data.endeavourenergy.com.au/api-console/explore/v2.1/
+        status: 200
+        note: >-
+          Interactive request builder for the Explore API v2.1. Also catalogued
+          in sandbox/endeavour-energy-sandbox.yml as the try-it surface.
+
+  - family: opendatasoft-visualizations
+    description: >-
+      Opendatasoft's published component library for building dashboards and
+      charts on top of an Explore API domain.
+    first_party_to: opendatasoft
+    loader: npm
+    components:
+      - name: '@opendatasoft/visualizations'
+        version_seen: 0.35.0
+        url: https://www.npmjs.com/package/@opendatasoft/visualizations
+        install: npm install @opendatasoft/visualizations
+        note: Framework-agnostic dashboard/visualization components.
+      - name: '@opendatasoft/visualizations-react'
+        version_seen: 0.35.0
+        url: https://www.npmjs.com/package/@opendatasoft/visualizations-react
+        install: npm install @opendatasoft/visualizations-react
+        note: React wrapper for the same components.
+      - name: '@opendatasoft/api-client'
+        version_seen: 21.10.1
+        url: https://www.npmjs.com/package/@opendatasoft/api-client
+        note: >-
+          The data-access half of the same SDK (ods-dataviz-sdk). Catalogued in
+          packages/endeavour-energy-packages.yml.
+
+  - family: ods-widgets
+    description: >-
+      Opendatasoft's older AngularJS web-component library — declarative
+      HTML widgets (ods-dataset-context, ods-map, ods-chart, ods-table) that
+      read directly from a portal domain.
+    first_party_to: opendatasoft
+    loader: cdn / bower
+    source: https://github.com/opendatasoft/ods-widgets
+    note: >-
+      The npm name `ods-widgets` resolves to a 0.0.1 placeholder; the library
+      is distributed via CDN and the GitHub repository, not npm.
+
+provider_authored_components: false

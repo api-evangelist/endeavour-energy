@@ -1,0 +1,75 @@
+overlay: 1.0.0
+info:
+  title: API Evangelist enhancements for Endeavour Energy Open Data Explore API v2.0 (deprecated)
+  version: 1.0.0
+extends: openapi/endeavour-energy-open-data-explore-api-v2-0-openapi.json
+x-apievangelist:
+  generated: '2026-07-27'
+  method: generated
+  source: >-
+    Generated from the harvested v2.0 contract plus live verification against
+    https://data.endeavourenergy.com.au/api/explore/v2.0 on 2026-07-27. The
+    single most important fact about this document is absent from it: the
+    version it describes is deprecated, and the server says so on every
+    response. This overlay records that, and the migration path.
+actions:
+  - target: $.info
+    update:
+      x-provider: Endeavour Energy
+      x-provider-aid: endeavour-energy
+      x-deployment-of: Opendatasoft Explore API v2.0
+      x-spec-source: https://data.endeavourenergy.com.au/api/explore/v2.0/swagger.json
+      x-spec-fetched: '2026-07-27'
+      x-lifecycle:
+        status: deprecated
+        still_served: true
+        superseded_by: v2.1
+        superseding_contract: openapi/endeavour-energy-open-data-explore-api-v2-1-openapi.json
+        sunset_date: null
+        evidence:
+          request: 'GET https://data.endeavourenergy.com.au/api/explore/v2.0/catalog/datasets?limit=1'
+          status: 200
+          headers:
+            ods-explore-api-deprecation: 'deprecated API version (v2.0), please use the current v2.1 version'
+            link: '<https://help.huwise.com/apis/ods-explore-v2/explore_v2.1.html#section/Introduction/v2.1-Changelog>;rel="deprecation"; type="text/html"'
+        note: >-
+          Deprecated but not sunset. No removal date has been published, so a
+          consumer is told to move without being told by when.
+      x-migration-to-v2-1:
+        operation_ids_unchanged: true
+        breaking_changes:
+          - 'Output schemas changed for getDatasets, getDataset, getRecords, getRecord.'
+          - 'Date ODSQL functions return integers instead of strings.'
+          - 'Date aggregation keys are isoformat dates, not timestamps.'
+          - 'CSV exports emit a BOM by default.'
+          - 'GPX exports use <extension> instead of <desc>.'
+          - 'GeoJSON datetimes are isoformat strings, not integer timestamps.'
+          - 'XLSX replaces XLS.'
+          - 'Grouping by geo fields is deprecated in favour of geo_cluster().'
+        removed_endpoints:
+          - '/datasets/{dataset_id}/aggregates — merged into /records'
+          - '/datasets/{dataset_id}/query — merged into /records'
+        changelog: 'https://help.opendatasoft.com/apis/ods-explore-v2/explore_v2.1.html#section/Introduction/v2.1-Changelog'
+
+  - target: $.info
+    update:
+      x-access-model:
+        anonymous: true
+        credential_required: false
+        verified: '2026-07-27'
+      x-rate-limit:
+        scope: domain
+        limit: 5000
+        window: day
+        shared_with: 'the v2.1 surface — the same counter'
+        headers: [X-RateLimit-Limit, X-RateLimit-Remaining, X-RateLimit-Reset]
+
+  - target: $.paths..get
+    update:
+      deprecated: true
+      x-idempotent: true
+      x-safe: true
+      x-apievangelist-note: >-
+        Marked deprecated by this overlay, not by the original document. Every
+        response from this version carries the ODS-Explore-API-Deprecation
+        header. Use the identically-named operation on v2.1.

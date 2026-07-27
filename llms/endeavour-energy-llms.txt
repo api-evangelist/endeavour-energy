@@ -1,0 +1,88 @@
+# Endeavour Energy
+
+> Endeavour Energy is the regulated electricity distribution network service provider (DNSP) for Greater Western Sydney, the Blue Mountains, the Illawarra, the Southern Highlands, the South Coast and Central West of New South Wales, Australia, delivering power to around 2.8 million people. It owns and operates the poles and wires; it does not sell energy, so it holds no retail billing relationship and no consumer usage API. What it does publish is a genuinely open, anonymous, key-free REST API over its physical grid — every pole, every conductor, every substation's spare capacity, and live outage feeds — served on the Opendatasoft Explore API v2.1 with a downloadable OpenAPI 3.0.3 contract.
+
+Generated 2026-07-27 by the API Evangelist enrichment pipeline. No `/llms.txt` is published by the provider (probed on both hosts, 404), so this file is generated from the catalogue entry and the artifacts in this repository. Everything below was verified live on 2026-07-27.
+
+## Start here
+
+- [Open data portal](https://data.endeavourenergy.com.au/pages/home/): The developer surface. Not linked from the corporate website — you have to already know it exists.
+- [API console](https://data.endeavourenergy.com.au/api-console/explore/v2.1/): Interactive request builder against the live API. No account needed.
+- [Dataset explorer](https://data.endeavourenergy.com.au/explore/): Browse the eight published datasets.
+- [Explore API v2.1 reference](https://help.opendatasoft.com/apis/ods-explore-v2/explore_v2.1.html): The platform documentation that governs this API. Endeavour Energy writes none of its own.
+
+## The API
+
+Base URL: `https://data.endeavourenergy.com.au/api/explore/v2.1`
+
+- Read-only. All 16 operations are GET; nothing can be created or changed.
+- Anonymous. No signup, no key, no licence click-through. `GET /catalog/datasets` returns 200 with no credential.
+- Quota: 5,000 calls/day, enforced per DOMAIN and shared across every anonymous consumer. Read `X-RateLimit-Remaining`.
+- Query language: ODSQL (`select`, `where`, `group_by`, `order_by`, `refine`, `exclude`).
+- Pagination: `limit` (max 100) + `offset`, with `offset+limit < 10000`. Anything larger must use the export endpoints.
+- Errors: `{"error_code": "...", "message": "..."}`. Not RFC 9457.
+- A deprecated v2.0 surface is still served at `/api/explore/v2.0` and returns `ODS-Explore-API-Deprecation` on every response.
+
+Operations: `getDatasets`, `getDataset`, `getDatasetsFacets`, `getRecords`, `getRecord`, `getRecordsFacets`, `getDatasetAttachments`, `listExportFormats`, `listDatasetExportFormats`, `exportDatasets`, `exportCatalogCSV`, `exportCatalogDCAT`, `exportRecords`, `exportRecordsCSV`, `exportRecordsParquet`, `exportRecordsGPX`.
+
+## Datasets
+
+| dataset_id | what it is | records | licence |
+|---|---|---|---|
+| `endeavourenergy_poles` | Distribution poles with the plant each carries | 440,725 | Open Database Licence |
+| `conductors_hv_lv_sl_ug` | HV/LV/streetlight/underground conductor segments | 808,500 | none declared |
+| `networkassets_otherassets` | Other network assets | 317,031 | Open Database Licence |
+| `distribution-substation-available-capacity` | Spare capacity (kVA) per distribution substation | 30,500 | none declared |
+| `distribution-district` | Distribution district boundary | 1 | none declared |
+| `outagecustomerlive` | Live unplanned outages | live | Open Database Licence |
+| `plannedoutagecustomer` | Planned outages | 9,645 | Open Database Licence |
+| `single_premise_outage_customer_live` | Live single-premise outages | ~800 | Open Database Licence |
+
+The live outage layers refresh approximately every ten minutes. Six of the eight datasets carry `geo_point_2d` or `geo_shape` geometry — geospatial predicates are the only practical way to join across datasets, because no shared foreign keys are published.
+
+## Specs
+
+- [OpenAPI 3.0.3 — Explore API v2.1](https://raw.githubusercontent.com/api-evangelist/endeavour-energy/refs/heads/main/openapi/endeavour-energy-open-data-explore-api-v2-1-openapi.json)
+- [OpenAPI 3.0.3 — Explore API v2.0 (deprecated)](https://raw.githubusercontent.com/api-evangelist/endeavour-energy/refs/heads/main/openapi/endeavour-energy-open-data-explore-api-v2-0-openapi.json)
+- [DCAT catalogue export](https://data.endeavourenergy.com.au/api/explore/v2.1/catalog/exports/dcat)
+
+## Artifacts
+
+- [Authentication profile](https://raw.githubusercontent.com/api-evangelist/endeavour-energy/refs/heads/main/authentication/endeavour-energy-authentication.yml): Anonymous by default; optional API key; an undeclared OAuth2 authorization-code flow that is live on the host.
+- [OAuth scopes](https://raw.githubusercontent.com/api-evangelist/endeavour-energy/refs/heads/main/scopes/endeavour-energy-scopes.yml): Exactly one scope, `all`.
+- [API conventions](https://raw.githubusercontent.com/api-evangelist/endeavour-energy/refs/heads/main/conventions/endeavour-energy-conventions.yml): Pagination bounds, error envelopes, rate-limit headers, CORS, caching.
+- [Error catalogue](https://raw.githubusercontent.com/api-evangelist/endeavour-energy/refs/heads/main/errors/endeavour-energy-problem-types.yml): Including the 404 the spec does not declare.
+- [Rate limits](https://raw.githubusercontent.com/api-evangelist/endeavour-energy/refs/heads/main/rate-limits/endeavour-energy-rate-limits.yml)
+- [Lifecycle](https://raw.githubusercontent.com/api-evangelist/endeavour-energy/refs/heads/main/lifecycle/endeavour-energy-lifecycle.yml): Versioning guarantees and how v2.0 is deprecated.
+- [Changelog](https://raw.githubusercontent.com/api-evangelist/endeavour-energy/refs/heads/main/changelog/endeavour-energy-changelog.yml)
+- [Data model](https://raw.githubusercontent.com/api-evangelist/endeavour-energy/refs/heads/main/data-model/endeavour-energy-data-model.yml): Platform entities plus the domain shape of all eight datasets.
+- [Conformance](https://raw.githubusercontent.com/api-evangelist/endeavour-energy/refs/heads/main/conformance/endeavour-energy-conformance.yml)
+- [Sandbox / console](https://raw.githubusercontent.com/api-evangelist/endeavour-energy/refs/heads/main/sandbox/endeavour-energy-sandbox.yml)
+- [Packages](https://raw.githubusercontent.com/api-evangelist/endeavour-energy/refs/heads/main/packages/endeavour-energy-packages.yml): No first-party SDK exists; platform-vendor clients do.
+- [MCP candidate manifest](https://raw.githubusercontent.com/api-evangelist/endeavour-energy/refs/heads/main/mcp/endeavour-energy-mcp.yml) and [tool crosswalk](https://raw.githubusercontent.com/api-evangelist/endeavour-energy/refs/heads/main/mcp/endeavour-energy-tool-crosswalk.yml)
+- [Agent skills index](https://raw.githubusercontent.com/api-evangelist/endeavour-energy/refs/heads/main/skills/_index.yml)
+- [Domain security](https://raw.githubusercontent.com/api-evangelist/endeavour-energy/refs/heads/main/security/endeavour-energy-domain-security.yml) and [vulnerability disclosure](https://raw.githubusercontent.com/api-evangelist/endeavour-energy/refs/heads/main/security/endeavour-energy-vulnerability-disclosure.yml)
+- [Well-known index](https://raw.githubusercontent.com/api-evangelist/endeavour-energy/refs/heads/main/well-known/endeavour-energy-well-known.yml)
+- [Review](https://raw.githubusercontent.com/api-evangelist/endeavour-energy/refs/heads/main/review.yml): The full evidence file, including the Consumer Data Right finding.
+
+## What does NOT exist
+
+State these plainly rather than guessing:
+
+- **No consumer data API.** No usage, interval, billing or account data of any kind. Endeavour Energy does not bill consumers; the retailer holds the account.
+- **No Consumer Data Right surface.** Verified against the authoritative register: `GET https://api.cdr.gov.au/cdr-register/v1/energy/data-holders/brands/summary` returned 84 energy brands, all retailers, with zero matches for Endeavour Energy or any Australian distribution network business. The CDR energy designation placed the data-holder obligation on retailers and on AEMO as gateway, not on the poles and wires. There is nothing to be non-compliant with.
+- **No developer portal, no SDKs, no CLI, no Postman collection, no GitHub organisation, no status page, no API support channel, no changelog of Endeavour Energy's own.**
+- **No events, webhooks, streaming or AsyncAPI.** Live data is polled, not pushed.
+- **No GraphQL** (`/graphql` -> 404) and **no official MCP server**.
+- **No published compliance program** — no SOC 2, ISO 27001 or trust centre.
+- **CSIP-AUS exists but is undocumented.** Endeavour Energy operates a CSIP-AUS (IEEE 2030.5 derivative) utility server for NSW flexible exports and the emergency backstop mechanism. It is a real standards-based machine interface, but no endpoint, base URI, specification or developer onboarding is published for it. Do not invent one.
+
+## Company
+
+- [Website](https://www.endeavourenergy.com.au/)
+- [Contact](https://www.endeavourenergy.com.au/about-us/contact-us)
+- [Newsroom](https://www.endeavourenergy.com.au/about-us/newsroom)
+- [Privacy policy](https://www.endeavourenergy.com.au/privacy-policy)
+- [Network outage map](https://www.endeavourenergy.com.au/power-outages/outage-map) — customer-facing outage reporting, the human counterpart to the live outage datasets
+- [Security contact](https://www.endeavourenergy.com.au/.well-known/security.txt) — cybersecurity@endeavourenergy.com.au
+- [LinkedIn](https://www.linkedin.com/company/endeavour-energy)

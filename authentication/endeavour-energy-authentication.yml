@@ -1,0 +1,127 @@
+generated: '2026-07-27'
+method: searched
+source: >-
+  openapi/endeavour-energy-open-data-explore-api-v2-1-openapi.json,
+  openapi/endeavour-energy-open-data-explore-api-v2-0-openapi.json (declared
+  securitySchemes), upgraded with
+  https://help.opendatasoft.com/apis/ods-explore-v2/explore_v2.1.html#section/Authentication
+  and live anonymous probes of https://data.endeavourenergy.com.au on
+  2026-07-27.
+docs: 'https://help.opendatasoft.com/apis/ods-explore-v2/explore_v2.1.html#section/Authentication'
+description: >-
+  The Explore API is anonymous by default. Every one of the eight published
+  datasets answers HTTP 200 with no credential of any kind — no signup, no key,
+  no licence click-through. The OpenAPI contract declares exactly one security
+  scheme (an apiKey in the query string), but that understates the platform:
+  the docs and the live host also support an Authorization header form, portal
+  session cookies, and a full OAuth2 authorization-code flow. The spec is thin;
+  this profile is the superset.
+
+summary:
+  types: [none, apiKey, oauth2]
+  api_key_in: [query, header]
+  oauth2_flows: [authorizationCode]
+  anonymous_access: true
+  credential_required: false
+
+schemes:
+  - name: anonymous
+    type: none
+    declared_in_spec: false
+    detail: >-
+      The default and the recommended path for this provider. Verified 2026-07-27:
+      GET /api/explore/v2.1/catalog/datasets -> 200 (total_count 8) and
+      GET /api/explore/v2.1/catalog/datasets/outagecustomerlive/records?limit=1
+      -> 200, both with no Authorization header and no apikey parameter.
+    quota: 5000 calls/day (X-RateLimit-Limit observed)
+
+  - name: apikey
+    type: apiKey
+    in: query
+    parameter: apikey
+    declared_in_spec: true
+    description: API key to make authenticated requests.
+    sources:
+      - openapi/endeavour-energy-open-data-explore-api-v2-0-openapi.json
+      - openapi/endeavour-energy-open-data-explore-api-v2-1-openapi.json
+    recommended: false
+    note: >-
+      The only scheme the contract declares, and the one the docs advise
+      AGAINST — query strings are retained in browser history and server logs.
+
+  - name: apikey-header
+    type: apiKey
+    in: header
+    parameter: Authorization
+    format: 'Authorization: Apikey <API_KEY>'
+    declared_in_spec: false
+    recommended: true
+    note: >-
+      Documented and supported, but absent from the OpenAPI contract. A client
+      generated purely from the spec will use the discouraged query form.
+
+  - name: portal-session
+    type: cookie
+    declared_in_spec: false
+    detail: >-
+      Being logged into https://data.endeavourenergy.com.au/ passes a session
+      cookie along with API calls, authenticating the user for the request.
+    login: https://data.endeavourenergy.com.au/login/
+
+  - name: oauth2
+    type: oauth2
+    declared_in_spec: false
+    rfc: [RFC 6749, RFC 6750]
+    flows:
+      - flow: authorizationCode
+        authorizationUrl: https://data.endeavourenergy.com.au/oauth2/authorize/
+        tokenUrl: https://data.endeavourenergy.com.au/oauth2/token/
+        scopes: 1
+        scope_names: [all]
+    token_type: Bearer
+    client_types: [confidential, public]
+    detail: >-
+      The Opendatasoft platform implements a full OAuth2 authorization-code
+      flow so a third party can query data on a user's behalf without handling
+      their password. Applications are registered per domain from the account
+      page and can only access data on that domain.
+    verified_live:
+      - {url: 'https://data.endeavourenergy.com.au/oauth2/authorize/', status: 302, note: 'endpoint exists; redirects to login'}
+      - {url: 'https://data.endeavourenergy.com.au/oauth2/token/', status: 405, note: 'endpoint exists; POST-only'}
+    detail_file: scopes/endeavour-energy-scopes.yml
+
+key_provisioning:
+  url: https://data.endeavourenergy.com.au/account/
+  path: '"My API keys" tab on the account page'
+  self_serve: false
+  note: >-
+    https://data.endeavourenergy.com.au/signup/ 302-redirects to the portal
+    home — open self-serve registration is not enabled on this domain, and
+    /account/api-keys/ redirects to /login/. Since every dataset is public and
+    anonymous, this limits quota, not access.
+  key_scope_warning: >-
+    Published caveat: "By default, every API key authenticates requests as
+    coming from your user, which means they grant the same rights (yours) to
+    any person using them." Keys are user-scoped, not application-scoped,
+    unless narrowed through the Automation API.
+
+not_present:
+  openid_connect: 'GET /.well-known/openid-configuration -> 404 on both hosts'
+  oauth_metadata: 'GET /.well-known/oauth-authorization-server -> 404 on both hosts (the OAuth2 surface exists but is not advertised via RFC 8414 discovery)'
+  mutual_tls: false
+  http_basic: 'Only at the OAuth2 token endpoint, to pass client_id/client_secret.'
+
+out_of_band:
+  csip_aus_utility_server: >-
+    Endeavour Energy operates a CSIP-AUS (IEEE 2030.5 / SEP2 derivative)
+    utility server for NSW flexible exports and the emergency backstop
+    mechanism. CSIP-AUS conventionally uses mutual TLS with device
+    certificates, but Endeavour Energy publishes no endpoint, no security
+    scheme and no onboarding path for it, so no auth model is asserted here.
+    Onboarding runs through CEC-approved inverter equipment and a connectivity
+    capability test in the NSW CER Installer Portal at installation time.
+
+related:
+  - scopes/endeavour-energy-scopes.yml
+  - conventions/endeavour-energy-conventions.yml
+  - well-known/endeavour-energy-well-known.yml

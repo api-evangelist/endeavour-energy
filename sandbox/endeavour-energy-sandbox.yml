@@ -1,0 +1,85 @@
+generated: '2026-07-27'
+method: searched
+source: >-
+  https://data.endeavourenergy.com.au/api-console/explore/v2.1/ (live, 200) and
+  https://help.opendatasoft.com/apis/ods-explore-v2/explore_v2.1.html#section/Getting-Started;
+  anonymous request verification against
+  https://data.endeavourenergy.com.au/api/explore/v2.1 on 2026-07-27.
+description: >-
+  There is no sandbox, and there does not need to be one. The Endeavour Energy
+  Open Data Explore API has no test/live separation, no test credentials, no
+  fixtures and no simulated data — because it is read-only, anonymous and free.
+  Production IS the try-it environment: any developer can issue a real GET
+  against real network data with no account. What the provider does ship is an
+  interactive API console served from the portal, which is the console/
+  playground surface for this API.
+
+test_live_separation:
+  exists: false
+  reason: >-
+    Read-only API (GET only, 16 operations). Nothing can be created, charged,
+    or broken, so there is no state to isolate. There are no key prefixes, no
+    modes, and no test/live toggle.
+
+console:
+  available: true
+  url: https://data.endeavourenergy.com.au/api-console/explore/v2.1/
+  status: 200
+  type: interactive request builder
+  auth_required: false
+  note: >-
+    Served by the portal itself. Reached from
+    https://data.endeavourenergy.com.au/api/explore/v2.1/console, which 301s to
+    the console path. Lets you compose ODSQL queries against the eight live
+    datasets and see the real response.
+  also_available:
+    - {name: Dataset explorer, url: 'https://data.endeavourenergy.com.au/explore/'}
+    - {name: Map view, url: 'https://data.endeavourenergy.com.au/map/'}
+    - {name: Chart view, url: 'https://data.endeavourenergy.com.au/chart/'}
+
+zero_credential_start:
+  verified: '2026-07-27'
+  examples:
+    - request: 'GET https://data.endeavourenergy.com.au/api/explore/v2.1/catalog/datasets'
+      status: 200
+      note: 'Returns total_count 8 — the whole catalogue, anonymously.'
+    - request: 'GET https://data.endeavourenergy.com.au/api/explore/v2.1/catalog/datasets/outagecustomerlive/records?limit=1'
+      status: 200
+      note: 'Live unplanned-outage record with coordinates, incident id, estimated restore time and customers affected.'
+    - request: 'GET https://data.endeavourenergy.com.au/api/explore/v2.1/catalog/exports/dcat'
+      status: 200
+      note: 'DCAT (RDF/XML) catalogue export.'
+
+safe_probe_datasets:
+  note: >-
+    Small datasets to develop against without burning the shared 5,000/day
+    domain quota (see rate-limits/). These are real production data, not
+    fixtures.
+  datasets:
+    - {dataset_id: distribution-district, records: 1}
+    - {dataset_id: outagecustomerlive, records: 'small — varies with live incidents'}
+    - {dataset_id: single_premise_outage_customer_live, records: '~800'}
+  avoid:
+    - {dataset_id: conductors_hv_lv_sl_ug, records: 808500, reason: 'use the export endpoints, not /records'}
+    - {dataset_id: endeavourenergy_poles, records: 440725, reason: 'use the export endpoints, not /records'}
+    - {dataset_id: networkassets_otherassets, records: 317031, reason: 'use the export endpoints, not /records'}
+
+test_credentials:
+  published: false
+  note: >-
+    None exist and none are needed. NEVER invent an apikey value — the
+    parameter is optional and every documented operation works without it.
+
+fixtures_and_simulation:
+  test_clock: false
+  trigger_tooling: false
+  simulated_events: false
+  note: >-
+    The live outage datasets are described as refreshing every 10 minutes.
+    There is no way to simulate an outage; to exercise outage-handling code you
+    wait for real incidents, or replay a captured response.
+
+related:
+  - conventions/endeavour-energy-conventions.yml
+  - rate-limits/endeavour-energy-rate-limits.yml
+  - components/endeavour-energy-components.yml

@@ -1,0 +1,50 @@
+generated: '2026-07-27'
+method: generated
+source: >-
+  Packaged Agent Skills generated from
+  openapi/endeavour-energy-open-data-explore-api-v2-1-openapi.json. Every step
+  is grounded in an operationId verified verbatim in that contract, and every
+  field name was read from the live dataset schemas on
+  https://data.endeavourenergy.com.au on 2026-07-27. Cross-cutting rules cite
+  ../conventions/, ../errors/, ../rate-limits/, ../authentication/ and
+  ../data-model/. Searched first for provider-published skills or an AGENTS.md
+  on both hosts — none exist.
+description: >-
+  Four skills covering the whole useful surface of this API. They are organised
+  around the four things a consumer actually does here — find out what is
+  published, watch the live outage feeds, bulk-export the asset layers, and
+  assess network hosting capacity — rather than around the 16 platform
+  operations, which are generic Opendatasoft plumbing.
+
+skills:
+  - file: endeavour-energy-discover-datasets.md
+    name: Discover what Endeavour Energy publishes
+    api: openapi/endeavour-energy-open-data-explore-api-v2-1-openapi.json
+    operations: [getDatasets, getDataset, getDatasetsFacets, getRecordsFacets, getDatasetAttachments]
+    summary: Enumerate the catalogue, read field schemas, and check the per-dataset licence before building.
+
+  - file: endeavour-energy-track-live-outages.md
+    name: Track live power outages
+    api: openapi/endeavour-energy-open-data-explore-api-v2-1-openapi.json
+    operations: [getDataset, getRecords, getRecord, getRecordsFacets]
+    summary: Poll the three live outage feeds with geospatial and area filters; correct polling cadence and date-parsing warnings.
+
+  - file: endeavour-energy-export-network-assets.md
+    name: Bulk export the network asset layers
+    api: openapi/endeavour-energy-open-data-explore-api-v2-1-openapi.json
+    operations: [getDataset, listDatasetExportFormats, exportRecords, exportRecordsCSV, exportRecordsParquet, exportRecordsGPX, exportCatalogDCAT]
+    summary: Retrieve the 808k/440k/317k-record asset layers via the export endpoints — the only path past the 10,000-row query window.
+
+  - file: endeavour-energy-find-substation-capacity.md
+    name: Find distribution substation available capacity
+    api: openapi/endeavour-energy-open-data-explore-api-v2-1-openapi.json
+    operations: [getDataset, getRecords, getRecordsFacets, exportRecords]
+    summary: Query spare kVA per distribution substation to assess where solar, batteries or EV charging can connect.
+
+cross_cutting_rules:
+  auth: 'None required. Never send an invented apikey value.'
+  idempotency: 'All 16 operations are GET — safe and idempotent under RFC 9110, freely retryable.'
+  rate_limits: '5,000 calls/day, DOMAIN-wide and shared with every other anonymous consumer. Read X-RateLimit-Remaining.'
+  pagination: 'limit max 100, offset+limit < 10000 without group_by. Anything larger must use the export endpoints.'
+  errors: '{error_code, message} on 4xx/5xx; a different {errorcode, call_limit, reset_time} shape on 429. 404 is real but undeclared in the spec.'
+  untyped_rows: 'record.fields is a free-form object in the contract — always call getDataset for the field schema before writing an ODSQL where clause.'

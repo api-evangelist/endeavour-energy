@@ -1,0 +1,112 @@
+generated: '2026-07-27'
+method: searched
+source: >-
+  Searched npm (registry search + package metadata), PyPI, and the GitHub orgs
+  github.com/opendatasoft, github.com/EndeavourEnergy and
+  github.com/Endeavour-Energy on 2026-07-27.
+description: >-
+  Endeavour Energy publishes NO first-party client library for its Open Data
+  Explore API in any registry. Nothing under its name exists on npm, PyPI,
+  Maven Central, NuGet, pkg.go.dev, RubyGems, Packagist or crates.io, and its
+  developer surface (the Opendatasoft portal) links no SDK. What DOES exist is
+  the platform vendor's client tooling: because the API is a stock Opendatasoft
+  Explore API v2.1, Opendatasoft's own published clients work against
+  data.endeavourenergy.com.au unchanged. Those are recorded here as
+  `official: false` with `first_party_to: opendatasoft` — they are official to
+  the platform vendor, not to the API provider. No `SDKs` pointer is wired in
+  apis.yml as a result: the provider ships none.
+
+provider_published_sdks: false
+
+github_orgs_checked:
+  - org: EndeavourEnergy
+    url: https://github.com/EndeavourEnergy
+    status: 200
+    public_repos: 2
+    verdict: >-
+      Not attributable. The two public repos (meta-quectel-community, a Yocto
+      BitBake layer; KuzuDot, a .NET wrapper for the KuzuDB graph database)
+      carry no Endeavour Energy branding, homepage or description linking them
+      to the NSW distribution network business. Not wired as
+      GitHubOrganization.
+  - org: Endeavour-Energy
+    url: https://github.com/Endeavour-Energy
+    status: 200
+    public_repos: 0
+    verdict: >-
+      Empty. Display name "Endeavour Energy", created 2026-02-16, no
+      description, no blog, no email, zero public repositories. Insufficient
+      evidence of first-party ownership; not wired as GitHubOrganization.
+
+packages:
+  - language: javascript
+    registry: npm
+    name: '@opendatasoft/api-client'
+    version_seen: 21.10.1
+    url: https://www.npmjs.com/package/@opendatasoft/api-client
+    install: npm install @opendatasoft/api-client
+    repository: https://github.com/opendatasoft/ods-dataviz-sdk
+    official: false
+    first_party_to: opendatasoft
+    note: >-
+      Opendatasoft's own JavaScript/TypeScript client for the Explore API.
+      Point it at https://data.endeavourenergy.com.au to query Endeavour
+      Energy's eight datasets. Not published or endorsed by Endeavour Energy.
+
+  - language: python
+    registry: github
+    name: opendatasoft-explore-sdk
+    url: https://github.com/opendatasoft/opendatasoft-explore-sdk
+    install: 'pip install git+https://github.com/opendatasoft/opendatasoft-explore-sdk'
+    official: false
+    first_party_to: opendatasoft
+    pypi: false
+    note: >-
+      Opendatasoft's Python SDK for the Explore API. Probed PyPI for
+      `opendatasoft-explore-sdk`, `opendatasoft`, `ods-explore`,
+      `opendatasoft-api` and `explore-api` — all 404. Source-install only.
+
+  - language: python
+    registry: github
+    name: opendatasoft-automation-sdk
+    url: https://github.com/opendatasoft/opendatasoft-automation-sdk
+    official: false
+    first_party_to: opendatasoft
+    pypi: false
+    note: >-
+      Clients for the Opendatasoft Automation/Management API, not the public
+      Explore API. Relevant only to a domain administrator; the corresponding
+      surface on this host (/api/management/v2/swagger.json) returns 401.
+
+  - language: python
+    registry: github
+    name: qgis-ods-plugin
+    url: https://github.com/opendatasoft/qgis-ods-plugin
+    official: false
+    first_party_to: opendatasoft
+    note: >-
+      QGIS plugin that loads an Opendatasoft domain as a data source. Directly
+      useful here — six of the eight Endeavour Energy datasets are geospatial
+      (geo_point_2d / geo_shape).
+
+third_party:
+  - language: javascript
+    registry: npm
+    name: '@pipeworx/mcp-opendatasoft'
+    url: https://www.npmjs.com/package/@pipeworx/mcp-opendatasoft
+    official: false
+    first_party_to: null
+    note: >-
+      Community MCP server that speaks to any public Opendatasoft portal.
+      Recorded for completeness in mcp/endeavour-energy-mcp.yml; unaffiliated
+      with both Endeavour Energy and Opendatasoft.
+
+registries_probed:
+  - {registry: npm, query: 'opendatasoft / "endeavour energy"', first_party_hits: 0}
+  - {registry: pypi, query: 'opendatasoft, opendatasoft-explore-sdk, ods-explore, opendatasoft-api, explore-api', hits: 0}
+  - {registry: maven-central, first_party_hits: 0}
+  - {registry: nuget, first_party_hits: 0}
+  - {registry: pkg.go.dev, first_party_hits: 0}
+  - {registry: rubygems, first_party_hits: 0}
+  - {registry: packagist, first_party_hits: 0}
+  - {registry: crates.io, first_party_hits: 0}
