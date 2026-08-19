@@ -1,111 +1,103 @@
 generated: '2026-07-27'
 method: derived
 status: candidate
-source: >-
-  Derived from the 16 operations in
-  openapi/endeavour-energy-open-data-explore-api-v2-1-openapi.json. Searched
-  for an official hosted server first — the npm registry, the corporate site
-  and the data portal — and found none.
-description: >-
-  Endeavour Energy publishes no MCP server. This is a CANDIDATE manifest: one
-  tool per real operationId, each inheriting its input contract from the
-  backing operation in the harvested OpenAPI. It is a design proposal, not a
-  provider claim, and no tool below has ever been served. The API is unusually
-  well suited to one — it is anonymous, read-only, rate-limited and returns
-  JSON, so an MCP server over it needs no credential handling and can expose
-  nothing destructive.
-
+source: Derived from the 16 operations in openapi/endeavour-energy-open-data-explore-api-v2-1-openapi.json.
+  Searched for an official hosted server first — the npm registry, the corporate site and the data portal
+  — and found none.
+description: 'Endeavour Energy publishes no MCP server. This is a CANDIDATE manifest: one tool per real
+  operationId, each inheriting its input contract from the backing operation in the harvested OpenAPI.
+  It is a design proposal, not a provider claim, and no tool below has ever been served. The API is unusually
+  well suited to one — it is anonymous, read-only, rate-limited and returns JSON, so an MCP server over
+  it needs no credential handling and can expose nothing destructive.'
 server:
   name: endeavour-energy
   transport: http
   url: null
   published: false
   auth: none required (anonymous)
-
 discovery_probes:
-  - {url: 'https://data.endeavourenergy.com.au/.well-known/ai-plugin.json', status: 404}
-  - {url: 'https://www.endeavourenergy.com.au/.well-known/ai-plugin.json', status: 404}
-  - {url: 'https://data.endeavourenergy.com.au/graphql', status: 404}
-  - {registry: npm, query: 'endeavour energy', official_hits: 0}
-
+- url: https://data.endeavourenergy.com.au/.well-known/ai-plugin.json
+  status: 404
+- url: https://www.endeavourenergy.com.au/.well-known/ai-plugin.json
+  status: 404
+- url: https://data.endeavourenergy.com.au/graphql
+  status: 404
+- registry: npm
+  query: endeavour energy
+  official_hits: 0
 tools:
-  - name: list_datasets
-    description: Query the catalogue of published datasets, with ODSQL where/select/order_by/group_by and faceting.
-    source_operation: 'openapi/endeavour-energy-open-data-explore-api-v2-1-openapi.json#getDatasets'
-  - name: get_dataset
-    description: Show one dataset's metadata and its full field schema.
-    source_operation: 'openapi/endeavour-energy-open-data-explore-api-v2-1-openapi.json#getDataset'
-  - name: list_catalog_facets
-    description: List facet values across the catalogue (themes, keywords, publishers).
-    source_operation: 'openapi/endeavour-energy-open-data-explore-api-v2-1-openapi.json#getDatasetsFacets'
-  - name: list_catalog_export_formats
-    description: List the export formats available for the catalogue.
-    source_operation: 'openapi/endeavour-energy-open-data-explore-api-v2-1-openapi.json#listExportFormats'
-  - name: export_catalog
-    description: Export the catalogue in a named format.
-    source_operation: 'openapi/endeavour-energy-open-data-explore-api-v2-1-openapi.json#exportDatasets'
-  - name: export_catalog_csv
-    description: Export the catalogue as CSV.
-    source_operation: 'openapi/endeavour-energy-open-data-explore-api-v2-1-openapi.json#exportCatalogCSV'
-  - name: export_catalog_dcat
-    description: Export the catalogue as RDF/XML (DCAT / DCAT-AP).
-    source_operation: 'openapi/endeavour-energy-open-data-explore-api-v2-1-openapi.json#exportCatalogDCAT'
-  - name: query_records
-    description: >-
-      Query records in one dataset with ODSQL — the workhorse tool. Bounded by
-      limit<=100 and offset+limit<10000 without group_by.
-    source_operation: 'openapi/endeavour-energy-open-data-explore-api-v2-1-openapi.json#getRecords'
-  - name: get_record
-    description: Read one record by record_id.
-    source_operation: 'openapi/endeavour-energy-open-data-explore-api-v2-1-openapi.json#getRecord'
-  - name: list_dataset_facets
-    description: List facets and their values within one dataset.
-    source_operation: 'openapi/endeavour-energy-open-data-explore-api-v2-1-openapi.json#getRecordsFacets'
-  - name: list_dataset_attachments
-    description: List files attached to a dataset.
-    source_operation: 'openapi/endeavour-energy-open-data-explore-api-v2-1-openapi.json#getDatasetAttachments'
-  - name: list_dataset_export_formats
-    description: List the export formats available for one dataset.
-    source_operation: 'openapi/endeavour-energy-open-data-explore-api-v2-1-openapi.json#listDatasetExportFormats'
-  - name: export_records
-    description: Export a whole dataset in a named format — the only way to get past the 10,000-row query window.
-    source_operation: 'openapi/endeavour-energy-open-data-explore-api-v2-1-openapi.json#exportRecords'
-  - name: export_records_csv
-    description: Export a whole dataset as CSV.
-    source_operation: 'openapi/endeavour-energy-open-data-explore-api-v2-1-openapi.json#exportRecordsCSV'
-  - name: export_records_parquet
-    description: Export a whole dataset as Parquet.
-    source_operation: 'openapi/endeavour-energy-open-data-explore-api-v2-1-openapi.json#exportRecordsParquet'
-  - name: export_records_gpx
-    description: Export a whole dataset as GPX.
-    source_operation: 'openapi/endeavour-energy-open-data-explore-api-v2-1-openapi.json#exportRecordsGPX'
-
+- name: list_datasets
+  description: Query the catalogue of published datasets, with ODSQL where/select/order_by/group_by and
+    faceting.
+  source_operation: openapi/endeavour-energy-open-data-explore-api-v2-1-openapi.json#getDatasets
+- name: get_dataset
+  description: Show one dataset's metadata and its full field schema.
+  source_operation: openapi/endeavour-energy-open-data-explore-api-v2-1-openapi.json#getDataset
+- name: list_catalog_facets
+  description: List facet values across the catalogue (themes, keywords, publishers).
+  source_operation: openapi/endeavour-energy-open-data-explore-api-v2-1-openapi.json#getDatasetsFacets
+- name: list_catalog_export_formats
+  description: List the export formats available for the catalogue.
+  source_operation: openapi/endeavour-energy-open-data-explore-api-v2-1-openapi.json#listExportFormats
+- name: export_catalog
+  description: Export the catalogue in a named format.
+  source_operation: openapi/endeavour-energy-open-data-explore-api-v2-1-openapi.json#exportDatasets
+- name: export_catalog_csv
+  description: Export the catalogue as CSV.
+  source_operation: openapi/endeavour-energy-open-data-explore-api-v2-1-openapi.json#exportCatalogCSV
+- name: export_catalog_dcat
+  description: Export the catalogue as RDF/XML (DCAT / DCAT-AP).
+  source_operation: openapi/endeavour-energy-open-data-explore-api-v2-1-openapi.json#exportCatalogDCAT
+- name: query_records
+  description: Query records in one dataset with ODSQL — the workhorse tool. Bounded by limit<=100 and
+    offset+limit<10000 without group_by.
+  source_operation: openapi/endeavour-energy-open-data-explore-api-v2-1-openapi.json#getRecords
+- name: get_record
+  description: Read one record by record_id.
+  source_operation: openapi/endeavour-energy-open-data-explore-api-v2-1-openapi.json#getRecord
+- name: list_dataset_facets
+  description: List facets and their values within one dataset.
+  source_operation: openapi/endeavour-energy-open-data-explore-api-v2-1-openapi.json#getRecordsFacets
+- name: list_dataset_attachments
+  description: List files attached to a dataset.
+  source_operation: openapi/endeavour-energy-open-data-explore-api-v2-1-openapi.json#getDatasetAttachments
+- name: list_dataset_export_formats
+  description: List the export formats available for one dataset.
+  source_operation: openapi/endeavour-energy-open-data-explore-api-v2-1-openapi.json#listDatasetExportFormats
+- name: export_records
+  description: Export a whole dataset in a named format — the only way to get past the 10,000-row query
+    window.
+  source_operation: openapi/endeavour-energy-open-data-explore-api-v2-1-openapi.json#exportRecords
+- name: export_records_csv
+  description: Export a whole dataset as CSV.
+  source_operation: openapi/endeavour-energy-open-data-explore-api-v2-1-openapi.json#exportRecordsCSV
+- name: export_records_parquet
+  description: Export a whole dataset as Parquet.
+  source_operation: openapi/endeavour-energy-open-data-explore-api-v2-1-openapi.json#exportRecordsParquet
+- name: export_records_gpx
+  description: Export a whole dataset as GPX.
+  source_operation: openapi/endeavour-energy-open-data-explore-api-v2-1-openapi.json#exportRecordsGPX
 agent_notes:
-  - Every tool is a GET. Nothing here can mutate, charge or delete; all tools are freely retryable.
-  - >-
-    The 5,000/day quota is DOMAIN-wide and shared with every other anonymous
-    consumer. An agent looping over query_records will exhaust it for everyone;
-    prefer export_records for anything bulk.
-  - >-
-    query_records cannot reach past offset+limit 10000, so the three large
-    asset datasets (808,500 / 440,725 / 317,031 records) are only fully
-    retrievable via the export tools.
-  - >-
-    `record.fields` is an untyped object in the contract. Call get_dataset
-    first to learn the field schema before writing an ODSQL where clause, or
-    the API returns a 400 ODSQLSyntaxError.
-
+- Every tool is a GET. Nothing here can mutate, charge or delete; all tools are freely retryable.
+- The 5,000/day quota is DOMAIN-wide and shared with every other anonymous consumer. An agent looping
+  over query_records will exhaust it for everyone; prefer export_records for anything bulk.
+- query_records cannot reach past offset+limit 10000, so the three large asset datasets (808,500 / 440,725
+  / 317,031 records) are only fully retrievable via the export tools.
+- '`record.fields` is an untyped object in the contract. Call get_dataset first to learn the field schema
+  before writing an ODSQL where clause, or the API returns a 400 ODSQLSyntaxError.'
 third_party:
-  - name: '@pipeworx/mcp-opendatasoft'
-    url: https://www.npmjs.com/package/@pipeworx/mcp-opendatasoft
-    official: false
-    note: >-
-      A community MCP server that targets any public Opendatasoft portal, so it
-      can be pointed at data.endeavourenergy.com.au. Unaffiliated with both
-      Endeavour Energy and Opendatasoft; recorded for completeness, not
-      endorsed.
-
+- name: '@pipeworx/mcp-opendatasoft'
+  url: https://www.npmjs.com/package/@pipeworx/mcp-opendatasoft
+  official: false
+  note: A community MCP server that targets any public Opendatasoft portal, so it can be pointed at data.endeavourenergy.com.au.
+    Unaffiliated with both Endeavour Energy and Opendatasoft; recorded for completeness, not endorsed.
 related:
-  - mcp/endeavour-energy-tool-crosswalk.yml
-  - conventions/endeavour-energy-conventions.yml
-  - rate-limits/endeavour-energy-rate-limits.yml
+- mcp/endeavour-energy-tool-crosswalk.yml
+- conventions/endeavour-energy-conventions.yml
+- rate-limits/endeavour-energy-rate-limits.yml
+deployment:
+  mode: none
+  verified: derived
+  tools: 16
+  checked: '2026-08-12'
+  source: catalog MCP census
