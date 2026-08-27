@@ -42,35 +42,16 @@ created: '2026-07-27'
 modified: '2026-07-27'
 specificationVersion: '0.23'
 apis:
-- aid: endeavour-energy:endeavour-energy-open-data-explore-api
-  name: Endeavour Energy Open Data Explore API
-  description: Anonymous, key-free REST API over Endeavour Energy's public network open data
-    catalogue, served on the Opendatasoft Explore API v2.1. Exposes eight datasets covering
-    distribution network assets (440,728 poles, 808,500 conductor segments, 316,997 other
-    network assets, distribution districts), 30,500 records of distribution substation available
-    capacity, and live outage feeds (unplanned, planned and single-premise) that refresh roughly
-    every ten minutes. Supports dataset search, record query via the Opendatasoft Query Language
-    (ODSQL), faceting, per-record lookup, attachments, and bulk export to CSV, Parquet, GPX
-    and DCAT. Verified anonymously on 2026-07-27 with HTTP 200 on the catalogue and on records
-    with no credential; an optional apikey query parameter exists for authenticated quota.
-    Anonymous quota observed at 5,000 calls per day via the x-ratelimit-limit response header.
-    Most datasets are published under the Open Database Licence; three carry no declared licence.
+- aid: endeavour-energy:endeavour-energy-catalog-api
+  name: Endeavour Energy Catalog API
+  description: API to enumerate datasets
   humanURL: https://data.endeavourenergy.com.au/pages/home/
   baseURL: https://data.endeavourenergy.com.au/api/explore/v2.1
   tags:
-  - Open Data
-  - Energy
-  - Electricity
-  - Grid
-  - Outages
-  - Network Assets
-  - Australia
-  - Geospatial
+  - Catalog
   properties:
   - type: OpenAPI
-    url: openapi/endeavour-energy-open-data-explore-api-v2-1-openapi.json
-  - type: OpenAPI
-    url: openapi/endeavour-energy-open-data-explore-api-v2-0-openapi.json
+    url: openapi/endeavour-energy-catalog-api-openapi.yml
   - type: Documentation
     url: https://data.endeavourenergy.com.au/pages/home/
   - type: APIReference
@@ -78,12 +59,32 @@ apis:
   - type: Portal
     url: https://data.endeavourenergy.com.au/explore/
   - type: GettingStarted
-    url: https://help.opendatasoft.com/apis/ods-explore-v2/explore_v2.1.html#section/Getting-Started
-  - type: Overlay
-    url: overlays/endeavour-energy-open-data-explore-api-v2-1-overlay.yaml
-  - type: Overlay
-    url: overlays/endeavour-energy-open-data-explore-api-v2-0-overlay.yaml
+    url: >-
+      https://help.opendatasoft.com/apis/ods-explore-v2/explore_v2.1.html#section/Getting-Started
+- aid: endeavour-energy:endeavour-energy-dataset-api
+  name: Endeavour Energy Dataset API
+  description: API to work on records
+  humanURL: https://data.endeavourenergy.com.au/pages/home/
+  baseURL: https://data.endeavourenergy.com.au/api/explore/v2.1
+  tags:
+  - Dataset
+  properties:
+  - type: OpenAPI
+    url: openapi/endeavour-energy-dataset-api-openapi.yml
+  - type: Documentation
+    url: https://data.endeavourenergy.com.au/pages/home/
+  - type: APIReference
+    url: https://data.endeavourenergy.com.au/api-console/explore/v2.1/
+  - type: Portal
+    url: https://data.endeavourenergy.com.au/explore/
+  - type: GettingStarted
+    url: >-
+      https://help.opendatasoft.com/apis/ods-explore-v2/explore_v2.1.html#section/Getting-Started
 common:
+- type: Overlay
+  url: overlays/endeavour-energy-open-data-explore-api-v2-1-overlay.yaml
+- type: Overlay
+  url: overlays/endeavour-energy-open-data-explore-api-v2-0-overlay.yaml
 - type: AgenticAccess
   url: agentic-access/endeavour-energy-agentic-access.yml
 - type: VulnerabilityDisclosure
