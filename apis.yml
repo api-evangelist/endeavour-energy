@@ -22,6 +22,17 @@ description: 'Endeavour Energy is the regulated electricity distribution network
   Inverter Profile - Australia) utility server for NSW flexible exports and the emergency
   backstop mechanism, but that machine interface is device-facing and entirely undocumented
   publicly. The open data portal itself is not linked from the corporate website.'
+deliveryModel:
+  model: saas
+  open_source: false
+  commercial: true
+  callable_host: false
+  label: Hosted service · you call their endpoint
+  confidence: medium
+  source:
+  - pricing
+  generated: '2026-08-28'
+  method: derived
 image: https://www.endeavourenergy.com.au/images/ee-logo.svg
 tags:
 - Energy
