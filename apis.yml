@@ -94,6 +94,8 @@ apis:
   humanURL: https://data.endeavourenergy.com.au/pages/home/
   baseURL: https://data.endeavourenergy.com.au/api/explore/v2.1
   tags:
+  - Datasets
+  tags_raw:
   - Dataset
   properties:
   - type: OpenAPI
