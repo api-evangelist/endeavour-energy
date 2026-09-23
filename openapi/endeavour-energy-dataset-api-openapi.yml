@@ -1,16 +1,15 @@
 openapi: 3.2.0
 info:
-  title: Endeavour Energy Dataset API
+  title: Explore Dataset API
+  version: v2.0
+  description: The Opendatasoft Explore API v2 is organized around REST.
   contact:
     email: support@opendatasoft.com
   license:
     name: Copyright Opendatasoft
     url: https://legal.huwise.com/en/terms-of-use.html
-  version: '1.0'
-  description: 'Operations tagged Dataset across 2 of this provider''s published API definitions: endeavour-energy-open-data-explore-api-v2-0-openapi.json, endeavour-energy-open-data-explore-api-v2-1-openapi.json. Each path carries the servers of the definition it was published in.'
 servers:
 - url: https://data.endeavourenergy.com.au/api/explore/v2.0
-- url: https://data.endeavourenergy.com.au/api/explore/v2.1
 security:
 - apikey: []
 tags:
@@ -56,8 +55,6 @@ paths:
           $ref: '#/components/responses/quota'
         '500':
           description: Internal Server Error
-    servers:
-    - url: https://data.endeavourenergy.com.au/api/explore/v2.0
   /catalog/datasets/{dataset_id}/exports:
     get:
       summary: List export formats
@@ -87,8 +84,6 @@ paths:
           $ref: '#/components/responses/quota'
         '500':
           description: Internal Server Error
-    servers:
-    - url: https://data.endeavourenergy.com.au/api/explore/v2.0
   /catalog/datasets/{dataset_id}/exports/{format}:
     get:
       summary: Export a dataset
@@ -123,8 +118,6 @@ paths:
           $ref: '#/components/responses/quota'
         '500':
           description: Internal Server Error
-    servers:
-    - url: https://data.endeavourenergy.com.au/api/explore/v2.0
   /catalog/datasets/{dataset_id}/exports/csv:
     get:
       summary: Export a dataset in CSV
@@ -180,8 +173,6 @@ paths:
           $ref: '#/components/responses/quota'
         '500':
           description: Internal Server Error
-    servers:
-    - url: https://data.endeavourenergy.com.au/api/explore/v2.0
   /catalog/datasets/{dataset_id}/exports/parquet:
     get:
       summary: Export a dataset in Parquet
@@ -212,8 +203,6 @@ paths:
           $ref: '#/components/responses/quota'
         '500':
           description: Internal Server Error
-    servers:
-    - url: https://data.endeavourenergy.com.au/api/explore/v2.0
   /catalog/datasets/{dataset_id}/exports/gpx:
     get:
       summary: Export a dataset in GPX
@@ -255,8 +244,6 @@ paths:
           $ref: '#/components/responses/quota'
         '500':
           description: Internal Server Error
-    servers:
-    - url: https://data.endeavourenergy.com.au/api/explore/v2.0
   /catalog/datasets/{dataset_id}/facets:
     get:
       summary: List dataset facets
@@ -265,9 +252,7 @@ paths:
       - Dataset
       description: 'Enumerates facet values for records and returns a list of values for each facet.
 
-        Can be used to implement guided navigation in large result sets.
-
-        '
+        Can be used to implement guided navigation in large result sets.'
       parameters:
       - $ref: '#/components/parameters/dataset_id'
       - $ref: '#/components/parameters/where'
@@ -303,17 +288,13 @@ paths:
           $ref: '#/components/responses/quota'
         '500':
           description: Internal Server Error
-    servers:
-    - url: https://data.endeavourenergy.com.au/api/explore/v2.0
   /catalog/datasets/{dataset_id}/attachments:
     get:
       summary: List dataset attachments
       operationId: getDatasetAttachments
       tags:
       - Dataset
-      description: 'Returns a list of all available attachments for a dataset.
-
-        '
+      description: Returns a list of all available attachments for a dataset.
       parameters:
       - $ref: '#/components/parameters/dataset_id'
       responses:
@@ -343,17 +324,13 @@ paths:
           $ref: '#/components/responses/quota'
         '500':
           description: Internal Server Error
-    servers:
-    - url: https://data.endeavourenergy.com.au/api/explore/v2.0
   /catalog/datasets/{dataset_id}/records/{record_id}:
     get:
       summary: Read a dataset record
       operationId: getRecord
       tags:
       - Dataset
-      description: 'Reads a single dataset record based on its identifier.
-
-        '
+      description: Reads a single dataset record based on its identifier.
       parameters:
       - $ref: '#/components/parameters/dataset_id'
       - $ref: '#/components/parameters/record_id'
@@ -378,18 +355,52 @@ paths:
           $ref: '#/components/responses/quota'
         '500':
           description: Internal Server Error
-    servers:
-    - url: https://data.endeavourenergy.com.au/api/explore/v2.0
 components:
   parameters:
-    facet:
-      name: facet
-      in: query
-      description: "A facet is a field used for simple filtering (through the `refine` and `exclude` parameters) or exploration (with the `/facets` endpoint).\n\nIt can also be a function such as `facet=facet(name=\"field_name\")` which is identical to `facet=field_name`. But this `facet()` function\ncan also take some optional arguments such as `disjunctive`, `hierarchical`, `separator`, `sort` and `limit`.\n\n* `disjunctive`: a boolean `true/false`, whether multiple values can be selected for the facet\n* `hierarchical`: a boolean `true/false` if the field is hierarchical. The separator must be given as the argument.\n   For instance, you can do `facet=facet(name=\"filepath\", hierarchical=true, separator=\"/\")` to retrieve facets related to this field which might look like `\"/home/user/file.txt\"`\n* `separator`: a string, e.g. `/`, `-`, `;`\n* `sort`: a string which describes how to sort the facets. Possible arguments are `count` and `-count` for all field types, `alphanum` and `-alphanum` for `date`, `datetime` and `text`, `num` and `-num` for `decimal` and `int`\n* `limit`: an integer to limit the number of results\n"
-      style: form
-      explode: true
+    record_id:
+      name: record_id
+      in: path
+      required: true
       schema:
         type: string
+      description: Record identifier
+    lang:
+      name: lang
+      in: query
+      description: 'A language value.
+
+
+        If specified, the `lang` value override the default language, which is "fr".
+
+        The language is used to format string, for example in the `date_format` function.'
+      schema:
+        type: string
+        enum:
+        - en
+        - fr
+        - nl
+        - pt
+        - it
+        - ar
+        - de
+        - es
+        - ca
+        - eu
+        - sv
+      style: form
+    limit_export:
+      name: limit
+      in: query
+      description: 'Number of items to return in export.
+
+
+        Use -1 (default) to retrieve all records
+
+        '
+      schema:
+        minimum: -1
+        type: integer
+        default: -1
     refine:
       name: refine
       in: query
@@ -412,15 +423,19 @@ components:
       explode: true
       schema:
         type: string
-    limit:
-      name: limit
-      in: query
-      description: "Number of items to return.\n\nTo use with the `offset` parameter to implement pagination.\n\nThe maximum possible value depends on whether the query contains a `group_by` clause or not.\n\nFor a query **without** a `group_by`:\n  - the maximum value for `limit` is 100,\n  - `offset+limit` should be less than 10000\n\nFor a query **with** a `group_by`:\n  - the maximum value for `limit` is 20000,\n  - `offset+limit` should be less than 20000\n\n**Note:** If you need more results, please use the /exports endpoint.\n"
+    format-datasets:
+      name: format
+      in: path
+      required: true
       schema:
-        maximum: 100
-        minimum: -1
-        type: integer
-        default: 10
+        $ref: '#/components/schemas/enum-format-datasets'
+      style: simple
+    select:
+      name: select
+      in: query
+      description: "Examples:\n- `select=size` - Example of select, which only return the \"size\" field.\n- `select=size * 2 as bigger_size` - Example of a complex expression with a label, which returns a new field named \"bigger_size\" and containing the double of size field value.\n- `select=dataset_id, fields` - Example of a select in catalog ODSQL query to only retrieve dataset_id and schema of datasets.\n\nA select expression can be used to add, remove or change the fields to return.\nAn expression can be:\n  - a wildcard ('*'): all fields are returned.\n  - A field name: only the specified field is returned.\n  - An include/exclude function: All fields matching the include or exclude expression are included or excluded. This expression can contain wildcard.\n  - A complex expression. The result of the expression is returned. A label can be set for this expression, and in that case, the field will be named after this label."
+      schema:
+        type: string
     exclude:
       name: exclude
       in: query
@@ -444,20 +459,18 @@ components:
       explode: true
       schema:
         type: string
-    compressed:
-      name: compressed
+    order_by:
+      name: order_by
       in: query
-      description: 'If set to `true`, this parameter can compress the output file of a specific export format with GZIP, e.g. `.csv.gzip`.
+      description: 'Example: `order_by=sum(age) desc, name asc`
 
-        '
-      required: false
-      schema:
-        type: boolean
-        default: false
-    select:
-      name: select
-      in: query
-      description: "Examples:\n- `select=size` - Example of select, which only return the \"size\" field.\n- `select=size * 2 as bigger_size` - Example of a complex expression with a label, which returns a new field named \"bigger_size\" and containing the double of size field value.\n- `select=dataset_id, fields` - Example of a select in catalog ODSQL query to only retrieve dataset_id and schema of datasets.\n\nA select expression can be used to add, remove or change the fields to return.\nAn expression can be:\n  - a wildcard ('*'): all fields are returned.\n  - A field name: only the specified field is returned.\n  - An include/exclude function: All fields matching the include or exclude expression are included or excluded. This expression can contain wildcard.\n  - A complex expression. The result of the expression is returned. A label can be set for this expression, and in that case, the field will be named after this label."
+
+        A comma-separated list of field names or aggregations to sort on, followed by an order (`asc` or `desc`).
+
+
+        Results are sorted in ascending order by default. To sort results in descending order, use the `desc` keyword.'
+      style: form
+      explode: false
       schema:
         type: string
     group_by:
@@ -478,13 +491,22 @@ components:
       required: true
       schema:
         type: string
-    record_id:
-      name: record_id
-      in: path
-      required: true
+    offset:
+      name: offset
+      in: query
+      description: 'Index of the first item to return (starting at 0).
+
+
+        To use with the `limit` parameter to implement pagination.
+
+
+        **Note:** the maximum value depends on the type of query, see the note on `limit` for the details
+
+        '
       schema:
-        type: string
-      description: Record identifier
+        minimum: 0
+        type: integer
+        default: 0
     timezone:
       name: timezone
       in: query
@@ -511,58 +533,6 @@ components:
         Europe/Berlin:
           summary: Berlin timezone
           value: Europe/Berlin
-    limit_export:
-      name: limit
-      in: query
-      description: 'Number of items to return in export.
-
-
-        Use -1 (default) to retrieve all records
-
-        '
-      schema:
-        minimum: -1
-        type: integer
-        default: -1
-    offset:
-      name: offset
-      in: query
-      description: 'Index of the first item to return (starting at 0).
-
-
-        To use with the `limit` parameter to implement pagination.
-
-
-        **Note:** the maximum value depends on the type of query, see the note on `limit` for the details
-
-        '
-      schema:
-        minimum: 0
-        type: integer
-        default: 0
-    order_by:
-      name: order_by
-      in: query
-      description: 'Example: `order_by=sum(age) desc, name asc`
-
-
-        A comma-separated list of field names or aggregations to sort on, followed by an order (`asc` or `desc`).
-
-
-        Results are sorted in ascending order by default. To sort results in descending order, use the `desc` keyword.'
-      style: form
-      explode: false
-      schema:
-        type: string
-    epsg:
-      name: epsg
-      in: query
-      description: 'This parameter sets the EPSG code to project shapes into for formats that support geometric features.
-
-        '
-      schema:
-        type: integer
-        default: 4326
     use_labels:
       name: use_labels
       in: query
@@ -575,30 +545,33 @@ components:
       schema:
         type: boolean
         default: false
-    lang:
-      name: lang
+    compressed:
+      name: compressed
       in: query
-      description: 'A language value.
+      description: 'If set to `true`, this parameter can compress the output file of a specific export format with GZIP, e.g. `.csv.gzip`.
 
-
-        If specified, the `lang` value override the default language, which is "fr".
-
-        The language is used to format string, for example in the `date_format` function.'
+        '
+      required: false
+      schema:
+        type: boolean
+        default: false
+    facet:
+      name: facet
+      in: query
+      description: "A facet is a field used for simple filtering (through the `refine` and `exclude` parameters) or exploration (with the `/facets` endpoint).\n\nIt can also be a function such as `facet=facet(name=\"field_name\")` which is identical to `facet=field_name`. But this `facet()` function\ncan also take some optional arguments such as `disjunctive`, `hierarchical`, `separator`, `sort` and `limit`.\n\n* `disjunctive`: a boolean `true/false`, whether multiple values can be selected for the facet\n* `hierarchical`: a boolean `true/false` if the field is hierarchical. The separator must be given as the argument.\n   For instance, you can do `facet=facet(name=\"filepath\", hierarchical=true, separator=\"/\")` to retrieve facets related to this field which might look like `\"/home/user/file.txt\"`\n* `separator`: a string, e.g. `/`, `-`, `;`\n* `sort`: a string which describes how to sort the facets. Possible arguments are `count` and `-count` for all field types, `alphanum` and `-alphanum` for `date`, `datetime` and `text`, `num` and `-num` for `decimal` and `int`\n* `limit`: an integer to limit the number of results\n"
+      style: form
+      explode: true
       schema:
         type: string
-        enum:
-        - en
-        - fr
-        - nl
-        - pt
-        - it
-        - ar
-        - de
-        - es
-        - ca
-        - eu
-        - sv
-      style: form
+    limit:
+      name: limit
+      in: query
+      description: "Number of items to return.\n\nTo use with the `offset` parameter to implement pagination.\n\nThe maximum possible value depends on whether the query contains a `group_by` clause or not.\n\nFor a query **without** a `group_by`:\n  - the maximum value for `limit` is 100,\n  - `offset+limit` should be less than 10000\n\nFor a query **with** a `group_by`:\n  - the maximum value for `limit` is 20000,\n  - `offset+limit` should be less than 20000\n\n**Note:** If you need more results, please use the /exports endpoint.\n"
+      schema:
+        maximum: 100
+        minimum: -1
+        type: integer
+        default: 10
     where:
       name: where
       in: query
@@ -610,31 +583,185 @@ components:
         For more information, see [Opendatasoft Query Language (ODSQL)](<https://help.huwise.com/apis/ods-explore-v2/#section/Opendatasoft-Query-Language-(ODSQL)/Where-clause>) reference documentation.'
       schema:
         type: string
-    format-datasets:
-      name: format
-      in: path
-      required: true
-      schema:
-        $ref: '#/components/schemas/enum-format-datasets'
-      style: simple
-    include_app_metas:
-      name: include_app_metas
+    epsg:
+      name: epsg
       in: query
-      description: 'If set to `true`, this parameter will add application metadata to the response.
+      description: 'This parameter sets the EPSG code to project shapes into for formats that support geometric features.
 
         '
       schema:
-        type: boolean
-        default: false
-    include_links:
-      name: include_links
-      in: query
-      description: 'If set to `true`, this parameter will add HATEOAS links in the response.
-
-        '
-      schema:
-        type: boolean
-        default: false
+        type: integer
+        default: 4326
+  responses:
+    quota:
+      description: Too many requests
+      content:
+        application/json; charset=utf-8:
+          schema:
+            type: object
+            properties:
+              errorcode:
+                type: number
+              reset_time:
+                type: string
+                minLength: 1
+              limit_time_unit:
+                type: string
+                minLength: 1
+              call_limit:
+                type: number
+              error:
+                type: string
+                minLength: 1
+            required:
+            - errorcode
+            - reset_time
+            - limit_time_unit
+            - call_limit
+            - error
+          examples:
+            quota_exceeded:
+              value:
+                errorcode: 10002
+                reset_time: '2021-01-26T00:00:00Z'
+                limit_time_unit: day
+                call_limit: 10000
+                error: Too many requests on the domain. Please contact the domain administrator.
+    bad_request:
+      description: Bad Request
+      content:
+        application/json; charset=utf-8:
+          schema:
+            type: object
+            properties:
+              message:
+                type: string
+                minLength: 1
+              error_code:
+                type: string
+                minLength: 1
+            required:
+            - message
+            - error_code
+          examples:
+            invalid_odsql:
+              value:
+                message: 'ODSQL query is malformed: invalid_function() Clause(s) containing the error(s): select.'
+                error_code: ODSQLError
+  schemas:
+    aggregation:
+      type: object
+      properties:
+        count:
+          type: integer
+        cou_name_en:
+          type: string
+    records:
+      type: object
+      properties:
+        total_count:
+          type: integer
+        links:
+          type: array
+          items:
+            $ref: '#/components/schemas/links'
+        records:
+          type: array
+          items:
+            oneOf:
+            - $ref: '#/components/schemas/aggregation'
+            - $ref: '#/components/schemas/record'
+    enum-format-datasets:
+      type: string
+      enum:
+      - csv
+      - fgb
+      - geojson
+      - gpx
+      - json
+      - jsonl
+      - jsonld
+      - kml
+      - n3
+      - ov2
+      - parquet
+      - rdfxml
+      - shp
+      - turtle
+      - xls
+    record:
+      type: object
+      properties:
+        record:
+          type: object
+          properties:
+            id:
+              type: string
+            timestamp:
+              type: string
+              format: dateTime
+            size:
+              type: integer
+              format: int64
+            fields:
+              type: object
+              additionalProperties:
+                type: any
+        links:
+          type: array
+          items:
+            $ref: '#/components/schemas/links'
+    attachment:
+      type: object
+      properties:
+        href:
+          type: string
+        metas:
+          type: object
+          properties:
+            mime-type:
+              type: string
+            title:
+              type: string
+            url:
+              type: string
+            id:
+              type: string
+    links:
+      type: object
+      properties:
+        href:
+          type: string
+          format: uri
+        rel:
+          type: string
+          enum:
+          - self
+          - first
+          - last
+          - next
+          - dataset
+          - catalog
+    facet_value_enumeration:
+      type: object
+      properties:
+        name:
+          type: string
+        count:
+          type: integer
+        value:
+          type: string
+        state:
+          type: string
+    facet_enumeration:
+      type: object
+      properties:
+        name:
+          type: string
+        facets:
+          type: array
+          items:
+            $ref: '#/components/schemas/facet_value_enumeration'
   examples:
     facets:
       value:
@@ -660,55 +787,6 @@ components:
             name: Albania
             value: Albania
           name: cou_name_en
-    attachments:
-      value:
-        links: []
-        attachments:
-        - href: https://documentation-resources.opendatasoft.com/api/v2/catalog/datasets/geonames-all-cities-with-a-population-1000/attachments/cities1000_zip
-          metas:
-            mime-type: application/zip
-            title: cities1000.zip
-    group_by_country-v2.0:
-      value:
-        links: []
-        records:
-        - count: 16729
-          cou_name_en: United States
-        - count: 9945
-          cou_name_en: Italy
-        - count: 8981
-          cou_name_en: Mexico
-    record-v2.0:
-      value:
-        links: []
-        record:
-          id: 5ce430b62d47a400a495c30345fb6fdfac5550f0
-          timestamp: '2021-06-23T14:46:05.881Z'
-          size: 190
-          fields:
-            timezone: Europe/Brussels
-            elevation: null
-            name: Fraire
-            modification_date: '2020-04-05'
-            dem: 238
-            cou_name_en: Belgium
-            feature_class: P
-            admin3_code: '93'
-            alternate_names:
-            - Fraire
-            coordinates:
-              lat: 50.26127
-              lon: 4.5076
-            country_code_2: null
-            geoname_id: '2798031'
-            feature_code: PPL
-            label_en: Belgium
-            admin4_code: '93088'
-            country_code: BE
-            ascii_name: Fraire
-            admin1_code: WAL
-            admin2_code: WNA
-            population: 1492
     records-v2.0:
       value:
         total_count: 137611
@@ -775,317 +853,58 @@ components:
               admin2_code: '80'
               admin4_code: '80706'
               population: 1781
-    records-v2.1:
+    record-v2.0:
       value:
-        total_count: 137611
-        results:
-        - admin1_code: '27'
-          elevation: null
-          name: Saint-Leu
-          modification_date: '2019-03-26'
-          alternate_names:
-          - Saint-Leu
-          feature_class: P
-          admin3_code: '711'
-          cou_name_en: France
-          coordinates:
-            lat: 46.7306
-            lon: 4.50083
-          country_code_2: null
-          geoname_id: '2978771'
-          feature_code: PPL
-          label_en: France
-          dem: 366
-          country_code: FR
-          ascii_name: Saint-Leu
-          timezone: Europe/Paris
-          admin2_code: '71'
-          admin4_code: '71436'
-          population: 29278
-        - admin1_code: '32'
-          elevation: null
-          name: Saint-Léger-lès-Domart
-          modification_date: '2016-02-18'
-          alternate_names:
-          - Saint-Leger
-          - Saint-Leger-les-Domart
-          - Saint-Léger
-          - Saint-Léger-lès-Domart
-          feature_class: P
-          admin3_code: '802'
-          cou_name_en: France
-          coordinates:
-            lat: 50.05208
-            lon: 2.14067
-          country_code_2: null
-          geoname_id: '2978817'
-          feature_code: PPL
-          label_en: France
-          dem: 31
-          country_code: FR
-          ascii_name: Saint-Leger-les-Domart
-          timezone: Europe/Paris
-          admin2_code: '80'
-          admin4_code: '80706'
-          population: 1781
-    group_by_country-v2.1:
+        links: []
+        record:
+          id: 5ce430b62d47a400a495c30345fb6fdfac5550f0
+          timestamp: '2021-06-23T14:46:05.881Z'
+          size: 190
+          fields:
+            timezone: Europe/Brussels
+            elevation: null
+            name: Fraire
+            modification_date: '2020-04-05'
+            dem: 238
+            cou_name_en: Belgium
+            feature_class: P
+            admin3_code: '93'
+            alternate_names:
+            - Fraire
+            coordinates:
+              lat: 50.26127
+              lon: 4.5076
+            country_code_2: null
+            geoname_id: '2798031'
+            feature_code: PPL
+            label_en: Belgium
+            admin4_code: '93088'
+            country_code: BE
+            ascii_name: Fraire
+            admin1_code: WAL
+            admin2_code: WNA
+            population: 1492
+    group_by_country-v2.0:
       value:
-        results:
+        links: []
+        records:
         - count: 16729
           cou_name_en: United States
         - count: 9945
           cou_name_en: Italy
         - count: 8981
           cou_name_en: Mexico
-    record-v2.1:
+    attachments:
       value:
-        timezone: Europe/Brussels
-        elevation: null
-        name: Fraire
-        modification_date: '2020-04-05'
-        dem: 238
-        cou_name_en: Belgium
-        feature_class: P
-        admin3_code: '93'
-        alternate_names:
-        - Fraire
-        coordinates:
-          lat: 50.26127
-          lon: 4.5076
-        country_code_2: null
-        geoname_id: '2798031'
-        feature_code: PPL
-        label_en: Belgium
-        admin4_code: '93088'
-        country_code: BE
-        ascii_name: Fraire
-        admin1_code: WAL
-        admin2_code: WNA
-        population: 1492
-  schemas:
-    facet_value_enumeration:
-      type: object
-      properties:
-        name:
-          type: string
-        count:
-          type: integer
-        value:
-          type: string
-        state:
-          type: string
-    records:
-      type: object
-      properties:
-        total_count:
-          type: integer
-        links:
-          type: array
-          items:
-            $ref: '#/components/schemas/links'
-        records:
-          type: array
-          items:
-            oneOf:
-            - $ref: '#/components/schemas/aggregation'
-            - $ref: '#/components/schemas/record'
-    record:
-      type: object
-      properties:
-        record:
-          type: object
-          properties:
-            id:
-              type: string
-            timestamp:
-              type: string
-              format: dateTime
-            size:
-              type: integer
-              format: int64
-            fields:
-              type: object
-              additionalProperties:
-                type: any
-        links:
-          type: array
-          items:
-            $ref: '#/components/schemas/links'
-    aggregation:
-      type: object
-      properties:
-        count:
-          type: integer
-        cou_name_en:
-          type: string
-    facet_enumeration:
-      type: object
-      properties:
-        name:
-          type: string
-        facets:
-          type: array
-          items:
-            $ref: '#/components/schemas/facet_value_enumeration'
-    enum-format-datasets:
-      type: string
-      enum:
-      - csv
-      - fgb
-      - geojson
-      - gpx
-      - json
-      - jsonl
-      - jsonld
-      - kml
-      - n3
-      - ov2
-      - parquet
-      - rdfxml
-      - shp
-      - turtle
-      - xls
-    attachment:
-      type: object
-      properties:
-        href:
-          type: string
-        metas:
-          type: object
-          properties:
-            mime-type:
-              type: string
-            title:
-              type: string
-            url:
-              type: string
-            id:
-              type: string
-    links:
-      type: object
-      properties:
-        href:
-          type: string
-          format: uri
-        rel:
-          type: string
-          enum:
-          - self
-          - first
-          - last
-          - next
-          - dataset
-          - catalog
-    records_2:
-      type: object
-      properties:
-        total_count:
-          type: integer
-        _links:
-          type: array
-          items:
-            $ref: '#/components/schemas/links'
-        results:
-          type: array
-          items:
-            $ref: '#/components/schemas/record_2'
-    record_2:
-      type: object
-      properties:
-        _id:
-          type: string
-        _timestamp:
-          type: string
-          format: dateTime
-        _size:
-          type: integer
-          format: int64
-        _links:
-          type: array
-          items:
-            $ref: '#/components/schemas/links'
-      additionalProperties:
-        type: any
-    enum-format-datasets_2:
-      type: string
-      enum:
-      - csv
-      - fgb
-      - geojson
-      - gpx
-      - json
-      - jsonl
-      - jsonld
-      - kml
-      - n3
-      - ov2
-      - parquet
-      - rdfxml
-      - shp
-      - turtle
-      - xlsx
-  responses:
-    bad_request:
-      description: Bad Request
-      content:
-        application/json; charset=utf-8:
-          schema:
-            type: object
-            properties:
-              message:
-                type: string
-                minLength: 1
-              error_code:
-                type: string
-                minLength: 1
-            required:
-            - message
-            - error_code
-          examples:
-            invalid_odsql:
-              value:
-                message: 'ODSQL query is malformed: invalid_function() Clause(s) containing the error(s): select.'
-                error_code: ODSQLError
-    quota:
-      description: Too many requests
-      content:
-        application/json; charset=utf-8:
-          schema:
-            type: object
-            properties:
-              errorcode:
-                type: number
-              reset_time:
-                type: string
-                minLength: 1
-              limit_time_unit:
-                type: string
-                minLength: 1
-              call_limit:
-                type: number
-              error:
-                type: string
-                minLength: 1
-            required:
-            - errorcode
-            - reset_time
-            - limit_time_unit
-            - call_limit
-            - error
-          examples:
-            quota_exceeded:
-              value:
-                errorcode: 10002
-                reset_time: '2021-01-26T00:00:00Z'
-                limit_time_unit: day
-                call_limit: 10000
-                error: Too many requests on the domain. Please contact the domain administrator.
+        links: []
+        attachments:
+        - href: https://documentation-resources.opendatasoft.com/api/v2/catalog/datasets/geonames-all-cities-with-a-population-1000/attachments/cities1000_zip
+          metas:
+            mime-type: application/zip
+            title: cities1000.zip
   securitySchemes:
     apikey:
       type: apiKey
       description: API key to make authenticated requests.
       name: apikey
       in: query
-x-refined-from:
-- endeavour-energy-open-data-explore-api-v2-0-openapi.json
-- endeavour-energy-open-data-explore-api-v2-1-openapi.json
