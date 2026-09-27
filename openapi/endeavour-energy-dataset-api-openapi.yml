@@ -357,50 +357,18 @@ paths:
           description: Internal Server Error
 components:
   parameters:
-    record_id:
-      name: record_id
-      in: path
-      required: true
-      schema:
-        type: string
-      description: Record identifier
-    lang:
-      name: lang
+    use_labels:
+      name: use_labels
       in: query
-      description: 'A language value.
+      description: 'If set to `true`, this parameter will make exports output the label of each field rather than its name.
 
 
-        If specified, the `lang` value override the default language, which is "fr".
-
-        The language is used to format string, for example in the `date_format` function.'
-      schema:
-        type: string
-        enum:
-        - en
-        - fr
-        - nl
-        - pt
-        - it
-        - ar
-        - de
-        - es
-        - ca
-        - eu
-        - sv
-      style: form
-    limit_export:
-      name: limit
-      in: query
-      description: 'Number of items to return in export.
-
-
-        Use -1 (default) to retrieve all records
+        This parameter only makes sense for formats that contain a list of the fields in their output.
 
         '
       schema:
-        minimum: -1
-        type: integer
-        default: -1
+        type: boolean
+        default: false
     refine:
       name: refine
       in: query
@@ -423,56 +391,22 @@ components:
       explode: true
       schema:
         type: string
-    format-datasets:
-      name: format
+    record_id:
+      name: record_id
       in: path
       required: true
       schema:
-        $ref: '#/components/schemas/enum-format-datasets'
-      style: simple
-    select:
-      name: select
-      in: query
-      description: "Examples:\n- `select=size` - Example of select, which only return the \"size\" field.\n- `select=size * 2 as bigger_size` - Example of a complex expression with a label, which returns a new field named \"bigger_size\" and containing the double of size field value.\n- `select=dataset_id, fields` - Example of a select in catalog ODSQL query to only retrieve dataset_id and schema of datasets.\n\nA select expression can be used to add, remove or change the fields to return.\nAn expression can be:\n  - a wildcard ('*'): all fields are returned.\n  - A field name: only the specified field is returned.\n  - An include/exclude function: All fields matching the include or exclude expression are included or excluded. This expression can contain wildcard.\n  - A complex expression. The result of the expression is returned. A label can be set for this expression, and in that case, the field will be named after this label."
-      schema:
         type: string
-    exclude:
-      name: exclude
+      description: Record identifier
+    limit:
+      name: limit
       in: query
-      description: 'Examples:
-
-        - `exclude=city:Paris` - Exclude the value `Paris` from the `city` facet. Facets enumeration will display `Paris` as `excluded` without any count information.
-
-        - `exclude=modified:2019/12` - Exclude the value `2019/12` from the `modified` facet. Facets enumeration will display `2020` as `excluded` without any count information.
-
-
-        A facet filter used to exclude a facet value from the result set.
-
-        Using this parameter, you can filter your query to exclude the selected facet value in the response.
-
-
-        `exclude` uses the following syntax: `exclude=<FACETNAME>:<FACETVALUE>`
-
-
-        **`exclude` must not be confused with a `where` filter. Excluding a facet value is equivalent to removing an entry in the left navigation panel.**'
-      style: form
-      explode: true
+      description: "Number of items to return.\n\nTo use with the `offset` parameter to implement pagination.\n\nThe maximum possible value depends on whether the query contains a `group_by` clause or not.\n\nFor a query **without** a `group_by`:\n  - the maximum value for `limit` is 100,\n  - `offset+limit` should be less than 10000\n\nFor a query **with** a `group_by`:\n  - the maximum value for `limit` is 20000,\n  - `offset+limit` should be less than 20000\n\n**Note:** If you need more results, please use the /exports endpoint.\n"
       schema:
-        type: string
-    order_by:
-      name: order_by
-      in: query
-      description: 'Example: `order_by=sum(age) desc, name asc`
-
-
-        A comma-separated list of field names or aggregations to sort on, followed by an order (`asc` or `desc`).
-
-
-        Results are sorted in ascending order by default. To sort results in descending order, use the `desc` keyword.'
-      style: form
-      explode: false
-      schema:
-        type: string
+        maximum: 100
+        minimum: -1
+        type: integer
+        default: 10
     group_by:
       name: group_by
       in: query
@@ -481,32 +415,17 @@ components:
       explode: false
       schema:
         type: string
-    dataset_id:
-      name: dataset_id
-      in: path
-      description: 'The identifier of the dataset to be queried.
+    where:
+      name: where
+      in: query
+      description: 'A `where` filter is a text expression performing a simple full-text search that can also include logical operations
+
+        (NOT, AND, OR...) and lots of other functions to perform complex and precise search operations.
 
 
-        You can find it in the "Information" tab of the dataset page or in the dataset URL, right after `/datasets/`.'
-      required: true
+        For more information, see [Opendatasoft Query Language (ODSQL)](<https://help.huwise.com/apis/ods-explore-v2/#section/Opendatasoft-Query-Language-(ODSQL)/Where-clause>) reference documentation.'
       schema:
         type: string
-    offset:
-      name: offset
-      in: query
-      description: 'Index of the first item to return (starting at 0).
-
-
-        To use with the `limit` parameter to implement pagination.
-
-
-        **Note:** the maximum value depends on the type of query, see the note on `limit` for the details
-
-        '
-      schema:
-        minimum: 0
-        type: integer
-        default: 0
     timezone:
       name: timezone
       in: query
@@ -533,54 +452,36 @@ components:
         Europe/Berlin:
           summary: Berlin timezone
           value: Europe/Berlin
-    use_labels:
-      name: use_labels
+    order_by:
+      name: order_by
       in: query
-      description: 'If set to `true`, this parameter will make exports output the label of each field rather than its name.
+      description: 'Example: `order_by=sum(age) desc, name asc`
 
 
-        This parameter only makes sense for formats that contain a list of the fields in their output.
+        A comma-separated list of field names or aggregations to sort on, followed by an order (`asc` or `desc`).
 
-        '
+
+        Results are sorted in ascending order by default. To sort results in descending order, use the `desc` keyword.'
+      style: form
+      explode: false
       schema:
-        type: boolean
-        default: false
-    compressed:
-      name: compressed
-      in: query
-      description: 'If set to `true`, this parameter can compress the output file of a specific export format with GZIP, e.g. `.csv.gzip`.
+        type: string
+    dataset_id:
+      name: dataset_id
+      in: path
+      description: 'The identifier of the dataset to be queried.
 
-        '
-      required: false
+
+        You can find it in the "Information" tab of the dataset page or in the dataset URL, right after `/datasets/`.'
+      required: true
       schema:
-        type: boolean
-        default: false
+        type: string
     facet:
       name: facet
       in: query
       description: "A facet is a field used for simple filtering (through the `refine` and `exclude` parameters) or exploration (with the `/facets` endpoint).\n\nIt can also be a function such as `facet=facet(name=\"field_name\")` which is identical to `facet=field_name`. But this `facet()` function\ncan also take some optional arguments such as `disjunctive`, `hierarchical`, `separator`, `sort` and `limit`.\n\n* `disjunctive`: a boolean `true/false`, whether multiple values can be selected for the facet\n* `hierarchical`: a boolean `true/false` if the field is hierarchical. The separator must be given as the argument.\n   For instance, you can do `facet=facet(name=\"filepath\", hierarchical=true, separator=\"/\")` to retrieve facets related to this field which might look like `\"/home/user/file.txt\"`\n* `separator`: a string, e.g. `/`, `-`, `;`\n* `sort`: a string which describes how to sort the facets. Possible arguments are `count` and `-count` for all field types, `alphanum` and `-alphanum` for `date`, `datetime` and `text`, `num` and `-num` for `decimal` and `int`\n* `limit`: an integer to limit the number of results\n"
       style: form
       explode: true
-      schema:
-        type: string
-    limit:
-      name: limit
-      in: query
-      description: "Number of items to return.\n\nTo use with the `offset` parameter to implement pagination.\n\nThe maximum possible value depends on whether the query contains a `group_by` clause or not.\n\nFor a query **without** a `group_by`:\n  - the maximum value for `limit` is 100,\n  - `offset+limit` should be less than 10000\n\nFor a query **with** a `group_by`:\n  - the maximum value for `limit` is 20000,\n  - `offset+limit` should be less than 20000\n\n**Note:** If you need more results, please use the /exports endpoint.\n"
-      schema:
-        maximum: 100
-        minimum: -1
-        type: integer
-        default: 10
-    where:
-      name: where
-      in: query
-      description: 'A `where` filter is a text expression performing a simple full-text search that can also include logical operations
-
-        (NOT, AND, OR...) and lots of other functions to perform complex and precise search operations.
-
-
-        For more information, see [Opendatasoft Query Language (ODSQL)](<https://help.huwise.com/apis/ods-explore-v2/#section/Opendatasoft-Query-Language-(ODSQL)/Where-clause>) reference documentation.'
       schema:
         type: string
     epsg:
@@ -592,103 +493,117 @@ components:
       schema:
         type: integer
         default: 4326
-  responses:
-    quota:
-      description: Too many requests
-      content:
-        application/json; charset=utf-8:
-          schema:
-            type: object
-            properties:
-              errorcode:
-                type: number
-              reset_time:
-                type: string
-                minLength: 1
-              limit_time_unit:
-                type: string
-                minLength: 1
-              call_limit:
-                type: number
-              error:
-                type: string
-                minLength: 1
-            required:
-            - errorcode
-            - reset_time
-            - limit_time_unit
-            - call_limit
-            - error
-          examples:
-            quota_exceeded:
-              value:
-                errorcode: 10002
-                reset_time: '2021-01-26T00:00:00Z'
-                limit_time_unit: day
-                call_limit: 10000
-                error: Too many requests on the domain. Please contact the domain administrator.
-    bad_request:
-      description: Bad Request
-      content:
-        application/json; charset=utf-8:
-          schema:
-            type: object
-            properties:
-              message:
-                type: string
-                minLength: 1
-              error_code:
-                type: string
-                minLength: 1
-            required:
-            - message
-            - error_code
-          examples:
-            invalid_odsql:
-              value:
-                message: 'ODSQL query is malformed: invalid_function() Clause(s) containing the error(s): select.'
-                error_code: ODSQLError
+    select:
+      name: select
+      in: query
+      description: "Examples:\n- `select=size` - Example of select, which only return the \"size\" field.\n- `select=size * 2 as bigger_size` - Example of a complex expression with a label, which returns a new field named \"bigger_size\" and containing the double of size field value.\n- `select=dataset_id, fields` - Example of a select in catalog ODSQL query to only retrieve dataset_id and schema of datasets.\n\nA select expression can be used to add, remove or change the fields to return.\nAn expression can be:\n  - a wildcard ('*'): all fields are returned.\n  - A field name: only the specified field is returned.\n  - An include/exclude function: All fields matching the include or exclude expression are included or excluded. This expression can contain wildcard.\n  - A complex expression. The result of the expression is returned. A label can be set for this expression, and in that case, the field will be named after this label."
+      schema:
+        type: string
+    offset:
+      name: offset
+      in: query
+      description: 'Index of the first item to return (starting at 0).
+
+
+        To use with the `limit` parameter to implement pagination.
+
+
+        **Note:** the maximum value depends on the type of query, see the note on `limit` for the details
+
+        '
+      schema:
+        minimum: 0
+        type: integer
+        default: 0
+    limit_export:
+      name: limit
+      in: query
+      description: 'Number of items to return in export.
+
+
+        Use -1 (default) to retrieve all records
+
+        '
+      schema:
+        minimum: -1
+        type: integer
+        default: -1
+    lang:
+      name: lang
+      in: query
+      description: 'A language value.
+
+
+        If specified, the `lang` value override the default language, which is "fr".
+
+        The language is used to format string, for example in the `date_format` function.'
+      schema:
+        type: string
+        enum:
+        - en
+        - fr
+        - nl
+        - pt
+        - it
+        - ar
+        - de
+        - es
+        - ca
+        - eu
+        - sv
+      style: form
+    exclude:
+      name: exclude
+      in: query
+      description: 'Examples:
+
+        - `exclude=city:Paris` - Exclude the value `Paris` from the `city` facet. Facets enumeration will display `Paris` as `excluded` without any count information.
+
+        - `exclude=modified:2019/12` - Exclude the value `2019/12` from the `modified` facet. Facets enumeration will display `2020` as `excluded` without any count information.
+
+
+        A facet filter used to exclude a facet value from the result set.
+
+        Using this parameter, you can filter your query to exclude the selected facet value in the response.
+
+
+        `exclude` uses the following syntax: `exclude=<FACETNAME>:<FACETVALUE>`
+
+
+        **`exclude` must not be confused with a `where` filter. Excluding a facet value is equivalent to removing an entry in the left navigation panel.**'
+      style: form
+      explode: true
+      schema:
+        type: string
+    format-datasets:
+      name: format
+      in: path
+      required: true
+      schema:
+        $ref: '#/components/schemas/enum-format-datasets'
+      style: simple
+    compressed:
+      name: compressed
+      in: query
+      description: 'If set to `true`, this parameter can compress the output file of a specific export format with GZIP, e.g. `.csv.gzip`.
+
+        '
+      required: false
+      schema:
+        type: boolean
+        default: false
   schemas:
-    aggregation:
+    facet_value_enumeration:
       type: object
       properties:
+        name:
+          type: string
         count:
           type: integer
-        cou_name_en:
+        value:
           type: string
-    records:
-      type: object
-      properties:
-        total_count:
-          type: integer
-        links:
-          type: array
-          items:
-            $ref: '#/components/schemas/links'
-        records:
-          type: array
-          items:
-            oneOf:
-            - $ref: '#/components/schemas/aggregation'
-            - $ref: '#/components/schemas/record'
-    enum-format-datasets:
-      type: string
-      enum:
-      - csv
-      - fgb
-      - geojson
-      - gpx
-      - json
-      - jsonl
-      - jsonld
-      - kml
-      - n3
-      - ov2
-      - parquet
-      - rdfxml
-      - shp
-      - turtle
-      - xls
+        state:
+          type: string
     record:
       type: object
       properties:
@@ -711,6 +626,70 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/links'
+    aggregation:
+      type: object
+      properties:
+        count:
+          type: integer
+        cou_name_en:
+          type: string
+    records:
+      type: object
+      properties:
+        total_count:
+          type: integer
+        links:
+          type: array
+          items:
+            $ref: '#/components/schemas/links'
+        records:
+          type: array
+          items:
+            oneOf:
+            - $ref: '#/components/schemas/aggregation'
+            - $ref: '#/components/schemas/record'
+    links:
+      type: object
+      properties:
+        href:
+          type: string
+          format: uri
+        rel:
+          type: string
+          enum:
+          - self
+          - first
+          - last
+          - next
+          - dataset
+          - catalog
+    enum-format-datasets:
+      type: string
+      enum:
+      - csv
+      - fgb
+      - geojson
+      - gpx
+      - json
+      - jsonl
+      - jsonld
+      - kml
+      - n3
+      - ov2
+      - parquet
+      - rdfxml
+      - shp
+      - turtle
+      - xls
+    facet_enumeration:
+      type: object
+      properties:
+        name:
+          type: string
+        facets:
+          type: array
+          items:
+            $ref: '#/components/schemas/facet_value_enumeration'
     attachment:
       type: object
       properties:
@@ -727,66 +706,7 @@ components:
               type: string
             id:
               type: string
-    links:
-      type: object
-      properties:
-        href:
-          type: string
-          format: uri
-        rel:
-          type: string
-          enum:
-          - self
-          - first
-          - last
-          - next
-          - dataset
-          - catalog
-    facet_value_enumeration:
-      type: object
-      properties:
-        name:
-          type: string
-        count:
-          type: integer
-        value:
-          type: string
-        state:
-          type: string
-    facet_enumeration:
-      type: object
-      properties:
-        name:
-          type: string
-        facets:
-          type: array
-          items:
-            $ref: '#/components/schemas/facet_value_enumeration'
   examples:
-    facets:
-      value:
-        links: []
-        facets:
-        - facets:
-          - count: 68888
-            state: displayed
-            name: Europe
-            value: Europe
-          - count: 36276
-            state: displayed
-            name: America
-            value: America
-          name: timezone
-        - facets:
-          - count: 313
-            state: displayed
-            name: Afghanistan
-            value: Afghanistan
-          - count: 356
-            state: displayed
-            name: Albania
-            value: Albania
-          name: cou_name_en
     records-v2.0:
       value:
         total_count: 137611
@@ -884,6 +804,30 @@ components:
             admin1_code: WAL
             admin2_code: WNA
             population: 1492
+    facets:
+      value:
+        links: []
+        facets:
+        - facets:
+          - count: 68888
+            state: displayed
+            name: Europe
+            value: Europe
+          - count: 36276
+            state: displayed
+            name: America
+            value: America
+          name: timezone
+        - facets:
+          - count: 313
+            state: displayed
+            name: Afghanistan
+            value: Afghanistan
+          - count: 356
+            state: displayed
+            name: Albania
+            value: Albania
+          name: cou_name_en
     group_by_country-v2.0:
       value:
         links: []
@@ -902,6 +846,62 @@ components:
           metas:
             mime-type: application/zip
             title: cities1000.zip
+  responses:
+    quota:
+      description: Too many requests
+      content:
+        application/json; charset=utf-8:
+          schema:
+            type: object
+            properties:
+              errorcode:
+                type: number
+              reset_time:
+                type: string
+                minLength: 1
+              limit_time_unit:
+                type: string
+                minLength: 1
+              call_limit:
+                type: number
+              error:
+                type: string
+                minLength: 1
+            required:
+            - errorcode
+            - reset_time
+            - limit_time_unit
+            - call_limit
+            - error
+          examples:
+            quota_exceeded:
+              value:
+                errorcode: 10002
+                reset_time: '2021-01-26T00:00:00Z'
+                limit_time_unit: day
+                call_limit: 10000
+                error: Too many requests on the domain. Please contact the domain administrator.
+    bad_request:
+      description: Bad Request
+      content:
+        application/json; charset=utf-8:
+          schema:
+            type: object
+            properties:
+              message:
+                type: string
+                minLength: 1
+              error_code:
+                type: string
+                minLength: 1
+            required:
+            - message
+            - error_code
+          examples:
+            invalid_odsql:
+              value:
+                message: 'ODSQL query is malformed: invalid_function() Clause(s) containing the error(s): select.'
+                error_code: ODSQLError
   securitySchemes:
     apikey:
       type: apiKey
