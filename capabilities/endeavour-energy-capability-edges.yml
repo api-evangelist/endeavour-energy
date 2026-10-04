@@ -1,0 +1,35 @@
+slug: endeavour-energy
+provider: Endeavour Energy
+generated_by: planning/capability-mapping/scripts/classify_capabilities.py
+model: claude-opus-5
+frame:
+- Software & Technology
+min_confidence: 0.7
+capability_model:
+  source: https://github.com/vincentmakes/turbo-ea-capabilities
+  license: CC-BY-4.0
+  attribution: Turbo EA Capabilities by Vincent Verdet — Turbo EA, https://github.com/vincentmakes/turbo-ea-capabilities,
+    CC BY 4.0
+  notice: NOTICE
+edge_count: 2
+edges:
+- tag: Catalog
+  spec_file: endeavour-energy-catalog-api-openapi.yml
+  capability_id: BC-610
+  capability_id_l1: BC-610
+  capability_name: Information & Data Management
+  confidence: 0.7
+  evidence: GET /catalog/datasets "Query catalog datasets"; GET /catalog/exports/dcat{dcat_ap_format}
+    "Export a catalog in RDF/XML (DCAT)"
+  reason: Opendatasoft Explore API surface for discovering, faceting and exporting a dataset catalogue
+    — data cataloguing and information asset publication. L1 only, since the evidence does not clearly
+    distinguish governance/cataloguing from analytics delivery.
+- tag: Dataset
+  spec_file: endeavour-energy-dataset-api-openapi.yml
+  capability_id: BC-610
+  capability_id_l1: BC-610
+  capability_name: Information & Data Management
+  confidence: 0.7
+  evidence: GET /catalog/datasets/{dataset_id}/records "Query dataset records"; "Export a dataset in Parquet"
+  reason: Querying and exporting records of published datasets — data access and distribution over managed
+    information assets. Mapped at L1 as the operations do not pin a specific sub-capability.

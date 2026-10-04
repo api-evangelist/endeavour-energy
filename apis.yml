@@ -110,6 +110,9 @@ apis:
     url: >-
       https://help.opendatasoft.com/apis/ods-explore-v2/explore_v2.1.html#section/Getting-Started
 common:
+- type: CapabilityMap
+  url: capabilities/endeavour-energy-capability-edges.yml
+  name: Endeavour Energy Business Capability Map
 - type: Overlay
   url: overlays/endeavour-energy-open-data-explore-api-v2-1-overlay.yaml
 - type: Overlay
