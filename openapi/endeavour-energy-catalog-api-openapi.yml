@@ -283,17 +283,6 @@ paths:
           description: Internal Server Error
 components:
   parameters:
-    where:
-      name: where
-      in: query
-      description: 'A `where` filter is a text expression performing a simple full-text search that can also include logical operations
-
-        (NOT, AND, OR...) and lots of other functions to perform complex and precise search operations.
-
-
-        For more information, see [Opendatasoft Query Language (ODSQL)](<https://help.huwise.com/apis/ods-explore-v2/#section/Opendatasoft-Query-Language-(ODSQL)/Where-clause>) reference documentation.'
-      schema:
-        type: string
     limit_export:
       name: limit
       in: query
@@ -307,6 +296,17 @@ components:
         minimum: -1
         type: integer
         default: -1
+    where:
+      name: where
+      in: query
+      description: 'A `where` filter is a text expression performing a simple full-text search that can also include logical operations
+
+        (NOT, AND, OR...) and lots of other functions to perform complex and precise search operations.
+
+
+        For more information, see [Opendatasoft Query Language (ODSQL)](<https://help.huwise.com/apis/ods-explore-v2/#section/Opendatasoft-Query-Language-(ODSQL)/Where-clause>) reference documentation.'
+      schema:
+        type: string
     refine:
       name: refine
       in: query
@@ -339,136 +339,6 @@ components:
       required: true
       schema:
         type: string
-    lang:
-      name: lang
-      in: query
-      description: 'A language value.
-
-
-        If specified, the `lang` value override the default language, which is "fr".
-
-        The language is used to format string, for example in the `date_format` function.'
-      schema:
-        type: string
-        enum:
-        - en
-        - fr
-        - nl
-        - pt
-        - it
-        - ar
-        - de
-        - es
-        - ca
-        - eu
-        - sv
-      style: form
-    dcat_format:
-      name: dcat_ap_format
-      in: path
-      required: true
-      schema:
-        type: string
-        enum:
-        - _ap_ch
-        - _ap_de
-        - _ap_se
-        - _ap_sp
-        - _ap_it
-        - _ap_vl
-        - _ap_benap
-        description: 'DCAT format specifier for the catalog export.
-
-          `dcat_ap_*` formats are only available upon activation.'
-      style: simple
-    timezone:
-      name: timezone
-      in: query
-      description: 'Set the timezone for datetime fields.
-
-
-        Timezone IDs are defined by the [Unicode CLDR project](https://github.com/unicode-org/cldr). The list of timezone IDs is available in [timezone.xml](https://github.com/unicode-org/cldr/blob/master/common/bcp47/timezone.xml).'
-      schema:
-        type: string
-        default: UTC
-      examples:
-        UTC:
-          summary: UTC timezone
-          value: UTC
-        Europe/Paris:
-          summary: Paris timezone
-          value: Europe/Paris
-        US/Eastern:
-          summary: Eastern timezone
-          value: US/Eastern
-        Europe/London:
-          summary: London timezone
-          value: Europe/London
-        Europe/Berlin:
-          summary: Berlin timezone
-          value: Europe/Berlin
-    exclude:
-      name: exclude
-      in: query
-      description: 'Examples:
-
-        - `exclude=city:Paris` - Exclude the value `Paris` from the `city` facet. Facets enumeration will display `Paris` as `excluded` without any count information.
-
-        - `exclude=modified:2019/12` - Exclude the value `2019/12` from the `modified` facet. Facets enumeration will display `2020` as `excluded` without any count information.
-
-
-        A facet filter used to exclude a facet value from the result set.
-
-        Using this parameter, you can filter your query to exclude the selected facet value in the response.
-
-
-        `exclude` uses the following syntax: `exclude=<FACETNAME>:<FACETVALUE>`
-
-
-        **`exclude` must not be confused with a `where` filter. Excluding a facet value is equivalent to removing an entry in the left navigation panel.**'
-      style: form
-      explode: true
-      schema:
-        type: string
-    offset:
-      name: offset
-      in: query
-      description: 'Index of the first item to return (starting at 0).
-
-
-        To use with the `limit` parameter to implement pagination.
-
-
-        **Note:** the maximum value depends on the type of query, see the note on `limit` for the details
-
-        '
-      schema:
-        minimum: 0
-        type: integer
-        default: 0
-    limit:
-      name: limit
-      in: query
-      description: "Number of items to return.\n\nTo use with the `offset` parameter to implement pagination.\n\nThe maximum possible value depends on whether the query contains a `group_by` clause or not.\n\nFor a query **without** a `group_by`:\n  - the maximum value for `limit` is 100,\n  - `offset+limit` should be less than 10000\n\nFor a query **with** a `group_by`:\n  - the maximum value for `limit` is 20000,\n  - `offset+limit` should be less than 20000\n\n**Note:** If you need more results, please use the /exports endpoint.\n"
-      schema:
-        maximum: 100
-        minimum: -1
-        type: integer
-        default: 10
-    order_by:
-      name: order_by
-      in: query
-      description: 'Example: `order_by=sum(age) desc, name asc`
-
-
-        A comma-separated list of field names or aggregations to sort on, followed by an order (`asc` or `desc`).
-
-
-        Results are sorted in ascending order by default. To sort results in descending order, use the `desc` keyword.'
-      style: form
-      explode: false
-      schema:
-        type: string
     format-catalog:
       name: format
       in: path
@@ -498,6 +368,74 @@ components:
 
           See [here](#tag/Catalog/operation/listExportFormats) to get the list of available export formats'
       style: simple
+    lang:
+      name: lang
+      in: query
+      description: 'A language value.
+
+
+        If specified, the `lang` value override the default language, which is "fr".
+
+        The language is used to format string, for example in the `date_format` function.'
+      schema:
+        type: string
+        enum:
+        - en
+        - fr
+        - nl
+        - pt
+        - it
+        - ar
+        - de
+        - es
+        - ca
+        - eu
+        - sv
+      style: form
+    timezone:
+      name: timezone
+      in: query
+      description: 'Set the timezone for datetime fields.
+
+
+        Timezone IDs are defined by the [Unicode CLDR project](https://github.com/unicode-org/cldr). The list of timezone IDs is available in [timezone.xml](https://github.com/unicode-org/cldr/blob/master/common/bcp47/timezone.xml).'
+      schema:
+        type: string
+        default: UTC
+      examples:
+        UTC:
+          summary: UTC timezone
+          value: UTC
+        Europe/Paris:
+          summary: Paris timezone
+          value: Europe/Paris
+        US/Eastern:
+          summary: Eastern timezone
+          value: US/Eastern
+        Europe/London:
+          summary: London timezone
+          value: Europe/London
+        Europe/Berlin:
+          summary: Berlin timezone
+          value: Europe/Berlin
+    dcat_format:
+      name: dcat_ap_format
+      in: path
+      required: true
+      schema:
+        type: string
+        enum:
+        - _ap_ch
+        - _ap_de
+        - _ap_se
+        - _ap_sp
+        - _ap_it
+        - _ap_vl
+        - _ap_benap
+        description: 'DCAT format specifier for the catalog export.
+
+          `dcat_ap_*` formats are only available upon activation.'
+      style: simple
     select:
       name: select
       in: query
@@ -512,27 +450,125 @@ components:
       explode: true
       schema:
         type: string
+    offset:
+      name: offset
+      in: query
+      description: 'Index of the first item to return (starting at 0).
+
+
+        To use with the `limit` parameter to implement pagination.
+
+
+        **Note:** the maximum value depends on the type of query, see the note on `limit` for the details
+
+        '
+      schema:
+        minimum: 0
+        type: integer
+        default: 0
+    exclude:
+      name: exclude
+      in: query
+      description: 'Examples:
+
+        - `exclude=city:Paris` - Exclude the value `Paris` from the `city` facet. Facets enumeration will display `Paris` as `excluded` without any count information.
+
+        - `exclude=modified:2019/12` - Exclude the value `2019/12` from the `modified` facet. Facets enumeration will display `2020` as `excluded` without any count information.
+
+
+        A facet filter used to exclude a facet value from the result set.
+
+        Using this parameter, you can filter your query to exclude the selected facet value in the response.
+
+
+        `exclude` uses the following syntax: `exclude=<FACETNAME>:<FACETVALUE>`
+
+
+        **`exclude` must not be confused with a `where` filter. Excluding a facet value is equivalent to removing an entry in the left navigation panel.**'
+      style: form
+      explode: true
+      schema:
+        type: string
+    order_by:
+      name: order_by
+      in: query
+      description: 'Example: `order_by=sum(age) desc, name asc`
+
+
+        A comma-separated list of field names or aggregations to sort on, followed by an order (`asc` or `desc`).
+
+
+        Results are sorted in ascending order by default. To sort results in descending order, use the `desc` keyword.'
+      style: form
+      explode: false
+      schema:
+        type: string
+    limit:
+      name: limit
+      in: query
+      description: "Number of items to return.\n\nTo use with the `offset` parameter to implement pagination.\n\nThe maximum possible value depends on whether the query contains a `group_by` clause or not.\n\nFor a query **without** a `group_by`:\n  - the maximum value for `limit` is 100,\n  - `offset+limit` should be less than 10000\n\nFor a query **with** a `group_by`:\n  - the maximum value for `limit` is 20000,\n  - `offset+limit` should be less than 20000\n\n**Note:** If you need more results, please use the /exports endpoint.\n"
+      schema:
+        maximum: 100
+        minimum: -1
+        type: integer
+        default: 10
+  responses:
+    quota:
+      description: Too many requests
+      content:
+        application/json; charset=utf-8:
+          schema:
+            type: object
+            properties:
+              errorcode:
+                type: number
+              reset_time:
+                type: string
+                minLength: 1
+              limit_time_unit:
+                type: string
+                minLength: 1
+              call_limit:
+                type: number
+              error:
+                type: string
+                minLength: 1
+            required:
+            - errorcode
+            - reset_time
+            - limit_time_unit
+            - call_limit
+            - error
+          examples:
+            quota_exceeded:
+              value:
+                errorcode: 10002
+                reset_time: '2021-01-26T00:00:00Z'
+                limit_time_unit: day
+                call_limit: 10000
+                error: Too many requests on the domain. Please contact the domain administrator.
+    bad_request:
+      description: Bad Request
+      content:
+        application/json; charset=utf-8:
+          schema:
+            type: object
+            properties:
+              message:
+                type: string
+                minLength: 1
+              error_code:
+                type: string
+                minLength: 1
+            required:
+            - message
+            - error_code
+          examples:
+            invalid_odsql:
+              value:
+                message: 'ODSQL query is malformed: invalid_function() Clause(s) containing the error(s): select.'
+                error_code: ODSQLError
   schemas:
-    facet_enumeration:
-      type: object
-      properties:
-        name:
-          type: string
-        facets:
-          type: array
-          items:
-            $ref: '#/components/schemas/facet_value_enumeration'
-    facet_value_enumeration:
-      type: object
-      properties:
-        name:
-          type: string
-        count:
-          type: integer
-        value:
-          type: string
-        state:
-          type: string
     datasets:
       type: object
       properties:
@@ -546,6 +582,21 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/dataset'
+    links:
+      type: object
+      properties:
+        href:
+          type: string
+          format: uri
+        rel:
+          type: string
+          enum:
+          - self
+          - first
+          - last
+          - next
+          - dataset
+          - catalog
     enum-format-datasets:
       type: string
       enum:
@@ -564,21 +615,6 @@ components:
       - shp
       - turtle
       - xls
-    links:
-      type: object
-      properties:
-        href:
-          type: string
-          format: uri
-        rel:
-          type: string
-          enum:
-          - self
-          - first
-          - last
-          - next
-          - dataset
-          - catalog
     dataset:
       type: object
       properties:
@@ -637,235 +673,27 @@ components:
                     type:
                     - string
                     - 'null'
-  responses:
-    quota:
-      description: Too many requests
-      content:
-        application/json; charset=utf-8:
-          schema:
-            type: object
-            properties:
-              errorcode:
-                type: number
-              reset_time:
-                type: string
-                minLength: 1
-              limit_time_unit:
-                type: string
-                minLength: 1
-              call_limit:
-                type: number
-              error:
-                type: string
-                minLength: 1
-            required:
-            - errorcode
-            - reset_time
-            - limit_time_unit
-            - call_limit
-            - error
-          examples:
-            quota_exceeded:
-              value:
-                errorcode: 10002
-                reset_time: '2021-01-26T00:00:00Z'
-                limit_time_unit: day
-                call_limit: 10000
-                error: Too many requests on the domain. Please contact the domain administrator.
-    bad_request:
-      description: Bad Request
-      content:
-        application/json; charset=utf-8:
-          schema:
-            type: object
-            properties:
-              message:
-                type: string
-                minLength: 1
-              error_code:
-                type: string
-                minLength: 1
-            required:
-            - message
-            - error_code
-          examples:
-            invalid_odsql:
-              value:
-                message: 'ODSQL query is malformed: invalid_function() Clause(s) containing the error(s): select.'
-                error_code: ODSQLError
+    facet_enumeration:
+      type: object
+      properties:
+        name:
+          type: string
+        facets:
+          type: array
+          items:
+            $ref: '#/components/schemas/facet_value_enumeration'
+    facet_value_enumeration:
+      type: object
+      properties:
+        name:
+          type: string
+        count:
+          type: integer
+        value:
+          type: string
+        state:
+          type: string
   examples:
-    dataset-v2.0:
-      value:
-        links: []
-        dataset:
-          dataset_id: geonames-all-cities-with-a-population-1000
-          dataset_uid: da_s2n5ed
-          attachments: []
-          has_records: true
-          data_visible: true
-          fields:
-          - description: null
-            label: Geoname ID
-            type: text
-            name: geoname_id
-            annotations:
-              facetsort:
-              - -count
-              id: []
-          - description: null
-            label: Name
-            type: text
-            name: name
-            annotations:
-              sortable: []
-          - annotations: {}
-            description: null
-            type: text
-            name: ascii_name
-            label: ASCII Name
-          - description: null
-            label: Alternate Names
-            type: text
-            name: alternate_names
-            annotations:
-              multivalued:
-              - ','
-          - annotations: {}
-            label: Feature Class
-            type: text
-            name: feature_class
-            description: see http://www.geonames.org/export/codes.html
-          - annotations: {}
-            label: Feature Code
-            type: text
-            name: feature_code
-            description: see http://www.geonames.org/export/codes.html
-          - annotations: {}
-            description: null
-            type: text
-            name: country_code
-            label: Country Code
-          - description: null
-            label: Country name EN
-            type: text
-            name: cou_name_en
-            annotations:
-              facet: []
-              facetsort:
-              - alphanum
-              disjunctive: []
-          - annotations: {}
-            description: null
-            type: text
-            name: country_code_2
-            label: Country Code 2
-          - annotations: {}
-            description: null
-            type: text
-            name: admin1_code
-            label: Admin1 Code
-          - description: null
-            label: Admin2 Code
-            type: text
-            name: admin2_code
-            annotations:
-              facetsort:
-              - -count
-          - annotations: {}
-            description: null
-            type: text
-            name: admin3_code
-            label: Admin3 Code
-          - annotations: {}
-            description: null
-            type: text
-            name: admin4_code
-            label: Admin4 Code
-          - annotations: {}
-            description: null
-            type: int
-            name: population
-            label: Population
-          - annotations: {}
-            description: null
-            type: text
-            name: elevation
-            label: Elevation
-          - annotations: {}
-            description: null
-            type: int
-            name: dem
-            label: DIgital Elevation Model
-          - description: null
-            label: Timezone
-            type: text
-            name: timezone
-            annotations:
-              facet: []
-              hierarchical:
-              - /
-          - annotations: {}
-            description: null
-            type: date
-            name: modification_date
-            label: Modification date
-          - annotations: {}
-            description: null
-            type: text
-            name: label_en
-            label: LABEL EN
-          - description: null
-            label: Coordinates
-            type: geo_point_2d
-            name: coordinates
-            annotations:
-              facetsort:
-              - -count
-          metas:
-            default:
-              records_count: 137611
-              modified: '2021-06-23T07:50:20+00:00'
-              source_domain_address: null
-              references: https://download.geonames.org/export/dump/
-              keyword:
-              - Geonames
-              - city
-              - world
-              source_domain_title: null
-              geographic_reference:
-              - world
-              timezone: null
-              title: Geonames - All Cities with a population > 1000
-              parent_domain: null
-              theme:
-              - Administration, Government, Public finances, Citizenship
-              modified_updates_on_data_change: true
-              metadata_processed: '2021-06-23T07:50:26.162000+00:00'
-              data_processed: '2021-06-22T08:47:08+00:00'
-              territory:
-              - World
-              description: "<p>All cities with a population &gt; 1000 or seats of adm div (ca 80.000)</p><h4>Sources and Contributions</h4><ul><li><strong>Sources</strong> : GeoNames is aggregating over hundred different <a href=\"http://www.geonames.org/data-sources.html\">data sources</a>. \t</li><li><strong>Ambassadors</strong> : <a href=\"http://www.geonames.org/team.html#ambassadors\">GeoNames Ambassadors</a> help in many countries. \t</li><li><strong>Wiki</strong> : A <a href=\"http://www.geonames.org/manual.html\">wiki</a> allows to view the data and quickly fix error and add missing places. \t</li><li><strong>Donations and Sponsoring</strong> : Costs for running GeoNames are covered by <a href=\"http://www.geonames.org/donations.html\">donations and sponsoring</a>.</li></ul><p><b>Enrichment:</b></p><ul><li>add country name</li></ul>"
-              modified_updates_on_metadata_change: false
-              shared_catalog: null
-              source_domain: null
-              attributions:
-              - https://www.geonames.org/about.html
-              geographic_area_mode: null
-              geographic_reference_auto: true
-              geographic_area: null
-              publisher: GeoNames
-              language: en
-              license: CC BY 4.0
-              source_dataset: null
-              metadata_languages:
-              - en
-              oauth_scope: null
-              federated: true
-              license_url: https://creativecommons.org/licenses/by/4.0/
-          features:
-          - geo
-          - analyze
-          - timeserie
     datasets-v2.0:
       value:
         total_count: 19
@@ -1184,6 +1012,178 @@ components:
             state: displayed
             name: fr
             value: fr
+    dataset-v2.0:
+      value:
+        links: []
+        dataset:
+          dataset_id: geonames-all-cities-with-a-population-1000
+          dataset_uid: da_s2n5ed
+          attachments: []
+          has_records: true
+          data_visible: true
+          fields:
+          - description: null
+            label: Geoname ID
+            type: text
+            name: geoname_id
+            annotations:
+              facetsort:
+              - -count
+              id: []
+          - description: null
+            label: Name
+            type: text
+            name: name
+            annotations:
+              sortable: []
+          - annotations: {}
+            description: null
+            type: text
+            name: ascii_name
+            label: ASCII Name
+          - description: null
+            label: Alternate Names
+            type: text
+            name: alternate_names
+            annotations:
+              multivalued:
+              - ','
+          - annotations: {}
+            label: Feature Class
+            type: text
+            name: feature_class
+            description: see http://www.geonames.org/export/codes.html
+          - annotations: {}
+            label: Feature Code
+            type: text
+            name: feature_code
+            description: see http://www.geonames.org/export/codes.html
+          - annotations: {}
+            description: null
+            type: text
+            name: country_code
+            label: Country Code
+          - description: null
+            label: Country name EN
+            type: text
+            name: cou_name_en
+            annotations:
+              facet: []
+              facetsort:
+              - alphanum
+              disjunctive: []
+          - annotations: {}
+            description: null
+            type: text
+            name: country_code_2
+            label: Country Code 2
+          - annotations: {}
+            description: null
+            type: text
+            name: admin1_code
+            label: Admin1 Code
+          - description: null
+            label: Admin2 Code
+            type: text
+            name: admin2_code
+            annotations:
+              facetsort:
+              - -count
+          - annotations: {}
+            description: null
+            type: text
+            name: admin3_code
+            label: Admin3 Code
+          - annotations: {}
+            description: null
+            type: text
+            name: admin4_code
+            label: Admin4 Code
+          - annotations: {}
+            description: null
+            type: int
+            name: population
+            label: Population
+          - annotations: {}
+            description: null
+            type: text
+            name: elevation
+            label: Elevation
+          - annotations: {}
+            description: null
+            type: int
+            name: dem
+            label: DIgital Elevation Model
+          - description: null
+            label: Timezone
+            type: text
+            name: timezone
+            annotations:
+              facet: []
+              hierarchical:
+              - /
+          - annotations: {}
+            description: null
+            type: date
+            name: modification_date
+            label: Modification date
+          - annotations: {}
+            description: null
+            type: text
+            name: label_en
+            label: LABEL EN
+          - description: null
+            label: Coordinates
+            type: geo_point_2d
+            name: coordinates
+            annotations:
+              facetsort:
+              - -count
+          metas:
+            default:
+              records_count: 137611
+              modified: '2021-06-23T07:50:20+00:00'
+              source_domain_address: null
+              references: https://download.geonames.org/export/dump/
+              keyword:
+              - Geonames
+              - city
+              - world
+              source_domain_title: null
+              geographic_reference:
+              - world
+              timezone: null
+              title: Geonames - All Cities with a population > 1000
+              parent_domain: null
+              theme:
+              - Administration, Government, Public finances, Citizenship
+              modified_updates_on_data_change: true
+              metadata_processed: '2021-06-23T07:50:26.162000+00:00'
+              data_processed: '2021-06-22T08:47:08+00:00'
+              territory:
+              - World
+              description: "<p>All cities with a population &gt; 1000 or seats of adm div (ca 80.000)</p><h4>Sources and Contributions</h4><ul><li><strong>Sources</strong> : GeoNames is aggregating over hundred different <a href=\"http://www.geonames.org/data-sources.html\">data sources</a>. \t</li><li><strong>Ambassadors</strong> : <a href=\"http://www.geonames.org/team.html#ambassadors\">GeoNames Ambassadors</a> help in many countries. \t</li><li><strong>Wiki</strong> : A <a href=\"http://www.geonames.org/manual.html\">wiki</a> allows to view the data and quickly fix error and add missing places. \t</li><li><strong>Donations and Sponsoring</strong> : Costs for running GeoNames are covered by <a href=\"http://www.geonames.org/donations.html\">donations and sponsoring</a>.</li></ul><p><b>Enrichment:</b></p><ul><li>add country name</li></ul>"
+              modified_updates_on_metadata_change: false
+              shared_catalog: null
+              source_domain: null
+              attributions:
+              - https://www.geonames.org/about.html
+              geographic_area_mode: null
+              geographic_reference_auto: true
+              geographic_area: null
+              publisher: GeoNames
+              language: en
+              license: CC BY 4.0
+              source_dataset: null
+              metadata_languages:
+              - en
+              oauth_scope: null
+              federated: true
+              license_url: https://creativecommons.org/licenses/by/4.0/
+          features:
+          - geo
+          - analyze
+          - timeserie
   securitySchemes:
     apikey:
       type: apiKey
