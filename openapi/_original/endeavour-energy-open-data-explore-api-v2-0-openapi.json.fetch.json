@@ -1,0 +1,12 @@
+{
+ "url": "https://data.endeavourenergy.com.au/api/explore/v2.1/swagger.json",
+ "requested_url": "https://data.endeavourenergy.com.au/api/explore/v2.1/swagger.json",
+ "status": 200,
+ "content_type": "application/json",
+ "bytes": 45937,
+ "sha256": "37b501bb4ffc716ec107715f7fbfb6d728a78d607f85ad1a69dc217571478123",
+ "fetched_at": "2026-10-04",
+ "fetched_by": "APIEvangelist-Harvest/1.0 (+https://apievangelist.com)",
+ "match": "equivalent",
+ "note": "Re-fetched from the provider by verify-openapi-sources.py; the provider's current document describes the same operations (Jaccard 1.0), but the bytes differ, so the archive is an earlier or reformatted copy."
+}
