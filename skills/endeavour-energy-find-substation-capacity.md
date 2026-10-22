@@ -1,15 +1,21 @@
 ---
-generated: '2026-07-27'
+generated: '2026-10-21'
 method: generated
-name: Find distribution substation available capacity
-description: Query spare capacity at Endeavour Energy distribution substations to assess whether the local network can host more solar, batteries or EV charging at a given location.
-api: openapi/endeavour-energy-open-data-explore-api-v2-1-openapi.json
-operations: [getDataset, getRecords, getRecordsFacets, exportRecords]
-source: >-
-  operationIds verified verbatim in
-  openapi/endeavour-energy-open-data-explore-api-v2-1-openapi.json; field names
-  read from the live schema of distribution-substation-available-capacity on
-  2026-07-27.
+name: endeavour-energy-find-substation-capacity
+description: Query spare capacity at Endeavour Energy distribution substations to assess whether the local
+  network can host more solar, batteries or EV charging at a given location.
+api: openapi/endeavour-energy-catalog-api-openapi.yml
+operations:
+- getDataset
+- getRecords
+- getRecordsFacets
+- exportRecords
+source: operationIds checked against openapi/endeavour-energy-catalog-api-openapi.yml and openapi/endeavour-energy-dataset-api-openapi.yml
+  on 2026-10-21; behaviour verified with live anonymous requests on 2026-07-27.
+title: Find distribution substation available capacity
+apis:
+- openapi/endeavour-energy-catalog-api-openapi.yml
+- openapi/endeavour-energy-dataset-api-openapi.yml
 ---
 
 # Find distribution substation available capacity

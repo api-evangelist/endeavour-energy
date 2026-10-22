@@ -1,0 +1,73 @@
+generated: '2026-10-21'
+method: derived
+generator: derive-vocabulary.py
+source:
+- openapi/endeavour-energy-catalog-api-openapi.yml
+- openapi/endeavour-energy-dataset-api-openapi.yml
+vocabulary:
+  name: Endeavour Energy Domain Vocabulary
+  description: 'Terms declared by Endeavour Energy''s own API contract: its resource groups, objects and enumerations, with the contract''s definitions.
+    Derived, not authored.'
+  version: '2026-10-21'
+  terms:
+  - term: Catalog
+    definition: API to enumerate datasets
+    tags:
+    - Resource Group
+    source: openapi/endeavour-energy-catalog-api-openapi.yml
+  - term: Dataset
+    definition: API to work on records
+    tags:
+    - Resource Group
+    source: openapi/endeavour-energy-dataset-api-openapi.yml
+  - term: links
+    definition: 'Object declared by the contract with fields: href, rel.'
+    tags:
+    - Object
+    source: openapi/endeavour-energy-catalog-api-openapi.yml#/components/schemas/links
+  - term: dataset
+    definition: 'Object declared by the contract with fields: links, dataset.'
+    tags:
+    - Object
+    source: openapi/endeavour-energy-catalog-api-openapi.yml#/components/schemas/dataset
+  - term: datasets
+    definition: 'Object declared by the contract with fields: total_count, links, datasets.'
+    tags:
+    - Object
+    source: openapi/endeavour-energy-catalog-api-openapi.yml#/components/schemas/datasets
+  - term: facet_value_enumeration
+    definition: 'Object declared by the contract with fields: name, count, value, state.'
+    tags:
+    - Object
+    source: openapi/endeavour-energy-catalog-api-openapi.yml#/components/schemas/facet_value_enumeration
+  - term: facet_enumeration
+    definition: 'Object declared by the contract with fields: name, facets.'
+    tags:
+    - Object
+    source: openapi/endeavour-energy-catalog-api-openapi.yml#/components/schemas/facet_enumeration
+  - term: enum-format-datasets
+    definition: 'Enumeration declared by the contract with values: csv, fgb, geojson, gpx, json, jsonl, jsonld, kml, n3, ov2, parquet, rdfxml.
+      (3 more)'
+    tags:
+    - Enumeration
+    source: openapi/endeavour-energy-catalog-api-openapi.yml#/components/schemas/enum-format-datasets
+  - term: attachment
+    definition: 'Object declared by the contract with fields: href, metas.'
+    tags:
+    - Object
+    source: openapi/endeavour-energy-dataset-api-openapi.yml#/components/schemas/attachment
+  - term: aggregation
+    definition: 'Object declared by the contract with fields: count, cou_name_en.'
+    tags:
+    - Object
+    source: openapi/endeavour-energy-dataset-api-openapi.yml#/components/schemas/aggregation
+  - term: records
+    definition: 'Object declared by the contract with fields: total_count, links, records.'
+    tags:
+    - Object
+    source: openapi/endeavour-energy-dataset-api-openapi.yml#/components/schemas/records
+  - term: record
+    definition: 'Object declared by the contract with fields: record, links.'
+    tags:
+    - Object
+    source: openapi/endeavour-energy-dataset-api-openapi.yml#/components/schemas/record

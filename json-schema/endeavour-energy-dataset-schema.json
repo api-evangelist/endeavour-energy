@@ -1,0 +1,114 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://raw.githubusercontent.com/api-evangelist/endeavour-energy/main/json-schema/endeavour-energy-dataset-schema.json",
+  "title": "dataset",
+  "x-generated": "2026-10-21",
+  "x-method": "derived",
+  "x-generator": "derive-json-schema.py",
+  "x-source": "openapi/endeavour-energy-catalog-api-openapi.yml#/components/schemas/dataset",
+  "type": "object",
+  "properties": {
+    "links": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/links"
+      }
+    },
+    "dataset": {
+      "type": "object",
+      "properties": {
+        "dataset_id": {
+          "type": "string"
+        },
+        "dataset_uid": {
+          "type": "string",
+          "readOnly": true
+        },
+        "attachments": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "mimetype": {
+                "type": "string"
+              },
+              "url": {
+                "type": "string"
+              },
+              "id": {
+                "type": "string"
+              },
+              "title": {
+                "type": "string"
+              }
+            }
+          }
+        },
+        "has_records": {
+          "type": "boolean"
+        },
+        "data_visible": {
+          "type": "boolean"
+        },
+        "features": {
+          "type": "array",
+          "description": "A map of available features for a dataset, with the fields they apply to.\n",
+          "items": {
+            "type": "string"
+          }
+        },
+        "metas": {
+          "type": "object"
+        },
+        "fields": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "name": {
+                "type": "string"
+              },
+              "label": {
+                "type": "string"
+              },
+              "type": {
+                "type": "string"
+              },
+              "annotations": {
+                "type": "object"
+              },
+              "description": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "$defs": {
+    "links": {
+      "type": "object",
+      "properties": {
+        "href": {
+          "type": "string",
+          "format": "uri"
+        },
+        "rel": {
+          "type": "string",
+          "enum": [
+            "self",
+            "first",
+            "last",
+            "next",
+            "dataset",
+            "catalog"
+          ]
+        }
+      }
+    }
+  }
+}

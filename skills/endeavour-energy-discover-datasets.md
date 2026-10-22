@@ -1,14 +1,22 @@
 ---
-generated: '2026-07-27'
+generated: '2026-10-21'
 method: generated
-name: Discover what Endeavour Energy publishes
-description: Enumerate the open data catalogue, read a dataset's field schema, and learn its licence before you build anything on it.
-api: openapi/endeavour-energy-open-data-explore-api-v2-1-openapi.json
-operations: [getDatasets, getDataset, getDatasetsFacets, getRecordsFacets, getDatasetAttachments]
-source: >-
-  operationIds verified verbatim in
-  openapi/endeavour-energy-open-data-explore-api-v2-1-openapi.json; behaviour
-  verified with live anonymous requests on 2026-07-27.
+name: endeavour-energy-discover-datasets
+description: Enumerate the open data catalogue, read a dataset's field schema, and learn its licence before
+  you build anything on it.
+api: openapi/endeavour-energy-catalog-api-openapi.yml
+operations:
+- getDatasets
+- getDataset
+- getDatasetsFacets
+- getRecordsFacets
+- getDatasetAttachments
+source: operationIds checked against openapi/endeavour-energy-catalog-api-openapi.yml and openapi/endeavour-energy-dataset-api-openapi.yml
+  on 2026-10-21; behaviour verified with live anonymous requests on 2026-07-27.
+title: Discover what Endeavour Energy publishes
+apis:
+- openapi/endeavour-energy-catalog-api-openapi.yml
+- openapi/endeavour-energy-dataset-api-openapi.yml
 ---
 
 # Discover what Endeavour Energy publishes

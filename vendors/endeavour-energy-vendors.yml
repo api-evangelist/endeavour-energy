@@ -1,0 +1,55 @@
+generated: '2026-10-21'
+method: probed
+source: pre-flight dossier (docs platform, portal detections) + CNAME chains and response headers of the hosts apis.yml names
+registry: all/0-working/vendors.yml
+areas_vocabulary:
+- documentation
+- developer-portal
+- api-gateway
+- cdn
+- hosting
+- sdk-generation
+- api-collections
+- status-page
+- support
+- community
+- identity
+- mcp-hosting
+vendors:
+- vendor: cloudfront
+  name: Amazon CloudFront
+  area: cdn
+  host: help.opendatasoft.com
+  evidence: header:x-amz-cf-id
+  signal: header
+  confidence: high
+  kin_score: []
+- vendor: vercel
+  name: Vercel
+  area: hosting
+  host: www.endeavourenergy.com.au
+  evidence: header:x-vercel-id
+  signal: header
+  confidence: high
+  kin_score: []
+reliance:
+  areas_vendor_served:
+  - cdn
+  - hosting
+  vendor_count: 2
+  areas_observed: 12
+  share_of_observable_areas: 0.167
+  note: areas where a third party was DETECTED serving this provider; an area absent here was either self-run or not observed, and this script
+    cannot tell those apart
+checked:
+- 'docs-platform: custom'
+- www.endeavourenergy.com.au (Website)
+- data.endeavourenergy.com.au (Portal)
+- www.endeavourenergy.com.au (Documentation)
+- data.endeavourenergy.com.au (DeveloperPortal)
+- help.opendatasoft.com (Documentation)
+- data.endeavourenergy.com.au (APIReference)
+- help.opendatasoft.com (GettingStarted)
+- www.endeavourenergy.com.au (Support)
+- data.endeavourenergy.com.au (Login)
+- data.endeavourenergy.com.au (baseURL)

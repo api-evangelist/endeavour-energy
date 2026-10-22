@@ -1,14 +1,21 @@
 ---
-generated: '2026-07-27'
+generated: '2026-10-21'
 method: generated
-name: Track live power outages
-description: Poll Endeavour Energy's three live outage feeds for unplanned, planned and single-premise supply interruptions, with location, cause, customers affected and estimated restore time.
-api: openapi/endeavour-energy-open-data-explore-api-v2-1-openapi.json
-operations: [getDataset, getRecords, getRecord, getRecordsFacets]
-source: >-
-  operationIds verified verbatim in
-  openapi/endeavour-energy-open-data-explore-api-v2-1-openapi.json; field names
-  read from the live dataset schema of outagecustomerlive on 2026-07-27.
+name: endeavour-energy-track-live-outages
+description: Poll Endeavour Energy's three live outage feeds for unplanned, planned and single-premise
+  supply interruptions, with location, cause, customers affected and estimated restore time.
+api: openapi/endeavour-energy-catalog-api-openapi.yml
+operations:
+- getDataset
+- getRecords
+- getRecord
+- getRecordsFacets
+source: operationIds checked against openapi/endeavour-energy-catalog-api-openapi.yml and openapi/endeavour-energy-dataset-api-openapi.yml
+  on 2026-10-21; behaviour verified with live anonymous requests on 2026-07-27.
+title: Track live power outages
+apis:
+- openapi/endeavour-energy-catalog-api-openapi.yml
+- openapi/endeavour-energy-dataset-api-openapi.yml
 ---
 
 # Track live power outages

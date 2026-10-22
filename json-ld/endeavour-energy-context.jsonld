@@ -1,0 +1,66 @@
+{
+  "@context": {
+    "@vocab": "https://endeavourenergy.com.au/schema#",
+    "schema": "https://schema.org/",
+    "xsd": "http://www.w3.org/2001/XMLSchema#",
+    "dcterms": "http://purl.org/dc/terms/",
+    "endeavour": "https://endeavourenergy.com.au/schema#",
+    "links": "endeavour:links",
+    "href": {
+      "@id": "endeavour:href",
+      "@type": "@id"
+    },
+    "rel": {
+      "@id": "endeavour:rel",
+      "@type": "xsd:string"
+    },
+    "dataset": "endeavour:dataset",
+    "datasets": "endeavour:datasets",
+    "total_count": {
+      "@id": "endeavour:total_count",
+      "@type": "xsd:integer"
+    },
+    "facet_value_enumeration": "endeavour:facet_value_enumeration",
+    "name": {
+      "@id": "endeavour:name",
+      "@type": "xsd:string"
+    },
+    "count": {
+      "@id": "endeavour:count",
+      "@type": "xsd:integer"
+    },
+    "value": {
+      "@id": "endeavour:value",
+      "@type": "xsd:string"
+    },
+    "state": {
+      "@id": "endeavour:state",
+      "@type": "xsd:string"
+    },
+    "facet_enumeration": "endeavour:facet_enumeration",
+    "facets": {
+      "@id": "endeavour:facets",
+      "@container": "@list"
+    },
+    "enum-format-datasets": "endeavour:enum-format-datasets",
+    "attachment": "endeavour:attachment",
+    "metas": {
+      "@id": "endeavour:metas"
+    },
+    "aggregation": "endeavour:aggregation",
+    "cou_name_en": {
+      "@id": "endeavour:cou_name_en",
+      "@type": "xsd:string"
+    },
+    "records": "endeavour:records",
+    "record": "endeavour:record"
+  },
+  "@type": "schema:Dataset",
+  "schema:name": "Endeavour Energy API JSON-LD context",
+  "schema:description": "A JSON-LD @context for the objects Endeavour Energy's own API contract declares: one class per component schema, one property per declared field, typed from the contract. Derived by script (derive-json-ld.py, 2026-10-21) from openapi/endeavour-energy-catalog-api-openapi.yml, openapi/endeavour-energy-dataset-api-openapi.yml.",
+  "dcterms:created": "2026-10-21",
+  "dcterms:source": [
+    "openapi/endeavour-energy-catalog-api-openapi.yml",
+    "openapi/endeavour-energy-dataset-api-openapi.yml"
+  ]
+}

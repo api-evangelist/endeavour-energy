@@ -1,15 +1,24 @@
 ---
-generated: '2026-07-27'
+generated: '2026-10-21'
 method: generated
-name: Bulk export the network asset layers
-description: Pull Endeavour Energy's poles, conductors and other network asset datasets in full via the export endpoints, which is the only way past the 10,000-row query window.
-api: openapi/endeavour-energy-open-data-explore-api-v2-1-openapi.json
-operations: [getDataset, listDatasetExportFormats, exportRecords, exportRecordsCSV, exportRecordsParquet, exportRecordsGPX, exportCatalogDCAT]
-source: >-
-  operationIds verified verbatim in
-  openapi/endeavour-energy-open-data-explore-api-v2-1-openapi.json; pagination
-  bounds read from the spec's limit/offset parameter descriptions; record
-  counts read from the live catalogue on 2026-07-27.
+name: endeavour-energy-export-network-assets
+description: Pull Endeavour Energy's poles, conductors and other network asset datasets in full via the
+  export endpoints, which is the only way past the 10,000-row query window.
+api: openapi/endeavour-energy-catalog-api-openapi.yml
+operations:
+- getDataset
+- listDatasetExportFormats
+- exportRecords
+- exportRecordsCSV
+- exportRecordsParquet
+- exportRecordsGPX
+- exportCatalogDCAT
+source: operationIds checked against openapi/endeavour-energy-catalog-api-openapi.yml and openapi/endeavour-energy-dataset-api-openapi.yml
+  on 2026-10-21; behaviour verified with live anonymous requests on 2026-07-27.
+title: Bulk export the network asset layers
+apis:
+- openapi/endeavour-energy-catalog-api-openapi.yml
+- openapi/endeavour-energy-dataset-api-openapi.yml
 ---
 
 # Bulk export the network asset layers

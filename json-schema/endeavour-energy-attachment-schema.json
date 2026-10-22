@@ -1,0 +1,32 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://raw.githubusercontent.com/api-evangelist/endeavour-energy/main/json-schema/endeavour-energy-attachment-schema.json",
+  "title": "attachment",
+  "x-generated": "2026-10-21",
+  "x-method": "derived",
+  "x-generator": "derive-json-schema.py",
+  "x-source": "openapi/endeavour-energy-dataset-api-openapi.yml#/components/schemas/attachment",
+  "type": "object",
+  "properties": {
+    "href": {
+      "type": "string"
+    },
+    "metas": {
+      "type": "object",
+      "properties": {
+        "mime-type": {
+          "type": "string"
+        },
+        "title": {
+          "type": "string"
+        },
+        "url": {
+          "type": "string"
+        },
+        "id": {
+          "type": "string"
+        }
+      }
+    }
+  }
+}

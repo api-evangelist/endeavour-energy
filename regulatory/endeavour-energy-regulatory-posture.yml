@@ -1,0 +1,84 @@
+generated: '2026-10-21'
+method: searched
+source: https://www.endeavourenergy.com.au/privacy-policy
+scope_note: >-
+  Endeavour Energy is an electricity distribution network operator in NSW, Australia; its privacy policy is
+  framed against the Australian Privacy Principles ("Privacy Laws"). Only the privacy policy speaks to
+  regulatory signals. /.well-known/security.txt (200, 182 bytes) names only a Contact
+  (cybersecurity@endeavourenergy.com.au), Expires 2027-07-01, Preferred-Languages and Hiring -- no policy
+  or disclosure-process statement, so no signal is recorded from it. Signals not listed here (AI
+  transparency, incident notification, GPC, accessibility conformance, SBOM, transparency report, etc.)
+  are not addressed on the pages read.
+signals:
+  data_subject_request:
+    url: https://www.endeavourenergy.com.au/privacy-policy
+    section: How can you access and correct the personal information we hold about you?
+    channel: Call Centre 133 718 or online enquiry form
+    stated_sla: 30 days (45 days for health information)
+    rights_named: [access, correction]
+    escalation: Privacy Officer (privacy@endeavourenergy.com.au), then OAIC privacy complaints
+    evidence:
+    - source: https://www.endeavourenergy.com.au/privacy-policy
+      http_status: 200
+      fetched: '2026-10-21'
+      quote: >-
+        Under the Privacy Laws, you have a right to seek access to personal information including health
+        information which we hold about you. You also have the right to ask us to correct information about
+        you, which is inaccurate, incomplete, out of date, irrelevant or misleading.
+    - source: https://www.endeavourenergy.com.au/privacy-policy
+      http_status: 200
+      fetched: '2026-10-21'
+      quote: >-
+        We generally seek to respond to access requests within 30 days, or within 45 days in respect of
+        health information.
+    note: >-
+      Establishes access and correction rights with a stated response target. Deletion and portability
+      are not named as rights.
+  data_retention:
+    url: https://www.endeavourenergy.com.au/privacy-policy
+    section: Retention and destruction of personal information
+    evidence:
+    - source: https://www.endeavourenergy.com.au/privacy-policy
+      http_status: 200
+      fetched: '2026-10-21'
+      quote: >-
+        We also take reasonable steps to destroy or de-identify personal information that we no longer
+        need. When personal information is no longer required, the personal information is destroyed in
+        accordance with Endeavour Energy's policies and internal processes.
+    - source: https://www.endeavourenergy.com.au/privacy-policy
+      http_status: 200
+      fetched: '2026-10-21'
+      quote: >-
+        Secure destruction is carried out by an authorised third party provider who provides us with a
+        certificate of destruction once the relevant record has been destroyed.
+    note: >-
+      A destruction/de-identification practice with a destruction log and certificate of destruction; no
+      specific retention periods are published.
+  data_residency:
+    url: https://www.endeavourenergy.com.au/privacy-policy
+    section: Do we disclose personal information to entities located overseas?
+    evidence:
+    - source: https://www.endeavourenergy.com.au/privacy-policy
+      http_status: 200
+      fetched: '2026-10-21'
+      quote: >-
+        We do not typically disclose personal information outside of Australia.  With respect to health
+        information, we typically do not disclose health information outside of New South Wales.
+    note: >-
+      A soft ("typically") locality statement -- Australia for personal information, NSW for health
+      information -- not a contractual residency guarantee; the policy goes on to describe steps taken
+      when information is provided offshore.
+  subprocessors:
+    url: https://www.endeavourenergy.com.au/privacy-policy
+    section: null
+    evidence:
+    - source: https://www.endeavourenergy.com.au/privacy-policy
+      http_status: 200
+      fetched: '2026-10-21'
+      quote: >-
+        The collection and management of personal information relating to our customers, employees and
+        Accredited Service Providers (ASPs) will be managed through our use of various technologies,
+        including third party software platforms provided by PEGA, SAP and Beakon (among others).
+    note: >-
+      Names three third-party platforms that process personal information, explicitly non-exhaustive
+      ("among others"); there is no published subprocessor list.

@@ -1,9 +1,9 @@
-generated: '2026-07-27'
+generated: '2026-10-21'
 method: derived
 status: candidate
-source: Derived from the 16 operations in openapi/endeavour-energy-open-data-explore-api-v2-1-openapi.json.
-  Searched for an official hosted server first — the npm registry, the corporate site and the data portal
-  — and found none.
+source: 'Derived from the 16 operations in openapi/endeavour-energy-catalog-api-openapi.yml (7) and openapi/endeavour-energy-dataset-api-openapi.yml
+  (9). Searched for an official hosted server first: the npm registry, the corporate site and the data
+  portal name none, and Endeavour Energy documents or advertises no MCP endpoint.'
 description: 'Endeavour Energy publishes no MCP server. This is a CANDIDATE manifest: one tool per real
   operationId, each inheriting its input contract from the backing operation in the harvested OpenAPI.
   It is a design proposal, not a provider claim, and no tool below has ever been served. The API is unusually
@@ -29,54 +29,54 @@ tools:
 - name: list_datasets
   description: Query the catalogue of published datasets, with ODSQL where/select/order_by/group_by and
     faceting.
-  source_operation: openapi/endeavour-energy-open-data-explore-api-v2-1-openapi.json#getDatasets
+  source_operation: openapi/endeavour-energy-catalog-api-openapi.yml#getDatasets
 - name: get_dataset
   description: Show one dataset's metadata and its full field schema.
-  source_operation: openapi/endeavour-energy-open-data-explore-api-v2-1-openapi.json#getDataset
+  source_operation: openapi/endeavour-energy-catalog-api-openapi.yml#getDataset
 - name: list_catalog_facets
   description: List facet values across the catalogue (themes, keywords, publishers).
-  source_operation: openapi/endeavour-energy-open-data-explore-api-v2-1-openapi.json#getDatasetsFacets
+  source_operation: openapi/endeavour-energy-catalog-api-openapi.yml#getDatasetsFacets
 - name: list_catalog_export_formats
   description: List the export formats available for the catalogue.
-  source_operation: openapi/endeavour-energy-open-data-explore-api-v2-1-openapi.json#listExportFormats
+  source_operation: openapi/endeavour-energy-catalog-api-openapi.yml#listExportFormats
 - name: export_catalog
   description: Export the catalogue in a named format.
-  source_operation: openapi/endeavour-energy-open-data-explore-api-v2-1-openapi.json#exportDatasets
+  source_operation: openapi/endeavour-energy-catalog-api-openapi.yml#exportDatasets
 - name: export_catalog_csv
   description: Export the catalogue as CSV.
-  source_operation: openapi/endeavour-energy-open-data-explore-api-v2-1-openapi.json#exportCatalogCSV
+  source_operation: openapi/endeavour-energy-catalog-api-openapi.yml#exportCatalogCSV
 - name: export_catalog_dcat
   description: Export the catalogue as RDF/XML (DCAT / DCAT-AP).
-  source_operation: openapi/endeavour-energy-open-data-explore-api-v2-1-openapi.json#exportCatalogDCAT
+  source_operation: openapi/endeavour-energy-catalog-api-openapi.yml#exportCatalogDCAT
 - name: query_records
   description: Query records in one dataset with ODSQL — the workhorse tool. Bounded by limit<=100 and
     offset+limit<10000 without group_by.
-  source_operation: openapi/endeavour-energy-open-data-explore-api-v2-1-openapi.json#getRecords
+  source_operation: openapi/endeavour-energy-dataset-api-openapi.yml#getRecords
 - name: get_record
   description: Read one record by record_id.
-  source_operation: openapi/endeavour-energy-open-data-explore-api-v2-1-openapi.json#getRecord
+  source_operation: openapi/endeavour-energy-dataset-api-openapi.yml#getRecord
 - name: list_dataset_facets
   description: List facets and their values within one dataset.
-  source_operation: openapi/endeavour-energy-open-data-explore-api-v2-1-openapi.json#getRecordsFacets
+  source_operation: openapi/endeavour-energy-dataset-api-openapi.yml#getRecordsFacets
 - name: list_dataset_attachments
   description: List files attached to a dataset.
-  source_operation: openapi/endeavour-energy-open-data-explore-api-v2-1-openapi.json#getDatasetAttachments
+  source_operation: openapi/endeavour-energy-dataset-api-openapi.yml#getDatasetAttachments
 - name: list_dataset_export_formats
   description: List the export formats available for one dataset.
-  source_operation: openapi/endeavour-energy-open-data-explore-api-v2-1-openapi.json#listDatasetExportFormats
+  source_operation: openapi/endeavour-energy-dataset-api-openapi.yml#listDatasetExportFormats
 - name: export_records
   description: Export a whole dataset in a named format — the only way to get past the 10,000-row query
     window.
-  source_operation: openapi/endeavour-energy-open-data-explore-api-v2-1-openapi.json#exportRecords
+  source_operation: openapi/endeavour-energy-dataset-api-openapi.yml#exportRecords
 - name: export_records_csv
   description: Export a whole dataset as CSV.
-  source_operation: openapi/endeavour-energy-open-data-explore-api-v2-1-openapi.json#exportRecordsCSV
+  source_operation: openapi/endeavour-energy-dataset-api-openapi.yml#exportRecordsCSV
 - name: export_records_parquet
   description: Export a whole dataset as Parquet.
-  source_operation: openapi/endeavour-energy-open-data-explore-api-v2-1-openapi.json#exportRecordsParquet
+  source_operation: openapi/endeavour-energy-dataset-api-openapi.yml#exportRecordsParquet
 - name: export_records_gpx
   description: Export a whole dataset as GPX.
-  source_operation: openapi/endeavour-energy-open-data-explore-api-v2-1-openapi.json#exportRecordsGPX
+  source_operation: openapi/endeavour-energy-dataset-api-openapi.yml#exportRecordsGPX
 agent_notes:
 - Every tool is a GET. Nothing here can mutate, charge or delete; all tools are freely retryable.
 - The 5,000/day quota is DOMAIN-wide and shared with every other anonymous consumer. An agent looping
@@ -97,7 +97,26 @@ related:
 - rate-limits/endeavour-energy-rate-limits.yml
 deployment:
   mode: none
-  verified: derived
-  tools: 16
-  checked: '2026-08-12'
-  source: catalog MCP census
+  auth: none
+  verified: searched
+  checked: '2026-10-21'
+  note: No server is published by Endeavour Energy. The tools below are a derived candidate. See platform_mcp
+    for the portal vendor's add-on.
+platform_mcp:
+  vendor: Huwise (formerly Opendatasoft), the platform behind data.endeavourenergy.com.au
+  endpoint: https://mcp.huwise.com/mcp
+  mode: remote
+  auth: api-key (X-Domain + X-Apikey headers, or query parameters)
+  documented_tools:
+  - analyze_catalog
+  - search_assets
+  - get_asset
+  - search_asset_records
+  l3: list
+  source: https://userguide.huwise.com/en/articles/5071874
+  verified: searched
+  enabled_for_this_portal: unknown
+  note: 'Huwise documents one multi-tenant MCP server that selects a portal through the X-Domain header.
+    Its guide says MCP "is not automatically included in your plan", so it is a paid add-on per customer.
+    Endeavour Energy neither documents nor advertises it, so we did not call it: these tool names are
+    Huwise''s published list, not a live tools/list from this portal.'

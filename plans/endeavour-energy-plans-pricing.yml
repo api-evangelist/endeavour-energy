@@ -1,0 +1,22 @@
+name: Endeavour Energy pricing
+provider: Endeavour Energy
+providerId: endeavour-energy
+generated: '2026-10-21'
+method: none
+source: https://data.endeavourenergy.com.au/pages/home/
+audience: unclear
+pricing_basis: none
+published: false
+plan_count: 0
+plans: []
+delivery:
+  model: managed
+note: >-
+  Endeavour Energy publishes no API plans or pricing page. The Open Data
+  portal (Opendatasoft-hosted) serves its public datasets anonymously with no
+  key and no signup (see authentication/endeavour-energy-authentication.yml),
+  subject only to the domain-wide quota recorded in
+  rate-limits/endeavour-energy-rate-limits.yml. No paid tier, extended-quota
+  offer or price is stated anywhere on data.endeavourenergy.com.au or the
+  corporate developers page
+  (https://www.endeavourenergy.com.au/for-your-business/developers).

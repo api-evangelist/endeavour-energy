@@ -1,11 +1,17 @@
 specification: API Commons Rate Limits
 specificationVersion: '0.1'
+name: Endeavour Energy rate limits
 provider: Endeavour Energy
 providerId: endeavour-energy
 generated: '2026-07-27'
 created: '2026-07-27'
-modified: '2026-07-27'
+modified: '2026-10-21'
 method: probed
+source: 'https://data.endeavourenergy.com.au/api/explore/v2.1/catalog/datasets?limit=1'
+note: >-
+  limit_text values are copied verbatim from HTTP RESPONSE HEADERS of the source
+  URL (probed 2026-10-21, HTTP 200), not from its JSON body, so a body-text
+  verbatim check cannot find them. The quota is not published in prose anywhere.
 tags:
   - Rate Limiting
   - Open Data
@@ -42,14 +48,18 @@ limits:
     scope: domain
     metric: requests_per_day
     limit: 5000
+    max: 5000
+    window: 1 day
+    limit_text: 'x-ratelimit-limit: 5000'
     timeFrame: day
     resetsAt: '00:00 UTC'
-    observed: '2026-07-27 — X-RateLimit-Limit: 5000, X-RateLimit-Remaining: 4988, X-RateLimit-Reset: 2026-07-28 00:00:00+00:00'
+    observed: '2026-07-27 — X-RateLimit-Limit: 5000, X-RateLimit-Remaining: 4988, X-RateLimit-Reset: 2026-07-28 00:00:00+00:00; re-observed 2026-10-21 (HTTP 200) — x-ratelimit-limit: 5000, x-ratelimit-remaining: 4994, x-ratelimit-reset: 2026-10-22 00:00:00+00:00'
     authenticated: false
   - name: Per-dataset quota
     scope: dataset
     metric: requests_per_day
     limit: null
+    limit_text: 'X-RateLimit-dataset-Limit'
     timeFrame: day
     observed: >-
       Not returned on the responses sampled, but the platform exposes

@@ -1,27 +1,25 @@
 aid: endeavour-energy
+
 url: https://raw.githubusercontent.com/api-evangelist/endeavour-energy/refs/heads/main/apis.yml
+
 name: Endeavour Energy
+
 kind: company
-description: 'Endeavour Energy is the regulated electricity distribution network service provider
-  (DNSP) for Greater Western Sydney, the Blue Mountains, the Illawarra, the Southern Highlands,
-  the South Coast and Central West of New South Wales, Australia, delivering power to around
-  2.8 million people over the poles-and-wires network it owns and operates. It sits between
-  transmission and retail in the value chain - it moves electricity and hosts the meters,
-  but it does not sell energy to consumers, so it holds no retail billing relationship. Its
-  API posture is a sharp split. On the market and network side it is genuinely open: a live
-  Opendatasoft portal at data.endeavourenergy.com.au serves eight network datasets (poles,
-  conductors, distribution districts, other network assets, distribution substation available
-  capacity, and live planned/unplanned/single-premise outages) through a documented, anonymous,
-  no-key REST Explore API with a downloadable OpenAPI 3.0.3 contract, most of it under the
-  Open Database Licence. On the consumer side it is closed and, more importantly, unobligated:
-  Australia''s Consumer Data Right was extended to energy, but the designation put the data-holder
-  obligation on electricity retailers as primary holders and AEMO as the secondary holder
-  and gateway, not on distributors. Endeavour Energy appears nowhere in the 84 brands of the
-  CDR energy data holder register, publishes no CDR base URI, and makes no reference to the
-  Consumer Data Right anywhere on its corporate site. It does operate a CSIP-AUS (Common Smart
-  Inverter Profile - Australia) utility server for NSW flexible exports and the emergency
-  backstop mechanism, but that machine interface is device-facing and entirely undocumented
+
+description: 'Endeavour Energy is the regulated electricity distribution network service provider (DNSP) for Greater Western Sydney, the Blue
+  Mountains, the Illawarra, the Southern Highlands, the South Coast and Central West of New South Wales, Australia, delivering power to around
+  2.8 million people over the poles-and-wires network it owns and operates. It sits between transmission and retail in the value chain - it moves
+  electricity and hosts the meters, but it does not sell energy to consumers, so it holds no retail billing relationship. Its API posture is a
+  sharp split. On the market and network side it is genuinely open: a live Opendatasoft portal at data.endeavourenergy.com.au serves eight network
+  datasets (poles, conductors, distribution districts, other network assets, distribution substation available capacity, and live planned/unplanned/single-premise
+  outages) through a documented, anonymous, no-key REST Explore API with a downloadable OpenAPI 3.0.3 contract, most of it under the Open Database
+  Licence. On the consumer side it is closed and, more importantly, unobligated: Australia''s Consumer Data Right was extended to energy, but
+  the designation put the data-holder obligation on electricity retailers as primary holders and AEMO as the secondary holder and gateway, not
+  on distributors. Endeavour Energy appears nowhere in the 84 brands of the CDR energy data holder register, publishes no CDR base URI, and makes
+  no reference to the Consumer Data Right anywhere on its corporate site. It does operate a CSIP-AUS (Common Smart Inverter Profile - Australia)
+  utility server for NSW flexible exports and the emergency backstop mechanism, but that machine interface is device-facing and entirely undocumented
   publicly. The open data portal itself is not linked from the corporate website.'
+
 deliveryModel:
   model: saas
   open_source: false
@@ -33,6 +31,7 @@ deliveryModel:
   - pricing
   generated: '2026-08-28'
   method: derived
+
 accessModel:
   pricing: unknown
   onboarding: self-serve
@@ -49,7 +48,9 @@ accessModel:
   - sandbox
   generated: '2026-09-02'
   method: derived
+
 image: https://www.endeavourenergy.com.au/images/ee-logo.svg
+
 tags:
 - Energy
 - Australia
@@ -65,58 +66,35 @@ tags:
 - DER
 - Solar
 - Renewables
+
 created: '2026-07-27'
-modified: '2026-07-27'
+
+modified: '2026-10-21'
+
 specificationVersion: '0.23'
-apis:
-- aid: endeavour-energy:endeavour-energy-catalog-api
-  name: Endeavour Energy Catalog API
-  description: API to enumerate datasets
-  humanURL: https://data.endeavourenergy.com.au/pages/home/
-  baseURL: https://data.endeavourenergy.com.au/api/explore/v2.1
-  tags:
-  - Catalog
-  properties:
-  - type: OpenAPI
-    url: openapi/endeavour-energy-catalog-api-openapi.yml
-  - type: Documentation
-    url: https://data.endeavourenergy.com.au/pages/home/
-  - type: APIReference
-    url: https://data.endeavourenergy.com.au/api-console/explore/v2.1/
-  - type: Portal
-    url: https://data.endeavourenergy.com.au/explore/
-  - type: GettingStarted
-    url: >-
-      https://help.opendatasoft.com/apis/ods-explore-v2/explore_v2.1.html#section/Getting-Started
-- aid: endeavour-energy:endeavour-energy-dataset-api
-  name: Endeavour Energy Dataset API
-  description: API to work on records
-  humanURL: https://data.endeavourenergy.com.au/pages/home/
-  baseURL: https://data.endeavourenergy.com.au/api/explore/v2.1
-  tags:
-  - Datasets
-  tags_raw:
-  - Dataset
-  properties:
-  - type: OpenAPI
-    url: openapi/endeavour-energy-dataset-api-openapi.yml
-  - type: Documentation
-    url: https://data.endeavourenergy.com.au/pages/home/
-  - type: APIReference
-    url: https://data.endeavourenergy.com.au/api-console/explore/v2.1/
-  - type: Portal
-    url: https://data.endeavourenergy.com.au/explore/
-  - type: GettingStarted
-    url: >-
-      https://help.opendatasoft.com/apis/ods-explore-v2/explore_v2.1.html#section/Getting-Started
+
+maintainers:
+- FN: Kin Lane
+  email: kin@apievangelist.com
+
 common:
+- type: Spectral
+  url: rules/endeavour-energy-rules.yml
+- type: JSONLD
+  url: json-ld/endeavour-energy-context.jsonld
+- type: Vocabulary
+  url: vocabulary/endeavour-energy-vocabulary.yml
+- type: Overlay
+  url: overlays/endeavour-energy-catalog-api-overlay.yaml
+- type: SecurityTxt
+  url: well-known/endeavour-energy-data-portal-security.txt
+- type: Hosts
+  url: hosts/endeavour-energy-hosts.yml
+- type: Vendors
+  url: vendors/endeavour-energy-vendors.yml
 - type: CapabilityMap
   url: capabilities/endeavour-energy-capability-edges.yml
   name: Endeavour Energy Business Capability Map
-- type: Overlay
-  url: overlays/endeavour-energy-open-data-explore-api-v2-1-overlay.yaml
-- type: Overlay
-  url: overlays/endeavour-energy-open-data-explore-api-v2-0-overlay.yaml
 - type: AgenticAccess
   url: agentic-access/endeavour-energy-agentic-access.yml
 - type: VulnerabilityDisclosure
@@ -145,6 +123,12 @@ common:
   url: well-known/endeavour-energy-well-known.yml
 - type: LinkedIn
   url: https://www.linkedin.com/company/endeavour-energy
+- type: YouTube
+  url: https://www.youtube.com/channel/UCOCblQ8mMDZszyJIqX51vMw
+- type: Facebook
+  url: https://www.facebook.com/endeavourenergy
+- type: Instagram
+  url: https://www.instagram.com/endeavourenergy/
 - type: DeveloperPortal
   url: https://data.endeavourenergy.com.au/pages/home/
 - type: Documentation
@@ -161,17 +145,13 @@ common:
   url: https://www.endeavourenergy.com.au/privacy-policy
 - type: Login
   url: https://data.endeavourenergy.com.au/login/
-- type: Packages
-  url: packages/endeavour-energy-packages.yml
 - type: Components
   url: components/endeavour-energy-components.yml
 - type: X-MCPServerCandidate
   url: mcp/endeavour-energy-mcp.yml
-  note: 'Renamed from MCPServer 2026-09-03 (roadmap#247): the manifest self-describes as status: candidate — a tool list derived from the published API contracts, not an existing server. The scorer already read the manifest and reported mcp_server correctly; the MCPServer type was crediting the artifact-type surfaces with a server that does not exist.'
-- type: ToolCrosswalk
-  url: mcp/endeavour-energy-tool-crosswalk.yml
-- type: LLMsTxt
-  url: llms/endeavour-energy-llms.txt
+  note: 'Renamed from MCPServer 2026-09-03 (roadmap#247): the manifest self-describes as status: candidate — a tool list derived from the published
+    API contracts, not an existing server. The scorer already read the manifest and reported mcp_server correctly; the MCPServer type was crediting
+    the artifact-type surfaces with a server that does not exist.'
 - type: Conformance
   url: conformance/endeavour-energy-conformance.yml
 - type: ErrorCatalog
@@ -196,6 +176,81 @@ common:
   url: sandbox/endeavour-energy-sandbox.yml
 - type: AgentSkill
   url: skills/_index.yml
-maintainers:
-- FN: Kin Lane
-  email: kin@apievangelist.com
+
+apis:
+- aid: endeavour-energy:endeavour-energy-catalog-api
+  name: Endeavour Energy Catalog API
+  description: API to enumerate datasets
+  humanURL: https://data.endeavourenergy.com.au/pages/home/
+  baseURL: https://data.endeavourenergy.com.au/api/explore/v2.1
+  tags:
+  - Catalog
+  properties:
+  - type: OpenAPI
+    url: openapi/endeavour-energy-catalog-api-openapi.yml
+  - type: Documentation
+    url: https://data.endeavourenergy.com.au/pages/home/
+  - type: APIReference
+    url: https://data.endeavourenergy.com.au/api-console/explore/v2.1/
+  - type: Portal
+    url: https://data.endeavourenergy.com.au/explore/
+  - type: GettingStarted
+    url: https://help.opendatasoft.com/apis/ods-explore-v2/explore_v2.1.html#section/Getting-Started
+  - type: JSONSchema
+    url: json-schema/endeavour-energy-dataset-schema.json
+  - type: JSONSchema
+    url: json-schema/endeavour-energy-datasets-schema.json
+  - type: JSONSchema
+    url: json-schema/endeavour-energy-links-schema.json
+  - type: JSONSchema
+    url: json-schema/endeavour-energy-facet-enumeration-schema.json
+- aid: endeavour-energy:endeavour-energy-dataset-api
+  name: Endeavour Energy Dataset API
+  description: API to work on records
+  humanURL: https://data.endeavourenergy.com.au/pages/home/
+  baseURL: https://data.endeavourenergy.com.au/api/explore/v2.1
+  tags:
+  - Datasets
+  tags_raw:
+  - Dataset
+  properties:
+  - type: OpenAPI
+    url: openapi/endeavour-energy-dataset-api-openapi.yml
+  - type: Documentation
+    url: https://data.endeavourenergy.com.au/pages/home/
+  - type: APIReference
+    url: https://data.endeavourenergy.com.au/api-console/explore/v2.1/
+  - type: Portal
+    url: https://data.endeavourenergy.com.au/explore/
+  - type: GettingStarted
+    url: https://help.opendatasoft.com/apis/ods-explore-v2/explore_v2.1.html#section/Getting-Started
+  - type: JSONSchema
+    url: json-schema/endeavour-energy-record-schema.json
+  - type: JSONSchema
+    url: json-schema/endeavour-energy-records-schema.json
+  - type: JSONSchema
+    url: json-schema/endeavour-energy-attachment-schema.json
+  - type: JSONSchema
+    url: json-schema/endeavour-energy-links-schema.json
+  - type: JSONSchema
+    url: json-schema/endeavour-energy-facet-enumeration-schema.json
+
+x-coverage:
+  state: covered
+  reason: identity-verified
+  detail: Website www.endeavourenergy.com.au confirmed 200 and self-identifies (title 'Endeavour Energy'); all common/properties pointers re-fetched
+    200 on 2026-10-21. The sitemap's /for-your-business/developers page is for property developers, not an API developer portal, so it was not
+    added; no Terms of Service page found (site uses 'Privacy and disclaimer').
+  evidence:
+  - url: https://www.endeavourenergy.com.au/
+    status: 200
+  - url: https://data.endeavourenergy.com.au/pages/home/
+    status: 200
+  - url: https://www.endeavourenergy.com.au/for-your-business/developers
+    status: 200
+x-enrichment:
+  date: '2026-10-21'
+  status: enriched
+  artifacts_added: 18
+  pass: modular-v1
+  engine: identity=anthropic,contract=anthropic,surfaces=anthropic,docs=anthropic,regulatory=anthropic

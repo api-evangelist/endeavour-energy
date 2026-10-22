@@ -1,0 +1,100 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://raw.githubusercontent.com/api-evangelist/endeavour-energy/main/json-schema/endeavour-energy-records-schema.json",
+  "title": "records",
+  "x-generated": "2026-10-21",
+  "x-method": "derived",
+  "x-generator": "derive-json-schema.py",
+  "x-source": "openapi/endeavour-energy-dataset-api-openapi.yml#/components/schemas/records",
+  "type": "object",
+  "properties": {
+    "total_count": {
+      "type": "integer"
+    },
+    "links": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/links"
+      }
+    },
+    "records": {
+      "type": "array",
+      "items": {
+        "oneOf": [
+          {
+            "$ref": "#/$defs/aggregation"
+          },
+          {
+            "$ref": "#/$defs/record"
+          }
+        ]
+      }
+    }
+  },
+  "$defs": {
+    "aggregation": {
+      "type": "object",
+      "properties": {
+        "count": {
+          "type": "integer"
+        },
+        "cou_name_en": {
+          "type": "string"
+        }
+      }
+    },
+    "links": {
+      "type": "object",
+      "properties": {
+        "href": {
+          "type": "string",
+          "format": "uri"
+        },
+        "rel": {
+          "type": "string",
+          "enum": [
+            "self",
+            "first",
+            "last",
+            "next",
+            "dataset",
+            "catalog"
+          ]
+        }
+      }
+    },
+    "record": {
+      "type": "object",
+      "properties": {
+        "record": {
+          "type": "object",
+          "properties": {
+            "id": {
+              "type": "string"
+            },
+            "timestamp": {
+              "type": "string",
+              "format": "dateTime"
+            },
+            "size": {
+              "type": "integer",
+              "format": "int64"
+            },
+            "fields": {
+              "type": "object",
+              "additionalProperties": {
+                "type": "any"
+              }
+            }
+          }
+        },
+        "links": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/links"
+          }
+        }
+      }
+    }
+  }
+}

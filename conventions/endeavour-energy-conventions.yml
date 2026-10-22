@@ -44,6 +44,7 @@ authentication:
   detail: authentication/endeavour-energy-authentication.yml
 
 idempotency:
+  coverage: na
   supported: true
   mechanism: http-method-semantics
   idempotency_key_header: false
@@ -192,3 +193,11 @@ related:
   - lifecycle/endeavour-energy-lifecycle.yml
   - rate-limits/endeavour-energy-rate-limits.yml
   - changelog/endeavour-energy-changelog.yml
+
+reversibility:
+  status: na
+  note: >-
+    Read-only API. The contract declares GET as the only method across all
+    operations, so there is no write surface to reverse; reversibility,
+    dry-run and idempotency-key replay protection are all not applicable.
+  source: openapi/endeavour-energy-dataset-api-openapi.yml
